@@ -23,7 +23,7 @@ class Auth extends CI_Controller {
                     'name'=>$user->name,
                     'role'=>$user->role
                 ]);
-                redirect('vacancy/search');
+                redirect('dashboard');
             }
             catch(Exception $e){
                 $err=$e->getMessage();

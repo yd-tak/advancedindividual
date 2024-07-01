@@ -81,6 +81,11 @@
 	        .list-group-item{
 	        	cursor:pointer;
 	        }
+	        .dt-action-button{
+	        	display: block;
+	        	position: fixed;
+	        	margin-top:20px;
+	        }
 		</style>
 		<!--begin::Javascript-->
 		<script>var hostUrl = "<?=base_url('assets/')?>";</script>

@@ -4,22 +4,11 @@
 	<div class="content flex-row-fluid" id="kt_content">
 		<!--begin::Card-->
 		<div class="card">
-			<!--begin::Card header-->
-			<div class="card-header border-0 pt-6">
-				<!--begin::Card title-->
-				<div class="card-title d-block">
-				</div>
-				<!--begin::Card title-->
-				<!--begin::Card toolbar-->
-				<div class="card-toolbar">
+			<!--begin::Card body-->
+			<div class="card-body pt-0">
+				<div class="dt-action-button">
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-users-modal">Add <?=$objectname?></button>
 				</div>
-				<!--end::Card toolbar-->
-			</div>
-			<!--end::Card header-->
-			<!--begin::Card body-->
-
-			<div class="card-body pt-0">
 				<!--begin::Table-->
 				<div class="table-responsive">
 					<!--begin::Table-->

@@ -40,6 +40,7 @@ class Interview_model extends CI_Model {
             return false;
         }
         $this->db->where('id',$vcid)->update('vc',['aiinterviewstarted'=>1]);
+        $this->db->where('vcid',$vcid)->where('stageid',2)->update('vc_stages',['usecredit'=>getsetting('interview_credit')]);
         $this->_createaiinterview($vcid);
         $this->credit_model->credit(getsetting('interview_credit'),'vc_stages',$vcid,'AI Interview: '.$vc->candidate.' for '.$vc->vacancy);
         return true;
@@ -53,6 +54,7 @@ class Interview_model extends CI_Model {
                 'vcid'=>$vcid,
                 'testid'=>$testid,
                 'createdt'=>date("Y-m-d H:i:s"),
+                'usecredit'=>$test->test_credit
             ]);
             $vct=$this->db->where('vcid',$vcid)->where('testid',$testid)->get('vc_tests')->row();
         }

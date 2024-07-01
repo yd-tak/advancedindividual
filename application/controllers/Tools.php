@@ -121,6 +121,15 @@ class Tools extends CI_Controller {
         ]);
         echo "Success";
     }
+    public function reset_user($username,$newpass){
+        $salt=uniqid();
+        $pass=md5($salt.$newpass.$salt);
+        $this->db->where('username',$username)->update('users',[
+            'password'=>$pass,
+            'salt'=>$salt
+        ]);
+        echo "Success";
+    }
     public function scorecv($vcid){
         $result=$this->vacancy_model->scorecv($vcid);
         echo $result;
