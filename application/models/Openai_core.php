@@ -3,13 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // use OpenAI;
 class Openai_core extends CI_Model {
-    private $_apikey='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';
+    private $_apikey='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';
     private $_assistant_id='';
     private $_thread_id='';
     public function __construct(){
         parent::__construct();
         $this->client = OpenAI::client($this->_apikey);
-        $this->_cv_parser='asst_ePXyP16U8ljTxxFnfkOXKBZ1';
+        $this->_cv_parser='asst_phfM0gkmtXF7VMfRjaJwLhHF';
     }
     public function save_assistant($assistant_id){
         $assistant = $this->client->assistants()->retrieve($assistant_id);
