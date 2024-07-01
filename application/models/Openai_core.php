@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // use OpenAI;
 class Openai_core extends CI_Model {
-    private $_apikey='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';
+    private $_apikey='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';
     private $_assistant_id='';
     private $_thread_id='';
     public function __construct(){
