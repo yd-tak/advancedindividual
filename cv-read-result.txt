@@ -1,0 +1,51 @@
+MUH HAIKAL PANDIA SITUMORANG
+haisitumorang@gmail.com · Phone : +62 812 1923 0303
+LinkedIn: Haikal Situmorang
+PROFESIONAL EXPERIENCE
+NOVEMBER 1ST 2022 – OCTOBER 31ST 2023
+PT. NAWADATA SOLUTION – SOFTWARE DEVELOPER
+• Develop CMS (Collateral Management System) web applications using ReactJS, C# and
+Microsoft SQL.
+• Enhancement LC (Loan Channeling) web applications using Microsoft SQL.
+• Investigate the root cause of reported bugs from Quality Assurance Team or Production
+Issue and find its solution.
+• Collaborate with Business Analyst Team to translate requirement and designs into
+functional applications.
+SEPTEMBER 13RD 2021 – NOVEMBER 15TH 2021
+PT. TELKOM INDONESIA - INTERNSHIP
+• Involve in designing and provisioning type 2 and type 3 of indihome fiber optic network at
+Majalaya Region.
+MAY 8TH – MAY 31ST 2019
+DIGITAL OASIS (PT. PILAR TIMUR TEKNOLOGI) – QUALITY CONTROL
+• Check the software that has been made by the developer and make sure the app run very
+well based on requirement.
+EDUCATION
+2018 - 2022
+POLYTECHNIC STATE OF BANDUNG - TELECOMMUNICATION ENGINEERING
+GPA : 3.3
+• Final Project
+My final project title is “Comparative Analysis of LFUDA and TLRU Caching Algorithm on NDN
+Architecture (LFUDA Caching Algorithm Part)”. This final project discusses the
+implementation of LFUDA algorithm on NDN architecture using C++ on the ndnSIM simulator
+and compares it to previously implemented algorithms.
+ORGANIZATIONAL
+NOVEMBER 2019 – MARCH 2021
+HIMPUNAN MAHASISWA TEKNIK TELEKOMUNIKASI (HIMATEL) POLBAN -
+SOCIAL WELFARE OF HIMATEL MEMBER
+• The Head of Inauguration Event 2019
+Responsible to lead the yearly event about farewell for graduates and welcoming new
+students that attended by 5 school generation.
+• The Head of Logistic Division of Regeneration HIMATEL Member 2020
+Responsible for leading the logistic division.
+• The Mentor of New Student 2019
+responsible for assisting new students in becoming acquainted with HIMATEL and the
+campus, as well as preparing for the regeneration of new HIMATEL membersSKILLS
+• Programming Language: C#, JavaScript, Python, C++, Java
+• Database MySQL and Microsoft SQL
+• Language: Bahasa (Native) and English
+CERTIFICATIONS & TRAINING
+• Web Development with C# .NET CORE by Kodehive Academy in 2022
+• Frontend Engineer with ReactJS by CodingID in 2022
+• Memulai Pemrograman Dengan Java by Dicoding Academy in 2022
+• Memulai Pemrograman Dengan C by Dicoding Academy in 2022
+2

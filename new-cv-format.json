@@ -1,0 +1,60 @@
+{
+  "candidate": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "phone": "123-456-7890",
+    "address": {
+      "street": "123 Main St",
+      "city": "Anytown",
+      "state": "Anystate",
+      "zipCode": "12345"
+    },
+    "educations": [
+      {
+        "degreeName": "Bachelor of Science",
+        "fieldName": "Computer Science",
+        "institution": "University of Example",
+        "startDate": "2015-08-23",
+        "endDate": "2019-05-30",
+        "notes": "Summa cum laude"
+      },
+      {
+        "degreeName": "Master of Science",
+        "fieldName": "Data Science",
+        "institution": "Institute of Advanced Analytics",
+        "startDate": "2019-09-01",
+        "endDate": "2021-06-15",
+        "notes": "Thesis on machine learning algorithms"
+      }
+    ],
+    "skills": [
+      {
+        "skillName": "Python Programming",
+        "proficiencyLevel": "Advanced",
+        "yearsOfExperience": 5
+      },
+      {
+        "skillName": "Data Analysis",
+        "proficiencyLevel": "Intermediate",
+        "yearsOfExperience": 3
+      }
+    ],
+    "workExperiences": [
+      {
+        "companyName": "Tech Innovations Inc.",
+        "title": "Software Developer",
+        "startDate": "2021-07-01",
+        "endDate": "2023-08-01",
+        "description": "Developed and maintained various software solutions, focusing on web applications."
+      },
+      {
+        "companyName": "Data Wizards Co.",
+        "title": "Data Analyst",
+        "startDate": "2019-05-15",
+        "endDate": "2021-06-30",
+        "description": "Analyzed large datasets to identify trends and insights, contributing to strategic decisions."
+      }
+    ]
+  }
+}
