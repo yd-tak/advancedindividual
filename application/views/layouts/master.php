@@ -85,6 +85,7 @@
 	        	display: block;
 	        	position: fixed;
 	        	margin-top:20px;
+	        	z-index: 100;
 	        }
 		</style>
 		<!--begin::Javascript-->

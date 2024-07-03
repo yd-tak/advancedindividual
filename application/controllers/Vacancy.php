@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Vacancy extends CI_Controller {
+class Vacancy extends MY_Controller {
 
     public function __construct() {
         parent::__construct();
@@ -136,7 +136,40 @@ class Vacancy extends CI_Controller {
         $vc=$this->db->where('vacancyid',$input['vacancyid'])->where('candidateid',$candidateid)->get('vc')->row();
         $this->vacancy_model->scorecv($vc->id);
         $this->db->trans_complete();
-        redirect("vacancy/apply/".$input['vacancyid']."/success");
+        redirect("vacancy/complete/".$vc->id);
+
+    }
+    public function complete($vcid){
+        $this->load->model("candidate_model");
+        $view=$this->_defaultview;
+        $vc=$this->db->where('id',$vcid)->get('vc')->row();
+        $vacancy=$this->vacancy_model->get($vc->vacancyid);
+        $candidate=$this->candidate_model->get($vc->candidateid);
+        $degrees=$this->db->get('degrees')->result();
+        $view['vacancy']=$vacancy;
+        $view['candidate']=$candidate;
+        $view['degrees']=$degrees;
+        // echo json_encode($candidate);
+        // pre($view['candidate']);
+        $view['vcid']=$vcid;
+        $view['pagename']=$view['breadcrumbs'][]='Complete your CV - '.$vacancy->title;
+        $view['content']=$this->load->view('vacancy/complete', $view,true);
+        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true]);
+    }
+    public function completep(){
+        $this->load->model("candidate_model");
+        $input=$this->input->post();
+        pre($input);
+        $vcid=$input['vcid'];
+        $vc=$this->db->where('id',$vcid)->get('vc')->row();
+        $this->db->trans_start();
+        $this->db->where('id',$vc->candidateid)->set(['airesult'=>json_encode($input)])->update('candidates');
+        $this->candidate_model->transform_to_airesult($input);
+        $this->candidate_model->parse_airesult($vc->candidateid);
+        $this->vacancy_model->scorecv($vc->id);
+        
+        $this->db->trans_complete();
+        redirect("vacancy/complete/".$vcid);
 
     }
     public function accept_vcs(){

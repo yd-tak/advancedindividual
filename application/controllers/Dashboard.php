@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Dashboard extends MY_Controller {
 	public function __construct() {
         parent::__construct();
         $this->_defaultview=[
@@ -31,6 +31,9 @@ class Dashboard extends CI_Controller {
 		// pre($query);
 		$offeracceptanceratedepts=[];
 		foreach($query as $row){
+			if(($row->accepted+$row->rejected==0){
+				$row->offeracceptancerate=0;
+			}
 			$row->offeracceptancerate=$row->accepted/($row->accepted+$row->rejected);
 			$offeracceptanceratedepts[]=$row;
 		}

@@ -488,10 +488,12 @@ class Vacancy_model extends CI_Model {
                     $techskills[]=$skillid;
                 }
             }
-            $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
-            if(!empty($datas)){
-                foreach($datas as $row){
-                    $techskills[]=$row->name;
+            if(!empty($skillids)){
+                $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
+                if(!empty($datas)){
+                    foreach($datas as $row){
+                        $techskills[]=$row->name;
+                    }
                 }
             }
         }
@@ -507,10 +509,12 @@ class Vacancy_model extends CI_Model {
                     $softskills[]=$skillid;
                 }
             }
-            $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
-            if(!empty($datas)){
-                foreach($datas as $row){
-                    $softskills[]=$row->name;
+            if(!empty($skillids)){
+                $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
+                if(!empty($datas)){
+                    foreach($datas as $row){
+                        $softskills[]=$row->name;
+                    }
                 }
             }
         }
@@ -526,11 +530,13 @@ class Vacancy_model extends CI_Model {
                     $langskills[]=$skillid;
                 }
             }
-            $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
-            if(!empty($datas)){
-                foreach($datas as $row){
-                    $langskills[]=$row->name;
-                }            
+            if(!empty($skillids)){
+                $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
+                if(!empty($datas)){
+                    foreach($datas as $row){
+                        $langskills[]=$row->name;
+                    }            
+                }
             }
         }
         $langskills=implode(",",$langskills);
@@ -545,10 +551,12 @@ class Vacancy_model extends CI_Model {
                     $certskills[]=$skillid;
                 }
             }
-            $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
-            if(!empty($datas)){
-                foreach($datas as $row){
-                    $certskills[]=$row->name;
+            if(!empty($skillids)){
+                $datas=$this->db->where_in('id',$skillids)->get('skills')->result();
+                if(!empty($datas)){
+                    foreach($datas as $row){
+                        $certskills[]=$row->name;
+                    }
                 }
             }
         }

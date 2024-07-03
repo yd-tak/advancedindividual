@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 // use OpenAI;
 // use OpenAI\Client;
-class Tools extends CI_Controller {
+class Tools extends MY_Controller {
 
     public function __construct() {
         parent::__construct();

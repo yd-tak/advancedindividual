@@ -29,85 +29,15 @@
 					<!--begin::Menu-->
 					<div class="menu menu-rounded menu-column menu-lg-row menu-active-bg menu-title-gray-700 menu-state-primary menu-arrow-gray-400 fw-semibold my-5 my-lg-0 align-items-stretch px-2 px-lg-0" id="#kt_header_menu" data-kt-menu="true">
 						
-						<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-here-bg menu-lg-down-accordion me-0 me-lg-2">
+						
+						<div class="menu-item me-0 me-lg-2 menu-url" data-href="<?=site_url('dashboard')?>">
 							
 							<span class="menu-link py-3">
-								<span class="menu-title">Dashboards</span>
+								<span class="menu-title">Dashboard</span>
 								<span class="menu-arrow d-lg-none"></span>
 							</span>
 							
-							<!--begin:Menu sub-->
-							<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown p-0 w-100 w-lg-850px">
-								<!--begin:Dashboards menu-->
-								<div class="menu-state-bg menu-extended overflow-hidden overflow-lg-visible" data-kt-menu-dismiss="true">
-									<!--begin:Row-->
-									<div class="row">
-										<!--begin:Col-->
-										<div class="col-lg-12 mb-3 mb-lg-0 py-3 px-3 py-lg-6 px-lg-6">
-											<!--begin:Row-->
-											<div class="row">
-												<!--begin:Col-->
-												<div class="col-lg-4 mb-3">
-													
-													<div class="menu-item p-0 m-0">
-														
-														<a href="../../demo2/dist/index.html" class="menu-link">
-															<span class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">
-																<i class="ki-duotone ki-element-11 text-primary fs-1">
-																	<span class="path1"></span>
-																	<span class="path2"></span>
-																	<span class="path3"></span>
-																	<span class="path4"></span>
-																</i>
-															</span>
-															<span class="d-flex flex-column">
-																<span class="fs-6 fw-bold text-gray-800">Default</span>
-																<span class="fs-7 fw-semibold text-muted">Overall Summary</span>
-															</span>
-														</a>
-														
-													</div>
-													
-												</div>
-												<!--end:Col-->
-												<!--begin:Col-->
-												<div class="col-lg-4 mb-3">
-													
-													<div class="menu-item p-0 m-0">
-														
-														<a href="../../demo2/dist/dashboards/ecommerce.html" class="menu-link">
-															<span class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">
-																<i class="ki-duotone ki-user-tick text-danger fs-1">
-																	<span class="path1"></span>
-																	<span class="path2"></span>
-																	<span class="path3"></span>
-																	<span class="path4"></span>
-																</i>
-															</span>
-															<span class="d-flex flex-column">
-																<span class="fs-6 fw-bold text-gray-800">Recruitment</span>
-																<span class="fs-7 fw-semibold text-muted">Performance of Recruitment</span>
-															</span>
-														</a>
-														
-													</div>
-													
-												</div>
-												<!--end:Col-->
-												
-											</div>
-											<!--end:Row-->
-											
-										</div>
-										<!--end:Col-->
-									</div>
-									<!--end:Row-->
-								</div>
-								<!--end:Dashboards menu-->
-							</div>
-							<!--end:Menu sub-->
 						</div>
-						
 						
 						<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
 							

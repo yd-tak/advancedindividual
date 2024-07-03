@@ -229,5 +229,8 @@ class Candidate_model extends CI_Model {
             }
         }
     }
+    public function transform_to_ai_result(){
+        
+    }    
 }
 ?>
