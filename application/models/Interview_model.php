@@ -61,7 +61,7 @@ class Interview_model extends CI_Model {
         // pre($vct);
         if($vct->test_assistantid==null){
             $this->_createaitester($vct->id);
-            $this->credit_model->credit($test->test_credit,'vc_tests',$vct->id,'AI '.$test->name.': '.$vc->candidate.' for '.$vc->vacancy);
+            $this->credit_model->credit($test->test_credit,'vc_tests',$vct->id,'AI '.$test->name.': '.$vct->candidate.' for '.$vct->vacancy);
         }
         
         $this->_createaitest($vct->id);
