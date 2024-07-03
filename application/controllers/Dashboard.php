@@ -34,7 +34,9 @@ class Dashboard extends MY_Controller {
 			if(($row->accepted+$row->rejected)==0){
 				$row->offeracceptancerate=0;
 			}
-			$row->offeracceptancerate=$row->accepted/($row->accepted+$row->rejected);
+			else{
+				$row->offeracceptancerate=$row->accepted/($row->accepted+$row->rejected);
+			}
 			$offeracceptanceratedepts[]=$row;
 		}
 		$countinterviewsdone=$this->db->select("count(id) countdata,sum(usecredit) sumdata")->where('result is not null')->where("stageid",2)->get('vc_stages')->row()->countdata;
