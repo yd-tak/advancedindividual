@@ -31,7 +31,7 @@ class Dashboard extends MY_Controller {
 		// pre($query);
 		$offeracceptanceratedepts=[];
 		foreach($query as $row){
-			if(($row->accepted+$row->rejected==0){
+			if(($row->accepted+$row->rejected)==0){
 				$row->offeracceptancerate=0;
 			}
 			$row->offeracceptancerate=$row->accepted/($row->accepted+$row->rejected);
