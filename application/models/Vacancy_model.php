@@ -318,6 +318,7 @@ class Vacancy_model extends CI_Model {
         $today=date("Y-m-d");
         $now=date("Y-m-d H:i:s");
         $vcss=$this->db->where_in('id',$post['vcsids'])->get('vc_stages')->result();
+        // pre($vcss);
         $ub_vcs=[];
         $ib_vcs=[];
 
@@ -590,7 +591,7 @@ class Vacancy_model extends CI_Model {
          // echo json_encode(['request'=>$request,'jobdesc'=>$answer]);
         // pre($response);
     }
-    public function scorecv($vcid){
+    public function scorecv($vcid,$cvdata){
         $vc=$this->db->where('id',$vcid)->get('vc')->row();
         $vacancy=$this->db->where('id',$vc->vacancyid)->get('vacancies')->row();
         $candidate=$this->db->where('id',$vc->candidateid)->get('candidates')->row();
@@ -615,7 +616,7 @@ class Vacancy_model extends CI_Model {
         ".$vacancy->jobdesc."
 
         CV:
-        ".$candidate->airesult."
+        ".$cvdata."
         ";
         
         $answer=$this->openai_core->do_chatjson($system,$request);

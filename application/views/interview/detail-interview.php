@@ -35,6 +35,21 @@
             opacity: 1;
         }
     }
+    .timer-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .timer {
+        font-size: 3rem;
+        font-weight: bold;
+        background: #007bff;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
 </style>
 <div id="kt_content_container" class="d-flex flex-column-fluid align-items-start container-xxl">
 	<!--begin::Post-->
@@ -193,7 +208,19 @@
 	</div>
 	<!--end::Post-->
 </div>
-
+<!-- Full Screen Warning Modal -->
+ <div class="modal fade" id="fullscreenModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fullscreenModalLabel">Attention</h5>
+            </div>
+            <div class="modal-body">
+                Please switch to full screen mode to continue the interview. <br>Click on CTRL+SHIFT+F on Windows or Command+Shift+F on Macbook.
+            </div>
+        </div>
+    </div>
+</div>
 <script>
 	function startinterview(vcid){
 		startloading("content-page-loader");
@@ -359,4 +386,76 @@
 			}
 		});
 	}
+	// Timer variables
+    let timerInterval;
+    let totalSeconds = 0;
+
+    // Start Timer function
+    function startTimer() {
+        timerInterval = setInterval(function() {
+            totalSeconds++;
+            let hours = Math.floor(totalSeconds / 3600);
+            let minutes = Math.floor((totalSeconds % 3600) / 60);
+            let seconds = totalSeconds % 60;
+            $('#timer').text(
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+            );
+        }, 1000);
+    }
+
+    // Stop Timer function
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+	$(document).ready(function() {
+        // Function to check full screen mode
+        function checkFullScreen() {
+        	// console.log($(document).fullscreenElement);
+        	console.log(window.innerHeight+" "+screen.height);
+        	if( window.innerHeight == screen.height) {
+        		return true;
+        	}
+            else
+            	return false;
+            	// return true;
+        }
+
+        // Show modal if not in full screen
+        function enforceFullScreen() {
+        	console.log("CHECK");
+            if (!checkFullScreen()) {
+                $('#fullscreenModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                $('#fullscreenModal').modal('show');
+            } else {
+                $('#fullscreenModal').modal('hide');
+            }
+        }
+
+        // Event listeners for fullscreen change
+        setInterval(enforceFullScreen, 1000);
+
+
+
+        // Track if user leaves the tab
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                alert('You have exited out of the interview. This action is being recorded.');
+            }
+        });
+
+        // Example usage: startTimer();
+        // To start the timer, call startTimer();
+        // To stop the timer, call stopTimer();
+
+        // Block copy-paste on the whole page
+        $(document).on('copy paste cut', function(e) {
+            e.preventDefault();
+        });
+        // Initial check
+        enforceFullScreen();
+        // startTimer();
+    });
 </script>

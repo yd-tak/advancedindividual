@@ -3,22 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // use OpenAI;
 class Openai_core extends CI_Model {
-    private $_apikeyproject='sk-proj-O61zVR3cyXbnNJuGzxTNT3BlbkFJD97eo7YYM1SJcrn2loI3';
-    private $_apikey='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';
+    private $_apikey='';
     private $_assistant_id='';
     private $_thread_id='';
     public function __construct(){
         parent::__construct();
+        $this->_apikey=$this->config->item('openai_key');
         $this->client = OpenAI::client($this->_apikey);
         $this->_cv_parser='asst_XgaImoNF9BpJmEjFEGVZscdV';
-    }
-    public function loadApi($type="project"){
-        if($type=="project"){
-            $this->client = OpenAI::client($this->_apikeyproject);
-        }
-        else{
-            $this->client = OpenAI::client($this->apikey);
-        }
     }
     public function save_assistant($assistant_id){
         $assistant = $this->client->assistants()->retrieve($assistant_id);
@@ -136,7 +128,8 @@ class Openai_core extends CI_Model {
                     'type' => 'code_interpreter',
                 ],
             ],
-            'model' => 'gpt-3.5-turbo',
+            'model' => 'gpt-4',
+            'tool_resources'=>[]
         ]);
         $this->db->set([
             'id'=>$assistant->id,
@@ -166,82 +159,39 @@ class Openai_core extends CI_Model {
     public function create_interviewer($jobtitle,$company,$jobdesc,$interviewlang){
         $assistant = $this->client->assistants()->create([
             'instructions' => 'You are an expert HR Recruiter with 10+ years in Recruitment. You are tasked to interview a candidate for a '.$jobtitle.' position at '.$company->name.'. '.$company->name.' is a '.$company->industry.' operating in '.$company->country.'. Conduct the interview in '.$interviewlang.' language.
-                You have 3 main task, which are:
+                You have 4 main task, which are:
 
-                A. First is to ask these questions to the candidate: 
-                    1. Name, place and date of birth, current place of living, age, marriage status, gender
-                    2. Education history:
-                        - Degree
-                        - Institution name
-                        - Enrollment years (From & To)
-                        - Field of study
-                        - GPA
-                        - Achievements
-                    3. Work history: 
-                        - Company name,
-                        - Employment Year (From & To)
-                        - Job position
-                        - Salary (optional)
-                        - Reason of resignation
-                        - Achievements
-                        You must ask more on the work history, you need to fully understand how they do their work on their previous work experience, find out what achievements they did in previous experience, you may make this segment a long conversation of back and forth with the candidate.
-                    4. Technical skills relating to the job they are interviewing for
-                    5. Expected salary
-                    6. Strong and weak qualities
-                    7. Why PT Passion Abadi Korpora should hire them
-                    8. Professional certification
-                        - Instution Name
-                        - Certification Title
-                        - Certified Year
-                        - Certificate Number
+                A. First is to validate their work experience, you need to check and understand whether the candidate are truthful about their work experience they put in CV, do not ask them outright if they are being truthful or not, instead do this by asking questions on their job details, you may keep asking until you are 100 percent sure they are thrutful or lying: 
+                
+                B. Second, ask these questions to the candidate:
+                    - Strong and weak qualities
+                    - Why '.getCompany('name').' should hire them
+                    - Expected salary
 
-                B. Second you need to ask 3 technical questions relating to a '.$jobtitle.' position in a '.$company->industry.' company and score their answer.
+                C. Third you need to ask 3 technical questions relating to a '.$jobtitle.' position in a '.$company->industry.' company and score their answer.
 
-                C. Third and finally you need to ask 3 question to evaluate and score their personality.
+                D. Finally you need to ask 3 question to evaluate and score their personality.
 
                 Please ask these questions one by one and ensure you receive an answer for each questions before moving to the next question. If the candidate misses or does not answer a question, politely prompt them to provide the information again and again until it is answered.
                 
                 Once you have had all the information, you must summarize the candidate data that you have collected in JSON FORMAT, date data must be in yyyy-mm-dd format, information about numbers or salary must be in numeric format, also in your JSON you MUST add 3 elements:
                 1. A score from 0 (least suitable) - 100 (most suitable) on how suitable do you think the candidate is, from candidate data, technical questions and personality questions you have acquired. BE HARSH on your scoring. "suitable_score"
                 2. A Score on their grammars & vocabulary from 0 (bad grammar) - 100 (excellent grammar), BE HARSH on your scoring. "grammar_vocab_score"
-                3. A Score from 0 (least likely) - 10 (most likely) on how likely the candidate is answering the question using AI tools,mBE SUSPICIOUS on your scoring. "ai_probability"
+                3. A Score from 0 (least likely) - 3 (most likely) on how likely the candidate is answering the question using AI tools. BE SUSPICIOUS on your scoring and name it "ai_probability". Follow this scoring matrix:
+                    - 0: Not using any AI Tools
+                    - 1: Use AI Tools for at least 10 percent of the question
+                    - 2: Use AI Tools for at least 30 percent of the question
+                    - 3: Use AI Tools for at least 50 percent of the question
 
                 Once you have summarized, output me the JSON response only, follow this JSON format and do not append or prepend any text outside of the JSON response:
 
                 {
-                    "firstname":"",
-                    "lastname":"",
-                    "place_of_birth":"",
-                    "birth_date":"",
-                    "current_residency":"",
-                    "age":"",
-                    "marriage_status":"",
-                    "gender":"",
-                    "education_history":[
+                    "work_evaluation":[
                         {
-                            "degree":"High School/Vocational School/Diploma/Bachelor/Master/Doctorate",
-                            "institution_name":"",
-                            "from_year":"yyyy",
-                            "to_year":"yyyy",
-                            "gpa":"",
-                            "status_of_enrollment":"Graduated/Ongoing/Failed",
-                            "achievements":""
+                            "workexps_id":"",
+                            "evaulation":"",
+                            "score":""
                         }
-                    ],
-                    "work_history":[
-                        {
-                            "company_name":"",
-                            "from_year":"yyyy",
-                            "to_year":"yyyy",
-                            "job_position":"",
-                            "responsibilities":"",
-                            "salary":"",
-                            "reason_of_resignment":"",
-                            "achievements":""
-                        }
-                    ],
-                    "technical_skills":[
-                        ""
                     ],
                     "expected_salary":"",
                     "strong_qualities":[
@@ -251,13 +201,6 @@ class Openai_core extends CI_Model {
                         ""
                     ],
                     "reason_to_hire":"",
-                    "professional_certification":[
-                        {
-                            "certification":"",
-                            "certified_year":"yyyy",
-                            "certification_number":""
-                        }
-                    ],
                     "technical_question":[
                         {
                             "question":"",
@@ -283,7 +226,7 @@ class Openai_core extends CI_Model {
                     'type' => 'code_interpreter',
                 ],
             ],
-            'model' => 'gpt-3.5-turbo',
+            'model' => 'gpt-4',
         ]);
         $this->db->set([
             'id'=>$assistant->id,
@@ -300,11 +243,11 @@ class Openai_core extends CI_Model {
         $this->_assistant_id=$assistant->id;
         return $assistant->id;
     }
-    public function create_interview($candidatename){
+    public function create_interview($candidatename,$cvdata){
         //create a thread
         $thread=$this->_create_thread();
         //create a message for a candidate
-        $content="Hi my name is ".$candidatename.". I am here for the interview.";
+        $content="Hi my name is ".$candidatename.". I am here for the interview. Here is my CV Data in JSON: ".$cvdata;
         $this->_create_message($content);
         $run=$this->_run_thread();
         return $run;
@@ -317,7 +260,7 @@ class Openai_core extends CI_Model {
     }
     public function do_chat($system,$request){
         $response = $this->client->chat()->create([
-            'model' => 'gpt-3.5-turbo',
+            'model' => 'gpt-4',
             'messages' => [
                 ['role'=>'system','content'=>$system],
                 ['role' => 'user', 'content' => $request],
@@ -332,7 +275,7 @@ class Openai_core extends CI_Model {
     }
     public function do_chatjson($system,$request){
         $response = $this->client->chat()->create([
-            'model' => 'gpt-3.5-turbo',
+            'model' => 'gpt-4',
             'messages' => [
                 ['role'=>'system','content'=>$system],
                 ['role' => 'user', 'content' => $request],

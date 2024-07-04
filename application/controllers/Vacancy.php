@@ -133,8 +133,9 @@ class Vacancy extends MY_Controller {
         $this->db->trans_start();
         $candidateid=$this->vacancy_model->add_new_candidate($input,$cvpath);
         $this->candidate_model->parse_airesult($candidateid);
+        $candidate=$this->db->where('id',$candidateid)->get('candidates')->result();
         $vc=$this->db->where('vacancyid',$input['vacancyid'])->where('candidateid',$candidateid)->get('vc')->row();
-        $this->vacancy_model->scorecv($vc->id);
+        $this->vacancy_model->scorecv($vc->id,$candidate->airesult);
         $this->db->trans_complete();
         redirect("vacancy/complete/".$vc->id);
 
@@ -159,15 +160,15 @@ class Vacancy extends MY_Controller {
     public function completep(){
         $this->load->model("candidate_model");
         $input=$this->input->post();
-        pre($input);
+            
         $vcid=$input['vcid'];
+        unset($input['vcid']);
+        // pre($input);
         $vc=$this->db->where('id',$vcid)->get('vc')->row();
+
         $this->db->trans_start();
-        $this->db->where('id',$vc->candidateid)->set(['airesult'=>json_encode($input)])->update('candidates');
-        $this->candidate_model->transform_to_airesult($input);
-        $this->candidate_model->parse_airesult($vc->candidateid);
-        $this->vacancy_model->scorecv($vc->id);
-        
+        $candidatefull=$this->candidate_model->complete($vcid,$vc->candidateid,$input);
+        $this->vacancy_model->scorecv($vc->id,json_encode($candidatefull));
         $this->db->trans_complete();
         redirect("vacancy/complete/".$vcid);
 

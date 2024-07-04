@@ -609,9 +609,9 @@
 						<tbody class="text-gray-600 fw-semibold">
 							<?php foreach($vacancy->stages[$stage->id]->candidates as $row){?>
 							<tr>
-								<td id="vcs-<?=$row->id?>">
+								<td id="vcs-<?=$row->lastvcstageid?>">
 									<div class="form-check form-check-sm form-check-custom form-check-solid">
-										<input class="form-check-input check-candidate" id="check-candidate-<?=$row->id?>" type="checkbox" value="<?=$row->id?>" name="vcsids[]" onchange="checkcandidate(<?=$row->id?>,this)" />
+										<input class="form-check-input check-candidate" id="check-candidate-<?=$row->id?>" type="checkbox" value="<?=$row->id?>" name="vcsids[]" onchange="checkcandidate(<?=$row->lastvcstageid?>,this)" />
 									</div>
 								</td>
 								<td class="align-items-center" onclick="viewvc(<?=$row->id?>)">
@@ -638,9 +638,9 @@
 												<i class="fa fa-external-link"></i></a>
 										<?php }
 										} ?>
-										<button onclick="acceptsingle(<?=$row->id?>,this)" class="btn btn-success btn-center btn-sm">
+										<button onclick="acceptsingle(<?=$row->lastvcstageid?>,this)" class="btn btn-success btn-center btn-sm">
 										<i class="fa fa-check"></i></button>
-										<button onclick="rejectsingle(<?=$row->id?>,this)" class="btn btn-danger btn-center btn-sm">
+										<button onclick="rejectsingle(<?=$row->lastvcstageid?>,this)" class="btn btn-danger btn-center btn-sm">
 										<i class="fa fa-times"></i></button>
 									<?php } ?>
 									<div class="dropdown">
@@ -701,13 +701,13 @@
 
 		});
 	}
-	function checkcandidate(vcid,elm){
-		if(vcsids.indexOf(vcid)>=0){
-			vcsids.splice(vcsids.indexOf(vcid),1);
+	function checkcandidate(vcsid,elm){
+		if(vcsids.indexOf(vcsid)>=0){
+			vcsids.splice(vcsids.indexOf(vcsid),1);
 			$(elm).closest("tr").removeClass("active");
 		}
 		else{
-			vcsids.push(vcid);
+			vcsids.push(vcsid);
 			$(elm).closest("tr").addClass("active");
 		}
 		drawselectedcandidate();
@@ -720,17 +720,17 @@
 		else
 			$("#selected-candidate-box").addClass("d-none");
 	}
-	function rejectsingle(vcid,elm){
-		if(vcsids.indexOf(vcid)==-1){
-			$("#check-candidate-"+vcid).prop("checked",1);
-			checkcandidate(vcid,elm);
+	function rejectsingle(vcsid,elm){
+		if(vcsids.indexOf(vcsid)==-1){
+			$("#check-candidate-"+vcsid).prop("checked",1);
+			checkcandidate(vcsid,elm);
 		}
 		reject();
 	}
-	function acceptsingle(vcid,elm){
-		if(vcsids.indexOf(vcid)==-1){
-			$("#check-candidate-"+vcid).prop("checked",1);
-			checkcandidate(vcid,elm);
+	function acceptsingle(vcsid,elm){
+		if(vcsids.indexOf(vcsid)==-1){
+			$("#check-candidate-"+vcsid).prop("checked",1);
+			checkcandidate(vcsid,elm);
 		}
 		accept();
 	}

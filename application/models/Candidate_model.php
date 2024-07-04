@@ -229,8 +229,111 @@ class Candidate_model extends CI_Model {
             }
         }
     }
-    public function transform_to_ai_result(){
-        
+    public function complete($vcid,$candidateid,$post){
+        $this->db->where('id',$candidateid)->update('candidates',[
+            'firstname'=>$post['firstname'],
+            'lastname'=>$post['lastname'],
+            'email'=>$post['email'],
+            'phone'=>$post['phone'],
+            'gender'=>$post['gender'],
+            'dob'=>$post['dob'],
+            'age'=>$post['age'],
+            'workexp'=>$post['workexp'],
+            'address'=>$post['address']
+        ]);
+        $this->db->where('id',$vcid)->update('vc',['isconfirmed'=>1]);
+        $ib_works=[];
+        if(!empty($post['workexps'])){
+            foreach($post['workexps']['company'] as $i=>$company){
+                $ib_works[]=[
+                    'candidateid'=>$candidateid,
+                    'company'=>$company,
+                    'position'=>$post['workexps']['position'][$i],
+                    'startyear'=>$post['workexps']['startyear'][$i],
+                    'endyear'=>$post['workexps']['endyear'][$i],
+                    'responsibilities'=>$post['workexps']['responsibilities'][$i],
+                    'achievements'=>$post['workexps']['achievements'][$i]
+                ];
+            }
+        }
+        $ib_educations=[];
+        $ib_fieldparse=[];
+        if(!empty($post['educations'])){
+            foreach($post['educations']['institution'] as $i=>$institution){
+                $ib_fieldparse[]=[
+                    'name'=>$post['educations']['field'][$i]
+                ];
+                $ib_educations[]=[
+                    'candidateid'=>$candidateid,
+                    'institution'=>$institution,
+                    'degree'=>$post['educations']['degree'][$i],
+                    'fieldparse'=>$post['educations']['field'][$i],
+                    'startyear'=>$post['educations']['startyear'][$i],
+                    'endyear'=>$post['educations']['endyear'][$i],
+                    'gpa'=>$post['educations']['gpa'][$i],
+                    'notes'=>$post['educations']['notes'][$i]
+                ];
+            }
+        }
+        $ib_skills=[];
+        $ib_skillparse=[];
+        if(!empty($post['skills'])){
+            foreach($post['skills']['skill'] as $i=>$skill){
+                $ib_skillparse[]=[
+                    'name'=>$skill,
+                    'type'=>'Technical'
+                ];
+                $ib_skills[]=[
+                    'candidateid'=>$candidateid,
+                    'skillparse'=>$skill,
+                    'proficiencylevel'=>$post['skills']['proficiencylevel'][$i]
+                ];
+            }
+        }
+        if(!empty($ib_fieldparse)){
+            $this->db->replace_batch('studyfields',$ib_fieldparse);
+        }
+        if(!empty($ib_skillparse)){
+            $this->db->replace_batch('skills',$ib_skillparse);
+        }
+        if(!empty($ib_works)){
+            $this->db->where('candidateid',$candidateid)->delete('candidate_workexps');
+            $this->db->insert_batch('candidate_workexps',$ib_works);
+        }
+        if(!empty($ib_educations)){
+            $this->db->where('candidateid',$candidateid)->delete('candidate_educations');
+            $this->db->insert_batch('candidate_educations',$ib_educations);
+            $this->db->query("UPDATE candidate_educations ce join studyfields sf on ce.fieldparse=sf.name SET ce.fieldid=sf.id WHERE ce.candidateid=".$candidateid);
+        }
+        if(!empty($ib_skills)){
+            $this->db->where('candidateid',$candidateid)->delete('candidate_skills');
+            $this->db->insert_batch('candidate_skills',$ib_skills);
+            $this->db->query("UPDATE candidate_skills cs join skills s on cs.skillparse=s.name and s.type='Technical' SET cs.skillid=s.id WHERE cs.candidateid=".$candidateid);
+
+        }
+        $candidatefull=[
+            'firstname'=>$post['firstname'],
+            'lastname'=>$post['lastname'],
+            'email'=>$post['email'],
+            'phone'=>$post['phone'],
+            'gender'=>$post['gender'],
+            'dob'=>$post['dob'],
+            'age'=>$post['age'],
+            'workexps'=>$post['workexp'],
+            'address'=>$post['address'],
+            'education_history'=>$ib_educations,
+            'work_history'=>$ib_works,
+            'technical_skills'=>$ib_skills
+        ];
+        return $candidatefull;
     }    
+    public function getjson($id){
+        $candidate=$this->db->select('firstname,lastname,email,phone,gender,dob,age,marriage_status,workexp,address')->where('id',$id)->get('candidates')->row();
+        $candidate->workexps=$this->db->select('company,position,salary,startyear,endyear,responsibilities,achievements')->where('candidateid',$id)->get('candidate_workexps')->result();
+        $candidate->educations=$this->db->select('degree,institution,fieldparse as field,startyear,endyear,gpa,notes')->where('candidateid',$id)->get('candidate_educations')->result();
+        $candidate->skills=$this->db->select('skillparse as skill,proficiencylevel')->where('candidateid',$id)->get('candidate_skills')->result();
+
+        return json_encode($candidate);
+    }
 }
 ?>

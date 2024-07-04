@@ -86,7 +86,7 @@ function getsetting($param=null){
     return $CI->setting_model->get($param);
 }
 function calc_netscore($score,$aisuspect,$penalty){
-    $netscore=(1-($aisuspect*$penalty/10))*$score;
+    $netscore=(1-($aisuspect*$penalty/3))*$score;
     return $netscore;
 }
 function sanitize_elm($arr,$elm,$append="",$default=""){

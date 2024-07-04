@@ -352,9 +352,10 @@ class Interview_model extends CI_Model {
     }
     private function _createaiinterview($vcid){
         $this->load->model("openai_core");
-        $vc=$this->db->select("v.interview_assistantid,concat(c.firstname,' ',c.lastname) candidate")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('candidates c',"vc.candidateid=c.id")->where('vc.id',$vcid)->get()->row();
+        $vc=$this->db->select("v.interview_assistantid,concat(c.firstname,' ',c.lastname) candidate,vc.candidateid")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('candidates c',"vc.candidateid=c.id")->where('vc.id',$vcid)->get()->row();
         $this->openai_core->set_assistant($vc->interview_assistantid);
-        $run=$this->openai_core->create_interview($vc->candidate);
+        $cvdata=$this->candidate_model->getjson($vc->candidateid);
+        $run=$this->openai_core->create_interview($vc->candidate,$cvdata);
         // pre($run);
         $this->db->where('id',$vcid)->update('vc',['interview_threadid'=>$run->threadId]);
         $this->db->insert('vc_interviews',[

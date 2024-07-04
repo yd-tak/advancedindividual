@@ -43,9 +43,11 @@ class Tools extends MY_Controller {
         $filecontent=file_get_contents($outputfile);
         echo $filecontent;
         $this->openai_core->run_extract_cv($filecontent);
-        
-
-    
+    }
+    public function set_ai_interviewer($id){
+        $vacancy=$this->vacancy_model->gettbl()->where('v.id',$id)->get()->row();
+        $assistant_id=$this->openai_core->create_interviewer($vacancy->title,$this->company_model->get(),$vacancy->jobdesc,$vacancy->interviewlang);
+        $this->db->where('id',$id)->update('vacancies',['interview_assistantid'=>$assistant_id]);
     }
     public function create_interview($vcid){
         $vc=$this->vacancy_model->gettblvc()->select("v.interview_assistantid,concat(c.firstname,' ',c.lastname) fullname")->where('vc.id',$vcid)->get()->row();
