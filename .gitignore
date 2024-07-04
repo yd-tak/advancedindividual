@@ -2,6 +2,7 @@
 
 application/config/database.php
 application/config/config.php
+application/config/apikey.php
 
 application/assets/uploads/*
 
