@@ -8,7 +8,7 @@ class Openai_core extends CI_Model {
     private $_thread_id='';
     public function __construct(){
         parent::__construct();
-        $this->_apikey=$this->config->item('openai_key');
+        $this->_apikey=getSetting('openai_key');
         $this->client = OpenAI::client($this->_apikey);
         $this->_cv_parser='asst_XgaImoNF9BpJmEjFEGVZscdV';
     }
