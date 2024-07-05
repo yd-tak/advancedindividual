@@ -78,26 +78,32 @@
 				<!--begin::Table-->
 				<div class="table-responsive">
 					<!--begin::Table-->
-					<table class="table align-middle table-row-bordered table-row-solid gy-4 gs-9" id="list-table">
+					<table class="table table-striped table-bordered table-condensed" id="list-table">
 						<!--begin::Thead-->
 						<thead class="border-gray-200 fs-5 fw-semibold bg-lighten">
 							<tr>
 								<th class="min-w-175px ps-9">Date</th>
 								<th class="min-w-150px px-0">Transaction</th>
-								<th class="min-w-350px">Debit</th>
-								<th class="min-w-125px">Credit</th>
-								<th class="min-w-125px text-center">Note</th>
+								<th class="min-w-100px">Debit</th>
+								<th class="min-w-100px">Credit</th>
+								<th class="min-w-150px">Balance</th>
+								<th class="min-w-200px text-center">Note</th>
 							</tr>
 						</thead>
 						<!--end::Thead-->
 						<!--begin::Tbody-->
-						<tbody class="fs-6 fw-semibold text-gray-600">
-							<?php foreach($cbs as $row){?>
+						<tbody class="">
+							<?php 
+							$currbalance=0;
+							foreach($cbs as $row){
+								$currbalance+=$row->debit-$row->credit;
+								?>
 							<tr>
 								<td class="ps-9"><?=ymd($row->balancedt)?></td>
 								<td class="ps-0"><?=associatedwith($row->associatedwith).' #'.$row->associatedid?></td>
 								<td class="text-success"><?=number_format($row->debit)?></td>
 								<td class="text-danger"><?=number_format($row->credit)?></td>
+								<td class=""><?=number_format($currbalance)?></td>
 								<td class="text-center">
 									<?=$row->note?>
 								</td>
