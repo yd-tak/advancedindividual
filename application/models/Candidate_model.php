@@ -243,6 +243,7 @@ class Candidate_model extends CI_Model {
         ]);
         $this->db->where('id',$vcid)->update('vc',['isconfirmed'=>1]);
         $ib_works=[];
+        $lastworkexpyear=0;
         if(!empty($post['workexps'])){
             foreach($post['workexps']['company'] as $i=>$company){
                 $ib_works[]=[
@@ -254,6 +255,9 @@ class Candidate_model extends CI_Model {
                     'responsibilities'=>$post['workexps']['responsibilities'][$i],
                     'achievements'=>$post['workexps']['achievements'][$i]
                 ];
+                if($post['workexps']['endyear'][$i]>$lastworkexpyear){
+                    $lastworkexpyear=$post['workexps']['endyear'][$i];
+                }
             }
         }
         $ib_educations=[];
@@ -299,6 +303,8 @@ class Candidate_model extends CI_Model {
         if(!empty($ib_works)){
             $this->db->where('candidateid',$candidateid)->delete('candidate_workexps');
             $this->db->insert_batch('candidate_workexps',$ib_works);
+            $lastworkexp=$this->db->where('candidateid',$candidateid)->where('endyear',$lastworkexpyear)->get('candidate_workexps')->row();
+            $this->db->where('id',$candidateid)->update('candidates',['lastworkexpid'=>$lastworkexp->id]);
         }
         if(!empty($ib_educations)){
             $this->db->where('candidateid',$candidateid)->delete('candidate_educations');

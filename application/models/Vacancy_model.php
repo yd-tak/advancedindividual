@@ -131,7 +131,7 @@ class Vacancy_model extends CI_Model {
         }
         return $vacancies;
     }
-    public function get($id){
+    public function get($id,$get=[]){
         $vacancy=$this->gettbl()->where('v.id',$id)->get()->row();
         $vacancy->skills=$this->gettblskill()->where("vs.vacancyid",$id)->get()->result();
         // pre($vacancy->skills);
@@ -190,7 +190,23 @@ class Vacancy_model extends CI_Model {
         $vacancy->language_str=implode(", ", $vacancy->languages);
         $vacancy->certification_str=implode(", ", $vacancy->certifications);
         $vacancy->test_str=implode(", ", $tests);
-        $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->get()->result();
+        $candidates=$this->gettblvc()->where("vc.vacancyid",$id);
+        if(isset($get['name']) && !empty($get['name'])){
+            $candidates->like("concat(c.firstname,' ',c.lastname)",$get['name']);
+        }
+        if(isset($get['minworkexp']) && !empty($get['minworkexp'])){
+            $candidates->where("c.workexp >=",$get['minworkexp']);
+        }
+        if(isset($get['minscore']) && !empty($get['minscore'])){
+            $candidates->where("vc.avgscore >=",$get['minscore']);
+        }
+        if(isset($get['minasksalary']) && !empty($get['minasksalary'])){
+            $candidates->where("vc.asksalary >=",$get['minasksalary']);
+        }
+        if(isset($get['maxasksalary']) && !empty($get['maxasksalary'])){
+            $candidates->where("vc.asksalary <=",$get['maxasksalary']);
+        }
+        $candidates=$candidates->get()->result();
         $vcs=$this->gettblvcstage()->where("vc.vacancyid",$id)->where('vcs.usecredit >',0)->get()->result();
         $vacancy->countcandidate=count($candidates);
         $stages=$this->db->order_by('no')->get('stages')->result();
@@ -623,6 +639,7 @@ class Vacancy_model extends CI_Model {
         $json=json_decode($answer);
         $this->db->where('id',$vcid)->update('vc',[
             'cvscore'=>$json->cvscore,
+            'avgscore'=>$json->cvscore,
             'cvresult'=>json_encode($json)
         ]);
         return $answer;

@@ -45,9 +45,11 @@ class Vacancy extends MY_Controller {
     }
     public function viewstage($id,$stageid){
         $view=$this->_defaultview;
-        $vacancy=$this->vacancy_model->get($id);
+        $input=$this->input->get();
+        $vacancy=$this->vacancy_model->get($id,$input);
         $stage=$this->db->where('id',$stageid)->get('stages')->row(0);
         $stages=$this->db->order_by('no')->get('stages')->result();
+        $view['get']=$input;
         $view['vacancy']=$vacancy;
         $view['stage']=$stage;
         $view['stages']=$stages;
