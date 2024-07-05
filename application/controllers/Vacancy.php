@@ -172,7 +172,7 @@ class Vacancy extends MY_Controller {
         $candidatefull=$this->candidate_model->complete($vcid,$vc->candidateid,$input);
         $this->vacancy_model->scorecv($vc->id,json_encode($candidatefull));
         $this->db->trans_complete();
-        redirect("vacancy/complete/".$vcid);
+        redirect("vacancy/apply/".$vc->vacancyid.'/success');
 
     }
     public function accept_vcs(){
