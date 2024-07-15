@@ -28,7 +28,8 @@
 		<!--begin::Vendor Stylesheets(used for this page only)-->
 		<link href="<?=base_url('assets/plugins/custom/datatables/datatables.bundle.css')?>" rel="stylesheet" type="text/css" />
 		<!--end::Global Stylesheets Bundle-->
-		<link href="<?=base_url('assets/css/select2.min.css')?>" rel="stylesheet" type="text/css" />
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
 		<style>
 			.ki-outline{
@@ -83,10 +84,20 @@
 	        }
 	        .dt-action-button{
 	        	display: block;
-	        	position: fixed;
+	        	position: absolute;
 	        	margin-top:20px;
-	        	z-index: 100;
+	        	z-index: 10;
 	        }
+	        /*@media (min-width: 992px) {
+    			:root {
+    				--bs-app-sidebar-width: 200px!important;
+			        --bs-app-sidebar-width-actual: 200px!important;
+			        --bs-app-sidebar-gap-start: 0px;
+			        --bs-app-sidebar-gap-end: 0px;
+			        --bs-app-sidebar-gap-top: 0px;
+			        --bs-app-sidebar-gap-bottom: 0px;
+    			}
+    		}*/
 		</style>
 		<!--begin::Javascript-->
 		<script>var hostUrl = "<?=base_url('assets/')?>";</script>
@@ -113,7 +124,7 @@
 		<!-- <script src="<?=base_url('assets/js/custom/utilities/modals/upgrade-plan.js')?>"></script>
 		<script src="<?=base_url('assets/js/custom/utilities/modals/create-app.js')?>"></script>
 		<script src="<?=base_url('assets/js/custom/utilities/modals/users-search.js')?>"></script> -->
-		<script src="<?=base_url('assets/js/select2.min.js')?>"></script>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 		<!--end::Custom Javascript-->
 		<script>
 			$(document).ready(function(){
@@ -145,23 +156,25 @@
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
-	<body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled">
+	<body id="kt_app_body" data-kt-app-header-fixed="true" data-kt-app-header-fixed-mobile="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" class="app-default">
 		<!--begin::Theme mode setup on page load-->
 		<script>var defaultThemeMode = "light"; var themeMode; if ( document.documentElement ) { if ( document.documentElement.hasAttribute("data-bs-theme-mode")) { themeMode = document.documentElement.getAttribute("data-bs-theme-mode"); } else { if ( localStorage.getItem("data-bs-theme") !== null ) { themeMode = localStorage.getItem("data-bs-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-bs-theme", themeMode); }</script>
 		<!--end::Theme mode setup on page load-->
 		<!--begin::Main-->
 		<!--begin::Root-->
-		<div class="d-flex flex-column flex-root">
+		<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
 			<!--begin::Page-->
-			<div class="page d-flex flex-row flex-column-fluid">
+			<div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+				<!--begin::Header-->
+				<?php if(!isset($hideheader) || !$hideheader){?>
+					<?php $this->load->view('layouts/header',$view)?>
+				<?php } ?>
+				<!--end::Header-->
 				<!--begin::Wrapper-->
-				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-					<?php if(!isset($hideheader) || !$hideheader){?>
-						<?php $this->load->view('layouts/header',$view)?>
-						
-					<?php } ?>
-					<?php if(!isset($hidetoolbar) || !$hidetoolbar){?>
-						<?php $this->load->view('layouts/toolbar',$view)?>
+				<div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+					
+					<?php if(!isset($hidesidebar) || !$hidesidebar){?>
+						<?php $this->load->view('layouts/sidebar',$view)?>
 					<?php } ?>
 					<?= $view['content']?>
 					<?php $this->load->view('layouts/modal',$view)?>

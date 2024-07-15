@@ -12,6 +12,15 @@ class Openai_core extends CI_Model {
         $this->client = OpenAI::client($this->_apikey);
         $this->_cv_parser='asst_XgaImoNF9BpJmEjFEGVZscdV';
     }
+    public $_cv_parser_prompt='You are a HR Admin whose job is to read through a candidate CV in raw text string format and summarize it into structured JSON, here is the JSON format that you must parse it to:
+        {
+        "firstname":"","lastname":"","birth_date":"yyyy-mm-dd","current_residency":"","age":"","marriage_status":"Single/Married/Divorced","gender":"Male/Female",
+        "education_history":[{"degree":"High School/Vocational School/Diploma/Bachelor/Master/Doctorate","institution_name":"","from_year":"yyyy","to_year":"yyyy","field_of_study":"","gpa":"","status_of_enrollment":"DropOut/Ongoing/Graduated","achievements":""}],
+        "work_history":[{"company_name":"","from_year":"yyyy","to_year":"yyyy","job_position":"","responsibilities":"","salary":"","reason_of_resignment":"","achievements":""}],
+        "technical_skills":[""],
+        "expected_salary":"","strong_qualities":"","weak_qualities":"","reason_to_hire":"",
+        "professional_certification":[{"certification":"","certified_year":"","certification_number":""}]
+        }';
     public function save_assistant($assistant_id){
         $assistant = $this->client->assistants()->retrieve($assistant_id);
         $this->db->set([

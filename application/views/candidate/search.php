@@ -8,6 +8,9 @@
 			<!--begin::Card body-->
 			<div class="card-body pt-0">
 				<div class="dt-action-button" data-kt-customer-table-toolbar="base">
+					<!--begin::Add customer-->
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-candidate-modal">Add <?=$objectname?></button>
+					<!--end::Add customer-->
 					<!--begin::Filter-->
 					<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
 					<i class="ki-duotone ki-filter fs-2">
@@ -50,40 +53,40 @@
 					</div>
 					<!--end::Menu 1-->
 					<!--end::Filter-->
-					<!--begin::Add customer-->
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-candidate-modal">Add <?=$objectname?></button>
-					<!--end::Add customer-->
+					
 				</div>
 				<!--begin::Table-->
-				<table class="table align-middle table-row-dashed fs-6 gy-5" id="list-table">
-					<thead>
-						<tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-							<th>ID</th>
-			                <th>Name</th>
-			                <th>Email</th>
-			                <th>Phone</th>
-			                <th>Experience</th>
-			                <th>Status</th>
-			                <th>Actions</th>
-						</tr>
-					</thead>
-					<tbody class="fw-semibold text-gray-600">
-						<?php foreach ($candidates as $row): ?>
-			            <tr>
-			                <td><?= $row->id ?></td>
-			                <td><?= $row->firstname." ".$row->lastname ?></td>
-			                <td><?= $row->email ?></td>
-			                <td><?= $row->phone ?></td>
-			                <td><?= $row->lastworkexp ?></td>
-			                <td><?= $row->status ?></td>
-			                <td>
-			                    <button class="btn btn-primary btn-sm">View</button>
-			                    <button class="btn btn-danger btn-sm">Delete</button>
-			                </td>
-			            </tr>
-			            <?php endforeach; ?>
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table align-middle table-row-bordered table-rounded g-2" id="list-table">
+						<thead>
+							<tr class="text-start fw-bold text-uppercase">
+								<th>ID</th>
+				                <th>Name</th>
+				                <th>Email</th>
+				                <th>Phone</th>
+				                <th>Experience</th>
+				                <th>Status</th>
+				                <th>Actions</th>
+							</tr>
+						</thead>
+						<tbody class="fw-semibold text-gray-600">
+							<?php foreach ($candidates as $row): ?>
+				            <tr>
+				                <td><?= $row->id ?></td>
+				                <td><?= $row->firstname." ".$row->lastname ?></td>
+				                <td><?= $row->email ?></td>
+				                <td><?= $row->phone ?></td>
+				                <td><?= $row->lastworkexp ?></td>
+				                <td><?= $row->status ?></td>
+				                <td>
+				                    <button class="btn btn-primary btn-sm">View</button>
+				                    <!-- <button class="btn btn-danger btn-sm">Delete</button> -->
+				                </td>
+				            </tr>
+				            <?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 				<!--end::Table-->
 			</div>
 			<!--end::Card body-->

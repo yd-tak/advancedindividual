@@ -18,7 +18,7 @@ class Dashboard extends MY_Controller {
 		$this->load->model('interview_model');
 		$this->load->model('recruitment_model');
 		$countcandidates=$this->db->select('count(id) countdata')->get('candidates')->row()->countdata;
-		$countcandidatestages=$this->db->select("ifnull(s.name,'Undefined') as stage,count(vc.id) countdata")->from('vc')->join('stages s','vc.lastvcstageid=s.id','left')->group_by("1")->get()->result();
+		$countcandidatestages=$this->db->select("ifnull(s.name,'On Progress') as stage,count(vc.id) countdata")->from('vc')->join('stages s','vc.lastvcstageid=s.id','left')->group_by("1")->get()->result();
 		$countcandidatedepts=$this->db->select("ifnull(d.name,'Undefined') as department,count(vc.id) countdata")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('departments d','v.departmentid=d.id','left')->group_by("1")->get()->result();
 		$countvacancies=$this->db->select("count(id) countdata")->get('vacancies')->row()->countdata;
 		$countvacancydepts=$this->db->select("ifnull(d.name,'Undefined') as department, count(v.id) countdata")->from("vacancies v")->join("departments d","v.departmentid=d.id","left")->group_by('1')->get()->result();

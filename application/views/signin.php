@@ -182,10 +182,10 @@
 									<!--begin::Heading-->
 									<div class="text-center mb-11">
 										<!--begin::Title-->
-										<h1 class="text-dark fw-bolder mb-3">Sign In</h1>
+										<img src="<?=base_url('assets/logo.png')?>"class="theme-light-show mx-auto mw-100 w-150px w-lg-300px mb-2" >
+										<!-- <h1 class="text-dark fw-bolder mb-3">Sign In</h1> -->
 										<!--end::Title-->
 										<!--begin::Subtitle-->
-										<div class="text-gray-500 fw-semibold fs-6">Advanced Individual</div>
 										<!--end::Subtitle=-->
 									</div>
 									<!--begin::Heading-->

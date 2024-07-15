@@ -16,7 +16,7 @@
 					<!--begin::Toolbar-->
 					<div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
 						<!--begin::Add customer-->
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-stage-modal">Add <?=$objectname?></button>
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-stage-modal">Add Stage</button>
 						<!--end::Add customer-->
 					</div>
 					<!--end::Toolbar-->
@@ -34,33 +34,36 @@
 			<!--begin::Card body-->
 			<div class="card-body pt-0">
 				<!--begin::Table-->
-				<table class="table align-middle table-row-dashed fs-6 gy-5" id="list-table">
-					<thead>
-						<tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-							<th>No</th>
-			                <th>Stage</th>
-			                <th>Description</th>
-			                <th>Status</th>
-			                <th>Actions</th>
-						</tr>
-					</thead>
-					<tbody class="fw-semibold text-gray-600">
-						<?php foreach ($stages as $row): ?>
-			            <tr>
-			                <td><?= $row->no ?></td>
-			                <td><?= $row->name ?></td>
-			                <td><?= $row->description ?></td>
-			                <td><?= $row->status ?></td>
-			                <td>
-			                	<?php if($row->iseditable){?>
-				                    <button class="btn btn-primary btn-sm" onclick="viewstage(<?=$row->id?>)">View</button>
-				                    <button class="btn btn-danger btn-sm" onclick="deletestage(<?=$row->id?>)">Delete</button>
-			                	<?php } ?>
-			                </td>
-			            </tr>
-			            <?php endforeach; ?>
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table align-middle table-row-bordered table-rounded g-2" id="list-table">
+						<thead>
+							<tr class="text-start fw-bold text-uppercase">
+				
+								<th>No</th>
+				                <th>Stage</th>
+				                <th>Description</th>
+				                <th>Status</th>
+				                <th>Actions</th>
+							</tr>
+						</thead>
+						<tbody class="fw-semibold text-gray-600">
+							<?php foreach ($stages as $row): ?>
+				            <tr>
+				                <td><?= $row->no ?></td>
+				                <td><?= $row->name ?></td>
+				                <td><?= $row->description ?></td>
+				                <td><?= $row->status ?></td>
+				                <td>
+				                	<?php if($row->iseditable){?>
+					                    <button class="btn btn-primary btn-sm" onclick="viewstage(<?=$row->id?>)">View</button>
+					                    <button class="btn btn-danger btn-sm" onclick="deletestage(<?=$row->id?>)">Delete</button>
+				                	<?php } ?>
+				                </td>
+				            </tr>
+				            <?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 				<!--end::Table-->
 			</div>
 			<!--end::Card body-->
@@ -72,7 +75,7 @@
 		    <div class="modal-dialog modal-dialog-centered">
 		        <div class="modal-content">
 		            <div class="modal-header">
-		                <h5 class="modal-title" id="add-stage-modal-label">Add <?=$objectname?></h5>
+		                <h5 class="modal-title" id="add-stage-modal-label">Add Stage</h5>
 		                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 		            </div>
 		            <div class="modal-body">
@@ -160,10 +163,10 @@
 <!--end::Container-->
 <script>
 	$("#list-table").DataTable({
-		dom: 'Bfrtip',
-        buttons: [
-            'csv', 'pdf'
-        ]
+		// dom: 'Bfrtip',
+        // buttons: [
+            // 'csv', 'pdf'
+        // ]
 	});
 	function viewstage(id){
 		$.ajax({

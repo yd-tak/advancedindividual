@@ -77,11 +77,9 @@
 			<div class="card-body pt-0">
 				<!--begin::Table-->
 				<div class="table-responsive">
-					<!--begin::Table-->
-					<table class="table table-striped table-bordered table-condensed" id="list-table">
-						<!--begin::Thead-->
-						<thead class="border-gray-200 fs-5 fw-semibold bg-lighten">
-							<tr>
+					<table class="table align-middle table-row-bordered table-rounded table-striped table-condensed g-2" id="list-table">
+						<thead>
+							<tr class="text-start fw-bold text-uppercase">
 								<th class="min-w-175px ps-9">Date</th>
 								<th class="min-w-150px px-0">Transaction</th>
 								<th class="min-w-100px">Debit</th>
@@ -101,9 +99,9 @@
 							<tr>
 								<td class="ps-9"><?=ymd($row->balancedt)?></td>
 								<td class="ps-0"><?=associatedwith($row->associatedwith).' #'.$row->associatedid?></td>
-								<td class="text-success"><?=number_format($row->debit)?></td>
-								<td class="text-danger"><?=number_format($row->credit)?></td>
-								<td class=""><?=number_format($currbalance)?></td>
+								<td class="text-success fw-bold"><?=number_format($row->debit)?></td>
+								<td class="text-danger fw-bold"><?=number_format($row->credit)?></td>
+								<td class=" fw-bold"><?=number_format($currbalance)?></td>
 								<td class="text-center">
 									<?=$row->note?>
 								</td>

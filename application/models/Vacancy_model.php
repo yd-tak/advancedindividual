@@ -620,7 +620,7 @@ class Vacancy_model extends CI_Model {
         - 40 = Bad Candidate, the candidate CV fulfill only 30 percent of the job requirements. Have no experience in similar industries, but have similar education background to the vacancy.
         - 0 = Rejected Candidate, the candidate CV does not match the job description, it will be disastrous to hire this person for the vacancy.
 
-        Give your score, evaluation, and explanation of the evaluation in JSON format:
+        Give your score, evaluation, and explanation of the evaluation in this EXACT JSON format:
 
         {
             "cvscore":"",

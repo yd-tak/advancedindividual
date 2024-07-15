@@ -7,77 +7,38 @@
 			<!--begin::Card body-->
 			<div class="card-body pt-0">
 				<div class="dt-action-button" data-kt-customer-table-toolbar="base">
-					<!--begin::Filter-->
-					<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-					<i class="ki-duotone ki-filter fs-2">
-						<span class="path1"></span>
-						<span class="path2"></span>
-					</i>Filter</button>
-					<!--begin::Menu 1-->
-					<div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
-						<!--begin::Header-->
-						<div class="px-7 py-5">
-							<div class="fs-4 text-dark fw-bold">Filter Options</div>
-						</div>
-						<!--end::Header-->
-						<!--begin::Separator-->
-						<div class="separator border-gray-200"></div>
-						<!--end::Separator-->
-						<!--begin::Content-->
-						<div class="px-7 py-5">
-							<div class="mb-10">
-								<label class="form-label fs-5 fw-semibold mb-3">Name:</label>
-								<input class="form-control fw-bold" name="name">
-							</div>
-							<div class="mb-10">
-								<label class="form-label fs-5 fw-semibold mb-3">Skills:</label>
-								<input class="form-select form-select-solid fw-bold" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-customer-table-filter="month" data-dropdown-parent="#kt-toolbar-filter">
-									<option></option>
-									<option value="aug">August</option>
-									<option value="sep">September</option>
-									<option value="oct">October</option>
-									<option value="nov">November</option>
-									<option value="dec">December</option>
-								</select>
-							</div>
-							<div class="d-flex justify-content-end">
-								<button type="reset" class="btn btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Reset</button>
-								<button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true" data-kt-customer-table-filter="filter">Apply</button>
-							</div><!--end::Actions-->
-						</div>
-						<!--end::Content-->
-					</div>
-					<!--end::Menu 1-->
-					<!--end::Filter-->
 					<!--begin::Add customer-->
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-location-modal">Add <?=$objectname?></button>
 					<!--end::Add customer-->
 				</div>
 				<!--begin::Table-->
-				<table class="table align-middle table-row-dashed fs-6 gy-5" id="list-table">
-					<thead>
-						<tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-							<th>ID</th>
-			                <th>Name</th>
-			                <th>Address</th>
-			                <th>Actions</th>
-						</tr>
-					</thead>
-					<tbody class="fw-semibold text-gray-600">
-						<?php foreach ($locations as $location): ?>
-			            <tr>
-			                <td><?= $location->id ?></td>
-			                <td><?= $location->name ?></td>
-			                <td><?= $location->address ?></td>
-			                <td>
-			                    <!-- Example actions -->
-			                    <button class="btn btn-primary btn-sm">Edit</button>
-			                    <button class="btn btn-danger btn-sm">Delete</button>
-			                </td>
-			            </tr>
-			            <?php endforeach; ?>
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table align-middle table-row-bordered table-rounded g-2" id="list-table">
+						<thead>
+							<tr class="text-start fw-bold text-uppercase">
+				
+								<th>ID</th>
+				                <th>Name</th>
+				                <th>Address</th>
+				                <th>Actions</th>
+							</tr>
+						</thead>
+						<tbody class="fw-semibold text-gray-600">
+							<?php foreach ($locations as $location): ?>
+				            <tr>
+				                <td><?= $location->id ?></td>
+				                <td><?= $location->name ?></td>
+				                <td><?= $location->address ?></td>
+				                <td>
+				                    <!-- Example actions -->
+				                    <button class="btn btn-primary btn-sm">Edit</button>
+				                    <button class="btn btn-danger btn-sm">Delete</button>
+				                </td>
+				            </tr>
+				            <?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 				<!--end::Table-->
 			</div>
 			<!--end::Card body-->

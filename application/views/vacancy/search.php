@@ -12,43 +12,45 @@
 					<a type="button" class="btn btn-primary" href="<?=site_url('vacancy/new')?>">Add <?=$objectname?></a>
 					<!--end::Add customer-->
 				</div>
-				<table class="table align-middle table-row-dashed fs-6 gy-5" id="list-table">
-					<thead>
-						<tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
-							<th>ID</th>
-			                <th>Name</th>
-			                <th>Commitment</th>
-			                <th>Location</th>
-			                <th>Credit Spent</th>
-			                <th>Candidates</th>
-			                <th>Actions</th>
-						</tr>
-					</thead>
-					<tbody class="fw-semibold text-gray-600">
-						<?php foreach ($vacancies as $row): ?>
-			            <tr>
-			                <td><?= $row->id ?></td>
-			                <td><?= $row->title ?></td>
-			                <td><?= $row->jobcommitment ?></td>
-			                <td><?= $row->location ?></td>
-			                <td><?= $row->creditused ?></td>
-			                <td>
-			                	<ul class="list-group list-group-horizontal text-center">
-									<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/1')?>'"><?=number_format($row->vc_pending)?><br><small style="font-weight: normal;">Pending</small></li>
-									<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/2')?>'"><?=number_format($row->vc_interviewing)?><br><small style="font-weight: normal;">Interviewing</small></li>
-									<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/3')?>'"><?=number_format($row->vc_onprocess)?><br><small style="font-weight: normal;">On Progress</small></li>
-									<li class="list-group-item"><?=number_format($row->vc_hired)?><br><small style="font-weight: normal;">Hired</small></li>
-									<li class="list-group-item"><?=number_format($row->vc_rejected)?><br><small style="font-weight: normal;">Rejected</small></li>
-								</ul>
-							</td>
-			                <td>
-			                    <a href="<?=site_url('vacancy/view/'.$row->id)?>" class="btn btn-primary btn-sm">View</a>
-			                    
-			                </td>
-			            </tr>
-			            <?php endforeach; ?>
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table align-middle table-row-bordered table-rounded g-2" id="list-table">
+						<thead>
+							<tr class="text-start fw-bold text-uppercase">
+								<th>ID</th>
+				                <th>Name</th>
+				                <th>Commitment</th>
+				                <th>Location</th>
+				                <th>Credit Spent</th>
+				                <th>Candidates</th>
+				                <th>Actions</th>
+							</tr>
+						</thead>
+						<tbody class="fw-semibold text-gray-600">
+							<?php foreach ($vacancies as $row): ?>
+				            <tr>
+				                <td><?= $row->id ?></td>
+				                <td><?= $row->title ?></td>
+				                <td><?= $row->jobcommitment ?></td>
+				                <td><?= $row->location ?></td>
+				                <td><?= $row->creditused ?></td>
+				                <td>
+				                	<ul class="list-group list-group-horizontal text-center">
+										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/1')?>'"><?=number_format($row->vc_pending)?><br><small style="font-weight: normal;">Pending</small></li>
+										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/2')?>'"><?=number_format($row->vc_interviewing)?><br><small style="font-weight: normal;">Interviewing</small></li>
+										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/3')?>'"><?=number_format($row->vc_onprocess)?><br><small style="font-weight: normal;">On Progress</small></li>
+										<li class="list-group-item"><?=number_format($row->vc_hired)?><br><small style="font-weight: normal;">Hired</small></li>
+										<li class="list-group-item"><?=number_format($row->vc_rejected)?><br><small style="font-weight: normal;">Rejected</small></li>
+									</ul>
+								</td>
+				                <td>
+				                    <a href="<?=site_url('vacancy/view/'.$row->id)?>" class="btn btn-primary btn-sm">View</a>
+				                    
+				                </td>
+				            </tr>
+				            <?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
 				<!--end::Table-->
 			</div>
 			<!--end::Card body-->

@@ -41,7 +41,7 @@ class Vacancy extends MY_Controller {
         $view['vacancy']=$vacancy;
         $view['pagename']=$view['breadcrumbs'][]='View Vacancy - '.$vacancy->title;
         $view['content']=$this->load->view('vacancy/view', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hidetoolbar'=>true]);
+        $this->load->view('layouts/master',['view'=>$view,'hidesidebar'=>true]);
     }
     public function viewstage($id,$stageid){
         $view=$this->_defaultview;
@@ -57,7 +57,7 @@ class Vacancy extends MY_Controller {
         $view['breadcrumbs'][]='View Vacancy - '.$vacancy->title;
         $view['breadcrumbs'][]=$stage->name;
         $view['content']=$this->load->view('vacancy/viewstage', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hidetoolbar'=>true]);
+        $this->load->view('layouts/master',['view'=>$view,'hidesidebar'=>true]);
     }
     public function add() {
         $input = $this->input->post();

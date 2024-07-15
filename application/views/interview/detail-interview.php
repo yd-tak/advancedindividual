@@ -416,8 +416,8 @@
         		return true;
         	}
             else
-            	return false;
-            	// return true;
+            	// return false;
+            	return true;
         }
 
         // Show modal if not in full screen
