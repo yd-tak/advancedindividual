@@ -41,7 +41,7 @@ class Interview extends MY_Controller {
         else
             $view['pagename']=$view['breadcrumbs'][]='['.$vc->vacancy.'] View Interview - '.$candidate->name;
         $view['content']=$this->load->view('interview/detail-interview', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true]);
+        $this->load->view('layouts/master',['view'=>$view,'hidesidebar'=>true,'hideheader'=>true]);
     }
     public function loadinterviewchats($vcid){
         $input=$this->input->get();
@@ -108,7 +108,7 @@ class Interview extends MY_Controller {
         $view['tests']=$result['tests'];
         $view['pagename']=$view['breadcrumbs'][]='['.$result['vc']->vacancy.'] Result Interview & Test - '.$result['vc']->candidate;
         $view['content']=$this->load->view('interview/result-interview', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true]);
+        $this->load->view('layouts/master',['view'=>$view,'hidesidebar'=>true,'hideheader'=>true]);
     }
 }
 ?>
