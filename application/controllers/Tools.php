@@ -12,6 +12,16 @@ class Tools extends MY_Controller {
         $this->load->model('candidate_model');
         
     }
+    public function universalsearch(){
+        $get=$this->input->get();
+        $searchresults=$this->search_model->run($get['keyword']);
+        // pre($searchresults);
+        $html=$this->load->view('universal-search-result',['searchresults'=>$searchresults],true);
+        echo json_encode(['html'=>$html]);
+    }
+    public function sendemail(){
+        sendHelperEmail("yudhistiradewanata@teknologiabadikorpora.com","Account Verification New","Hi nice to meet you, i am Advin AI");
+    }
     public function get_text_normalizer() {
         $assistant=$this->openai_core->text_normalizer();
         // pre($response);

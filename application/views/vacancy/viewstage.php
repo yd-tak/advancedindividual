@@ -68,7 +68,7 @@
 									<!--begin::Stats-->
 									<div class="d-flex flex-wrap">
 										<!--begin::Stat-->
-										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+										<div class="border border-gray-300 border-dashed rounded  py-3 px-4 me-6 mb-3">
 											<!--begin::Number-->
 											<div class="d-flex align-items-center">
 												<i class="ki-duotone ki-arrow-up fs-3 text-success me-2">
@@ -84,7 +84,7 @@
 										</div>
 										<!--end::Stat-->
 										<!--begin::Stat-->
-										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+										<div class="border border-gray-300 border-dashed rounded  py-3 px-4 me-6 mb-3">
 											<!--begin::Number-->
 											<div class="d-flex align-items-center">
 												<i class="ki-duotone ki-arrow-up fs-3 text-success me-2">
@@ -100,7 +100,7 @@
 										</div>
 										<!--end::Stat-->
 										<!--begin::Stat-->
-										<div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+										<div class="border border-gray-300 border-dashed rounded  py-3 px-4 me-6 mb-3">
 											<!--begin::Number-->
 											<div class="d-flex align-items-center">
 												<i class="ki-duotone ki-arrow-up fs-3 text-success me-2">
@@ -177,12 +177,12 @@
 							<i class="ki-duotone ki-filter fs-2">
 								<span class="path1"></span>
 								<span class="path2"></span>
-							</i>Filter</button>
+							</i>AI Filter</button>
 							<!--begin::Menu 1-->
 							<div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
 								<!--begin::Header-->
 								<div class="px-7 py-5">
-									<div class="fs-5 text-dark fw-bold">Filter Options</div>
+									<div class="fs-5 text-dark fw-bold">AI Search</div>
 								</div>
 								<!--end::Header-->
 								<!--begin::Separator-->
@@ -192,38 +192,8 @@
 								<?=form_open('vacancy/viewstage/'.$vacancy->id.'/'.$stage->id,['method'=>'get'])?>
 								<div class="px-7 py-5" data-kt-user-table-filter="form">
 									<div class="mb-10">
-										<label class="form-label fs-6 fw-semibold">Name</label>
-										<input class="form-control form-control-solid form-control-sm" name="name" value="<?=(isset($get['name']))?$get['name']:''?>">
-									</div>
-									<div class="mb-10">
-										<label class="form-label fs-6 fw-semibold">Min Ask Salary</label>
-										<input class="form-control form-control-solid form-control-sm" name="minasksalary" value="<?=(isset($get['minasksalary']))?$get['minasksalary']:''?>">
-									</div>
-									<div class="mb-10">
-										<label class="form-label fs-6 fw-semibold">Max Ask Salary</label>
-										<input class="form-control form-control-solid form-control-sm" name="maxasksalary" value="<?=(isset($get['maxasksalary']))?$get['maxasksalary']:''?>">
-									</div>
-									<div class="mb-10">
-										<label class="form-label fs-6 fw-semibold">Min Score</label>
-										<select class="form-select form-select-solid form-select-sm" name="minscore">
-											<option value="">All Score</option>
-											<option value="90" <?=(isset($get['minscore']) && $get['minscore']=='90')?'selected':''?>>90</option>
-											<option value="80" <?=(isset($get['minscore']) && $get['minscore']=='80')?'selected':''?>>80</option>
-											<option value="70" <?=(isset($get['minscore']) && $get['minscore']=='70')?'selected':''?>>70</option>
-											<option value="60" <?=(isset($get['minscore']) && $get['minscore']=='60')?'selected':''?>>60</option>
-										</select>
-									</div>
-									<div class="mb-10">
-										<label class="form-label fs-6 fw-semibold">Min Exp</label>
-										<select class="form-select form-select-solid form-select-sm" name="minworkexp">
-											<option value="">All Work Exp</option>
-											<option value="1" <?=(isset($get['minworkexp']) && $get['minworkexp']=='1')?'selected':''?>>1 year</option>
-											<option value="3" <?=(isset($get['minworkexp']) && $get['minworkexp']=='3')?'selected':''?>>3 year</option>
-											<option value="5" <?=(isset($get['minworkexp']) && $get['minworkexp']=='5')?'selected':''?>>5 year</option>
-											<option value="10" <?=(isset($get['minworkexp']) && $get['minworkexp']=='10')?'selected':''?>>10 year</option>
-											<option value="15" <?=(isset($get['minworkexp']) && $get['minworkexp']=='15')?'selected':''?>>15 year</option>
-											<option value="20" <?=(isset($get['minworkexp']) && $get['minworkexp']=='20')?'selected':''?>>20 year</option>
-										</select>
+										<label class="form-label fs-6 fw-semibold">Search Description</label>
+										<textarea class="form-control form-control-solid form-control-sm" name="aidescription"><?=(isset($get['aidescription']))?$get['aidescription']:''?></textarea>
 									</div>
 									<!--begin::Actions-->
 									<div class="d-flex justify-content-end">
@@ -497,13 +467,16 @@
 												</div>
 												
 											</div>
-											<div class="text-center pt-10">
+											<div class="text-center pt-10" id="offer-candidate-modal-action">
 												<button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</button>
 												<button type="button" class="btn btn-primary" onclick="offervc()">
 													<span class="indicator-label">Submit</span>
 													<span class="indicator-progress">Please wait...
 													<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 												</button>
+											</div>
+											<div class="text-center pt-10 d-none" id="offer-candidate-modal-loading">
+												<button type="button" class="btn btn-secondary me-3" >Loading...</button>
 											</div>
 										<?=form_close()?>
 										<!--end::Form-->
@@ -527,12 +500,12 @@
 								<th class="w-10px pe-2">
 									
 								</th>
-								<th class="min-w-125px">Name & Location</th>
-								<th class="min-w-125px">Gender & Age</th>
-								<th class="min-w-125px">Expected Salary</th>
-								<th class="min-w-125px">Years of Exp</th>
-								<th class="min-w-125px">Last Exp</th>
-								<th class="min-w-125px">Score</th>
+								<th class="">Name & Location</th>
+								<th class="">Gender & Age</th>
+								<th class="">Ask Salary</th>
+								<th class="">Work Exp</th>
+								<th class="">Last Exp</th>
+								<th class="">Score</th>
 								<th class="text-end min-w-100px">Actions</th>
 							</tr>
 						</thead>
@@ -561,7 +534,7 @@
 									<?php if(!$vacancy->stages[$stage->id]->isfinish){?>
 										<?php if($stage->id==7){?>
 											<?php if(!$row->isoffered){?>
-												<button onclick="offersingle(<?=$row->id?>,<?=$row->asksalary?>,this)" class="btn btn-primary btn-center btn-sm">
+												<button onclick="offersingle(<?=$row->id?>,<?=($row->asksalary==null?0:$row->asksalary)?>,this)" class="btn btn-primary btn-center btn-sm">
 												<i class="fa fa-envelope"></i></button>
 											<?php }else{ ?>
 												<a href="<?=site_url('vacancy/view_offered/'.$row->id)?>" target="_blank" class="btn btn-primary btn-center btn-sm">
@@ -691,6 +664,7 @@
 		$("#offer-vc-id").val(vcid);
 		$("#offer-vc-salary").val(asksalary);
 		$("#offer-candidate-modal").modal("show");
+		
 	}
 	function offervc(){
 		
@@ -701,14 +675,20 @@
 			type:"POST",
 			dataType:"json",
 			data:$("#offer-vc-form").serialize(),
+			beforeSend:function(){
+				$("#offer-candidate-modal-action").addClass("d-none");
+				$("#offer-candidate-modal-loading").removeClass("d-none");
+			},
 			success:function(response){
 				alert("Offering Letter Sent to the candidate email");
 				stoploading("content-page-loader");
-				
+					
 			},
 			error:function(err){
 				alert(err);
 				stoploading("content-page-loader");
+				$("#offer-candidate-modal-action").removeClass("d-none");
+				$("#offer-candidate-modal-loading").addClass("d-none");
 			}
 		});
 	}

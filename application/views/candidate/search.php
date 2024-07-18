@@ -12,16 +12,18 @@
 					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-candidate-modal">Add <?=$objectname?></button>
 					<!--end::Add customer-->
 					<!--begin::Filter-->
-					<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+					<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start">
 					<i class="ki-duotone ki-filter fs-2">
 						<span class="path1"></span>
 						<span class="path2"></span>
 					</i>Filter</button>
 					<!--begin::Menu 1-->
-					<div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter">
+					
+					<div class="menu menu-sub menu-sub-dropdown w-300px w-md-500px" data-kt-menu="true" id="kt-toolbar-filter">
+						<?=form_open('candidate/search',['method'=>'get'])?>
 						<!--begin::Header-->
 						<div class="px-7 py-5">
-							<div class="fs-4 text-dark fw-bold">Filter Options</div>
+							<div class="fs-4 text-dark fw-bold">Filter Data</div>
 						</div>
 						<!--end::Header-->
 						<!--begin::Separator-->
@@ -30,19 +32,16 @@
 						<!--begin::Content-->
 						<div class="px-7 py-5">
 							<div class="mb-10">
-								<label class="form-label fs-5 fw-semibold mb-3">Name:</label>
-								<input class="form-control fw-bold" name="name">
-							</div>
-							<div class="mb-10">
-								<label class="form-label fs-5 fw-semibold mb-3">Skills:</label>
-								<select class="form-select form-select-solid fw-bold" data-kt-select2="true" data-placeholder="Select option" data-allow-clear="true" data-kt-customer-table-filter="month" data-dropdown-parent="#kt-toolbar-filter">
-									<option></option>
-									<option value="aug">August</option>
-									<option value="sep">September</option>
-									<option value="oct">October</option>
-									<option value="nov">November</option>
-									<option value="dec">December</option>
-								</select>
+								<label class="form-label fs-5 fw-semibold">Keyword (OR)</label>
+								<div class="">
+									<select class="form-select form-select-sm select2-tag" name="keywords[]" multiple="multiple" style="width:100%">
+										<?php if(isset($input)){
+											foreach($input['keywords'] as $keyword){?>
+												<option value="<?=ucwords($keyword)?>" selected><?=ucwords($keyword)?></option>
+											<?php }
+										}?>
+									</select>
+								</div>
 							</div>
 							<div class="d-flex justify-content-end">
 								<button type="reset" class="btn btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true" data-kt-customer-table-filter="reset">Reset</button>
@@ -50,36 +49,40 @@
 							</div><!--end::Actions-->
 						</div>
 						<!--end::Content-->
+						<?=form_close()?>
 					</div>
+					
 					<!--end::Menu 1-->
 					<!--end::Filter-->
 					
 				</div>
 				<!--begin::Table-->
 				<div class="table-responsive">
-					<table class="table align-middle table-row-bordered table-rounded g-2" id="list-table">
+					<table class="table align-middle table-row-bordered table-rounded table-condensed" id="list-table">
 						<thead>
 							<tr class="text-start fw-bold text-uppercase">
 								<th>ID</th>
 				                <th>Name</th>
-				                <th>Email</th>
+				                <!-- <th>Email</th> -->
 				                <th>Phone</th>
 				                <th>Experience</th>
-				                <th>Status</th>
+				                <!-- <th>Status</th> -->
+				                <th>Desc</th>
 				                <th>Actions</th>
 							</tr>
 						</thead>
-						<tbody class="fw-semibold text-gray-600">
+						<tbody class="">
 							<?php foreach ($candidates as $row): ?>
 				            <tr>
 				                <td><?= $row->id ?></td>
 				                <td><?= $row->firstname." ".$row->lastname ?></td>
-				                <td><?= $row->email ?></td>
+				                <!-- <td><?= $row->email ?></td> -->
 				                <td><?= $row->phone ?></td>
 				                <td><?= $row->lastworkexp ?></td>
-				                <td><?= $row->status ?></td>
+				                <!-- <td><?= $row->status ?></td> -->
+				                <td><?= (isset($row->desc)?$row->desc:'') ?></td>
 				                <td>
-				                    <button class="btn btn-primary btn-sm">View</button>
+				                    <a class="btn btn-primary btn-sm" href="<?=site_url('candidate/view/'.$row->id)?>">View</a>
 				                    <!-- <button class="btn btn-danger btn-sm">Delete</button> -->
 				                </td>
 				            </tr>

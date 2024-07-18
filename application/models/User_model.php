@@ -36,5 +36,42 @@ class User_model extends CI_Model {
         $this->db->where('id',$post['id'])->update('users',$u_users);
         return true;
     }
+    public function saveResetToken($userId, $resetToken)
+    {
+        $data = [
+            'reset_token' => $resetToken,
+            'reset_token_expires' => date('Y-m-d H:i:s', strtotime('+1 hour'))
+        ];
+        return $this->db->where('id', $userId)->update('users', $data);
+    }
+    public function saveEmailResetToken($email, $resetToken)
+    {
+        $data = [
+            'reset_token' => $resetToken
+        ];
+        return $this->db->where('email', $email)->update('users', $data);
+    }
+
+    public function updatePassword($userId, $hashedPassword)
+    {
+        $data = [
+            'password' => $hashedPassword,
+            'reset_token' => null,
+            'reset_token_expires' => null
+        ];
+        return $this->db->where('id', $userId)->update('users', $data);
+    }
+    public function getUserByResetToken($resetToken)
+    {
+        return $this->db->where('reset_token', $resetToken)
+                        ->where('reset_token_expires >=', date('Y-m-d H:i:s'))
+                        ->get('users')->row();
+    }
+    public function getUserByEmailResetToken($resetToken)
+    {
+        return $this->db->where('reset_token', $resetToken)
+                        ->get('users')->row();
+    }
+
 }
 ?>

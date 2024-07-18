@@ -190,32 +190,27 @@ class Vacancy_model extends CI_Model {
         $vacancy->language_str=implode(", ", $vacancy->languages);
         $vacancy->certification_str=implode(", ", $vacancy->certifications);
         $vacancy->test_str=implode(", ", $tests);
-        $candidates=$this->gettblvc()->where("vc.vacancyid",$id);
-        if(isset($get['name']) && !empty($get['name'])){
-            $candidates->like("concat(c.firstname,' ',c.lastname)",$get['name']);
+        $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->get()->result();
+        if(isset($get['aidescription']) && !empty(trim($get['aidescription']))){
+            $airesult=$this->search_model->runai($candidates,$get['aidescription']);
+            // pre($airesult->result);
+            $airesultmap=[];
+            foreach($airesult->result as $row){
+                // pre($row);
+                $airesultmap[$row->id]=$row->reason;
+            }
+            $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->where_in("vc.id",array_keys($airesultmap))->get()->result();
+            foreach($candidates as $row){
+                $row->reason=$airesultmap[$row->id];
+            }
+
         }
-        if(isset($get['minworkexp']) && !empty($get['minworkexp'])){
-            $candidates->where("c.workexp >=",$get['minworkexp']);
-        }
-        if(isset($get['minscore']) && !empty($get['minscore'])){
-            $candidates->where("vc.avgscore >=",$get['minscore']);
-        }
-        if(isset($get['minasksalary']) && !empty($get['minasksalary'])){
-            $candidates->where("vc.asksalary >=",$get['minasksalary']);
-        }
-        if(isset($get['maxasksalary']) && !empty($get['maxasksalary'])){
-            $candidates->where("vc.asksalary <=",$get['maxasksalary']);
-        }
-        $candidates=$candidates->get()->result();
-        $vcs=$this->gettblvcstage()->where("vc.vacancyid",$id)->where('vcs.usecredit >',0)->get()->result();
+
+        $vcsinfo=$this->db->select("count(vc.id) countid,sum(vcs.usecredit) sumusecredit")->from("vc")->join("vc_stages vcs","vc.id=vcs.vcid")->where("vc.vacancyid",$id)->where('vcs.usecredit >',0)->get()->row();
         $vacancy->countcandidate=count($candidates);
-        $stages=$this->db->order_by('no')->get('stages')->result();
+
+        $stages=$this->db->where('isdeleted',0)->order_by('no')->get('stages')->result();
         $stagemap=[];
-        $totalcredit=0;
-        $aiprocessed=count($vcs);
-        foreach($vcs as $row){
-            $totalcredit+=$row->usecredit;
-        }
         foreach($stages as $row){
             $row->candidates=[];
             $stagemap[$row->id]=$row;
@@ -224,8 +219,10 @@ class Vacancy_model extends CI_Model {
             $stagemap[$row->stageid]->candidates[]=$row;
         }
         $vacancy->stages=$stagemap;
-        $vacancy->totalcredit=$totalcredit;
-        $vacancy->aiprocessed=$aiprocessed;
+
+        $vacancy->totalcredit=$vcsinfo->sumusecredit;
+        $vacancy->aiprocessed=$vcsinfo->countid;
+        
         // $vacancy->vcs=$vcs;
         // pre($vacancy->vcs);
         return $vacancy;
@@ -663,6 +660,7 @@ class Vacancy_model extends CI_Model {
             'isoffered'=>1
         ]);
         $this->create_offering_letter($vcid);
+        $this->send_offering_letter($vcid);
     }
     public function create_offering_letter($vcid){
         $vc=$this->getvc($vcid);
@@ -688,11 +686,17 @@ class Vacancy_model extends CI_Model {
         ]);
         return true;
     }
+    public function send_offering_letter($vcid){
+        $vc=$this->db->select("v.title,vc.id,c.email,concat(c.firstname,' ',c.lastname) name,vc.interviewurisent,vc.offerletter")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('vc_stages vcs','vc.lastvcstageid=vcs.id')->join("candidates c","vc.candidateid=c.id")->where('vc.id',$vcid)->get()->row();
+        if($vc->offerletter!=null){
+            $subject=getCompany('name').' - Offering Letter for '.$vc->title.' Job Position';
+            sendHelperEmail($vc->email,$subject,$vc->offerletter);
+        }
+    }
     public function create_offering_pdf($vcid){
         $vc=$this->db->where('id',$vcid)->get('vc')->row();
         $this->utilities->savetopdf($vc->offerletter,'vc-'.$vc->id);
     }
-
     
 }
 ?>

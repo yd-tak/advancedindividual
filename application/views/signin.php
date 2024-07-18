@@ -191,6 +191,7 @@
 									<!--begin::Heading-->
 									<!--end::Login options-->
 									<!--end::Separator-->
+									<?=showFlashData()?>
 									<!--begin::Input group=-->
 									<div class="fv-row mb-8">
 										<!--begin::Email-->
@@ -208,7 +209,7 @@
 									<div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
 										<div></div>
 										<!--begin::Link-->
-										<a href="<?=site_url('auth/forget_password')?>" class="link-primary">Forgot Password ?</a>
+										<a href="<?=site_url('auth/forgotpassword')?>" class="link-primary">Forgot Password ?</a>
 										<!--end::Link-->
 									</div>
 									<!--end::Wrapper-->

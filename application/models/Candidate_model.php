@@ -22,6 +22,7 @@ class Candidate_model extends CI_Model {
     }
     public function get($id){
         $candidate=$this->gettbl()->where('c.id',$id)->get()->row();
+        // pre($candidate);
         $candidate->name=$candidate->firstname." ".$candidate->lastname;
         $candidate->workexps=$this->gettblworkexp()->where('c.id',$id)->get()->result();
         $candidate->educations=$this->gettbleducation()->where('c.id',$id)->get()->result();

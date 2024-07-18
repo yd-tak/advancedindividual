@@ -1,4 +1,20 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+function getRequestMethod()
+{
+    $method=$_SERVER['REQUEST_METHOD'];
+    return strtolower($method);
+}
+function getLoginSession($key=null)
+{
+    $ci=&get_instance();
+    $login=$ci->session->userdata('login');
+    $ret=false;
+    if(isset($login->$key)){
+        $ret=$login->$key;
+    }
+    return $ret;
+}
+
 function pre($data, $next = 0)
 {
     echo '<pre>';
@@ -27,7 +43,7 @@ function filter_select_option_ids($options){
     ];
 }
 function insert_select_options($tblname,$datas,$colname='name',$defaultrow=[]){
-    $CI = get_instance();
+    $ci=&get_instance();
     if(!empty($datas)){
 
         $ib_newdata=[];
@@ -37,8 +53,8 @@ function insert_select_options($tblname,$datas,$colname='name',$defaultrow=[]){
             $ib_newdata[]=$newdata;
         }
         // pre($ib_newdata);
-        $CI->db->insert_batch($tblname,$ib_newdata);
-        $inserted=$CI->db->where_in($colname,$datas)->get($tblname)->result();
+        $ci->db->insert_batch($tblname,$ib_newdata);
+        $inserted=$ci->db->where_in($colname,$datas)->get($tblname)->result();
         // pre($inserted);
         $newids=[];
         foreach($inserted as $row){
@@ -78,12 +94,12 @@ function ymd($date,$format="d M y"){
     return $dt->format($format);
 }
 function getcompany($param=null){
-    $CI = get_instance();
-    return $CI->company_model->get($param);
+    $ci=&get_instance();
+    return $ci->company_model->get($param);
 }
 function getsetting($param=null){
-    $CI = get_instance();
-    return $CI->setting_model->get($param);
+    $ci=&get_instance();
+    return $ci->setting_model->get($param);
 }
 function calc_netscore($score,$aisuspect,$penalty){
     $netscore=(1-($aisuspect*$penalty/3))*$score;
@@ -125,4 +141,51 @@ function str_replace_multiple($str,$findreplaces){
         $resultstr=str_replace($search, $replace, $resultstr);
     }
     return $resultstr;
+}
+function showFlashData(){
+    $ci=&get_instance();
+    if ($ci->session->flashdata('warning')){
+        echo '<div class="alert alert-warning">WARNING: '.ucwords($ci->session->flashdata('warning')).'</div>';
+    }
+    if ($ci->session->flashdata('error')){
+        echo '<div class="alert alert-danger">ERROR:'.ucwords($ci->session->flashdata('error')).'</div>';
+    }
+    if ($ci->session->flashdata('success')){
+        echo '<div class="alert alert-success">SUCCESS: '.ucwords($ci->session->flashdata('success')).'</div>';
+    }
+}
+function generateRandomString($length = 6) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}
+function getRecentViews($userid){
+    $ci=&get_instance();
+    $recentViews=$ci->search_model->recentViews($userid);
+    return $recentViews;
+}
+function now(){
+    return date("Y-m-d H:i:s");
+}
+function getCreditBalance(){
+    $ci=&get_instance();
+    $balance=$ci->db->select("ifnull(sum(debit)-sum(credit),0) balance")->get("credit_balances")->row();
+    return $balance->balance;
+}
+function sendHelperEmail($recipient,$subject,$message){
+    $ci=&get_instance();
+    // pre($ci->config->item('email'));
+    $ci->load->library('email');
+    $config=$ci->config->item('email');
+    $ci->email->initialize($config);
+    $ci->email->from($config['smtp_user'], 'Advin');
+    $ci->email->to($recipient);
+    $ci->email->subject($subject);
+    $ci->email->message($message);
+
+    return $ci->email->send();
 }

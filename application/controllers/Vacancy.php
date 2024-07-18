@@ -38,17 +38,20 @@ class Vacancy extends MY_Controller {
     public function view($id){
         $view=$this->_defaultview;
         $vacancy=$this->vacancy_model->get($id);
+        $this->search_model->logView(getLoginSession('id'),'Vacancy',$vacancy->id,$vacancy->title,'vacancy/view/'.$id);
         $view['vacancy']=$vacancy;
         $view['pagename']=$view['breadcrumbs'][]='View Vacancy - '.$vacancy->title;
         $view['content']=$this->load->view('vacancy/view', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hidesidebar'=>true]);
+        $this->load->view('layouts/master',['view'=>$view]);
     }
     public function viewstage($id,$stageid){
         $view=$this->_defaultview;
         $input=$this->input->get();
         $vacancy=$this->vacancy_model->get($id,$input);
+
         $stage=$this->db->where('id',$stageid)->get('stages')->row(0);
         $stages=$this->db->order_by('no')->get('stages')->result();
+        $this->search_model->logView(getLoginSession('id'),'Vacancy',$vacancy->id,$vacancy->title.' - '.$stage->name,'vacancy/viewstage/'.$id.'/'.$stageid);
         $view['get']=$input;
         $view['vacancy']=$vacancy;
         $view['stage']=$stage;
@@ -57,7 +60,7 @@ class Vacancy extends MY_Controller {
         $view['breadcrumbs'][]='View Vacancy - '.$vacancy->title;
         $view['breadcrumbs'][]=$stage->name;
         $view['content']=$this->load->view('vacancy/viewstage', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hidesidebar'=>true]);
+        $this->load->view('layouts/master',['view'=>$view]);
     }
     public function add() {
         $input = $this->input->post();
@@ -89,6 +92,7 @@ class Vacancy extends MY_Controller {
         $this->load->model("candidate_model");
         $vc=$this->vacancy_model->gettblvc()->where('vc.id',$vcid)->get()->row();
         $candidate=$this->candidate_model->get($vc->candidateid);
+
         if($vc->cvresult!==null){
             $vc->cvresult=json_decode($vc->cvresult);
         }
@@ -98,11 +102,11 @@ class Vacancy extends MY_Controller {
                 'explanation'=>''
             ];
         }
+        // pre($vc);
         $stage=$this->db->where('id',$vc->stageid)->get('stages')->row();
         $stages=$this->db->order_by('no')->get('stages')->result();
         $html=$this->load->view('vacancy/vc-modal',['vc'=>$vc,'candidate'=>$candidate,'stages'=>$stages,'stage'=>$stage],true);
         echo json_encode(['html'=>$html]);
-        #$this->vacancy_model->get()
     }
     public function apply($id,$status=false){
         $view=$this->_defaultview;
@@ -125,19 +129,20 @@ class Vacancy extends MY_Controller {
         $this->load->library('upload', $config);
         if ( ! $this->upload->do_upload('userfile'))
         {
-            echo $this->upload->display_errors();
-            exit;
+            $this->session->set_flashdata('error', 'Error checking CV');
+            redirect($this->input->server('HTTP_REFERER'));
         }
         $uploaddata = $this->upload->data();
         $cv=$uploaddata['file_name'];
         $cvpath=$config['upload_path'].$cv;
-
+        $input['cvfile']=$cv;
         $this->db->trans_start();
         $candidateid=$this->vacancy_model->add_new_candidate($input,$cvpath);
         $this->candidate_model->parse_airesult($candidateid);
         $candidate=$this->db->where('id',$candidateid)->get('candidates')->result();
         $vc=$this->db->where('vacancyid',$input['vacancyid'])->where('candidateid',$candidateid)->get('vc')->row();
         $this->vacancy_model->scorecv($vc->id,$candidate->airesult);
+
         $this->db->trans_complete();
         redirect("vacancy/complete/".$vc->id);
 
@@ -201,9 +206,7 @@ class Vacancy extends MY_Controller {
         $this->db->trans_complete();
         echo json_encode(['message'=>'offered']);
     }
-    public function create_offering_letter($vcid){
-        $this->vacancy_model->create_offering_pdf($vcid);
-    }
+    
     public function view_offered($vcid){
         // $view=$this->_defaultview;
         // $view['pagename']=$view['breadcrumbs'][]='View Offering Letter';

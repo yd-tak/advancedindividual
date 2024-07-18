@@ -11,6 +11,7 @@ class Openai_core extends CI_Model {
         $this->_apikey=getSetting('openai_key');
         $this->client = OpenAI::client($this->_apikey);
         $this->_cv_parser='asst_XgaImoNF9BpJmEjFEGVZscdV';
+        $this->_search_data='asst_3JoUdTy2CmHc8QfFo2C3tZfG';
     }
     public $_cv_parser_prompt='You are a HR Admin whose job is to read through a candidate CV in raw text string format and summarize it into structured JSON, here is the JSON format that you must parse it to:
         {
@@ -309,6 +310,16 @@ class Openai_core extends CI_Model {
         // $lastmessage=$this->_get_lastmessage();
 
         // return $lastmessage;
+    }
+    public function searchData($datas,$description){
+        $this->set_assistant($this->_search_data);
+        $thread=$this->_create_thread();
+        $run=$this->run_message("
+            List of Datas: ".json_encode($datas).".
+            Search Description: $description
+        ");
+        // pre($run)
+        return $run;
     }
     public function parseCV($cvtext){
         $this->set_assistant($this->_cv_parser);

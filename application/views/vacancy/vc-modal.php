@@ -195,7 +195,9 @@
 						
 					</div>
 					<div class="tab-pane" id="candidate-cv" role="tabpanel" style="background: white;padding:10px;">
-						
+						<?php if($candidate->cvfile!=null){?>
+							<iframe width="100%" height="600px" src="<?=base_url('assets/uploads/cvs/'.$candidate->cvfile)?>"></iframe>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
