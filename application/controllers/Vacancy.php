@@ -129,7 +129,7 @@ class Vacancy extends MY_Controller {
         $this->load->library('upload', $config);
         if ( ! $this->upload->do_upload('userfile'))
         {
-            $this->session->set_flashdata('error', 'Error checking CV');
+            $this->session->set_flashdata('error', $this->upload->display_errors());
             redirect($this->input->server('HTTP_REFERER'));
         }
         $uploaddata = $this->upload->data();
