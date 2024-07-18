@@ -118,7 +118,7 @@ class Vacancy extends MY_Controller {
         }
         $view['pagename']=$view['breadcrumbs'][]='Apply for Vacancy - '.$vacancy->title;
         $view['content']=$this->load->view('vacancy/apply', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true]);
+        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true,'hidesidebar'=>true]);
     }
     public function applyp(){
         $this->load->model("candidate_model");
@@ -162,7 +162,7 @@ class Vacancy extends MY_Controller {
         $view['vcid']=$vcid;
         $view['pagename']=$view['breadcrumbs'][]='Complete your CV - '.$vacancy->title;
         $view['content']=$this->load->view('vacancy/complete', $view,true);
-        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true]);
+        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true,'hidesidebar'=>true]);
     }
     public function completep(){
         $this->load->model("candidate_model");
