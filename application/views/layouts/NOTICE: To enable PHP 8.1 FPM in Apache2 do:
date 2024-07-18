@@ -1,5 +1,0 @@
-NOTICE: To enable PHP 8.1 FPM in Apache2 do:
-NOTICE: a2enmod proxy_fcgi setenvif
-NOTICE: a2enconf php8.1-fpm
-NOTICE: You are seeing this message because you have apache2 package installed.
-
