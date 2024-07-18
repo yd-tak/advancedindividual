@@ -123,7 +123,7 @@ class Vacancy extends MY_Controller {
     public function applyp(){
         $this->load->model("candidate_model");
         $input=$this->input->post();
-        $config['upload_path']          = APPATH.'assets/uploads/cvs/';
+        $config['upload_path']          = APPPATH.'assets/uploads/cvs/';
         $config['allowed_types']        = 'pdf';
         
         $this->load->library('upload', $config);
