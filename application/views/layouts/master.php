@@ -171,7 +171,7 @@
 				<?php } ?>
 				<!--end::Header-->
 				<!--begin::Wrapper-->
-				<div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+				<div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper" style="<?php if(isset($hideheader) &&$hideheader){echo 'margin-top:40px!important;';}?> <?php if(isset($hidesidebar) &&$hidesidebar){echo 'margin-left:10px!important;';}?>">
 					
 					<?php if(!isset($hidesidebar) || !$hidesidebar){?>
 						<?php $this->load->view('layouts/sidebar',$view)?>
