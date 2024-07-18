@@ -12,6 +12,9 @@ class Tools extends MY_Controller {
         $this->load->model('candidate_model');
         
     }
+    public function apppath(){
+        echo APPPATH;
+    }
     public function universalsearch(){
         $get=$this->input->get();
         $searchresults=$this->search_model->run($get['keyword']);
