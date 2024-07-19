@@ -199,9 +199,14 @@ class Vacancy_model extends CI_Model {
                 // pre($row);
                 $airesultmap[$row->id]=$row->reason;
             }
-            $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->where_in("vc.id",array_keys($airesultmap))->get()->result();
-            foreach($candidates as $row){
-                $row->reason=$airesultmap[$row->id];
+            if(empty($airesultmap)){
+                $candidates=[];
+            }
+            else{
+                $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->where_in("vc.id",array_keys($airesultmap))->get()->result();
+                foreach($candidates as $row){
+                    $row->reason=$airesultmap[$row->id];
+                }
             }
 
         }
