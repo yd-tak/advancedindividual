@@ -138,8 +138,7 @@ class Openai_core extends CI_Model {
                     'type' => 'code_interpreter',
                 ],
             ],
-            'model' => 'gpt-4',
-            'tool_resources'=>[]
+            'model' => 'gpt-4'
         ]);
         $this->db->set([
             'id'=>$assistant->id,
