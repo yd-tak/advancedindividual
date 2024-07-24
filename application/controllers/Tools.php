@@ -23,7 +23,7 @@ class Tools extends MY_Controller {
         echo json_encode(['html'=>$html]);
     }
     public function sendemail(){
-        sendHelperEmail("yudhistiradewanata@teknologiabadikorpora.com","Account Verification New","Hi nice to meet you, i am Advin AI");
+        sendHelperEmail("yudhistiradewanata@gmail.com","Account Verification New","Hi nice to meet you, i am Advin AI");
     }
     public function get_text_normalizer() {
         $assistant=$this->openai_core->text_normalizer();
