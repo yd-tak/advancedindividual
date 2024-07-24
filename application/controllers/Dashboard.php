@@ -26,7 +26,11 @@ class Dashboard extends MY_Controller {
 		$timetohire=$this->db->select("avg(a.mindaytook) avgdata")->from("(SELECT v.id vacancyid,datediff(v.createdate,min(vc.createdt)) mindaytook from vacancies v join vc on v.id=vc.vacancyid join vc_stages vcs on vc.id=vcs.vcid and vcs.stageid=8 group by 1 having count(vc.id)>0) a")->get()->result();
 		$timetohiredepts=$this->db->select("a.department,avg(a.mindaytook) avgdata")->from("(SELECT ifnull(d.name,'Undefined') department,datediff(v.createdate,min(vcs.createdt)) mindaytook from vacancies v left join departments d on v.departmentid=d.id join vc on v.id=vc.vacancyid join vc_stages vcs on vc.id=vcs.vcid and vcs.stageid=8 group by 1 having count(vc.id)>0) a")->group_by('1')->get()->result();
 		$query=$this->db->select("ifnull(sum(case when vcs.stageid=7 then 1 else 0 end),0) accepted,ifnull(sum(case when vcs.stageid=8 and vcs.result='Offer Rejected' then 1 else 0 end),0) rejected")->from("vc_stages vcs")->get()->row();
-		$offeracceptancerate=$query->accepted/($query->accepted+$query->rejected);
+		if($query->rejected==0){
+			$offeracceptancerate=0;
+		}
+		else
+			$offeracceptancerate=$query->accepted/($query->accepted+$query->rejected);
 		$query=$this->db->select("ifnull(d.name,'Undefined') department,ifnull(sum(case when vcs.stageid=7 then 1 else 0 end),0) accepted,ifnull(sum(case when vcs.stageid=8 and vcs.result='Offer Rejected' then 1 else 0 end),0) rejected")->from("vc_stages vcs")->join('vc','vcs.vcid=vc.id')->join('vacancies v','vc.vacancyid=v.id')->join('departments d','v.departmentid=d.id','left')->group_by('1')->get()->result();
 		// pre($query);
 		$offeracceptanceratedepts=[];
