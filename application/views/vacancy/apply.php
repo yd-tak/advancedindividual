@@ -11,6 +11,125 @@
 					<div class="flex-lg-row-fluid me-0 me-lg-20">
 						<!--begin::Job-->
 						<div class="mb-17">
+							<!--end::Accordion-->
+							<div class="mt-10">
+								<!--begin::Title-->
+								<h4 class="fs-1 text-gray-800 w-bolder mb-6">Submit your Application</h4>
+								<!--end::Title-->
+								
+							</div>
+							
+							<div class="m-0">
+								<!--begin::Heading-->
+								<div class="align-items-center py-3 toggle mb-0">
+									<?php if(isset($status) && $status=='success'){?>
+									<div class="notice d-flex bg-light-success rounded border-success border border-dashed p-6">
+										<!--begin::Icon-->
+										<i class="ki-duotone ki-information fs-2tx text-success me-4">
+											<span class="path1"></span>
+											<span class="path2"></span>
+											<span class="path3"></span>
+										</i>
+										<!--end::Icon-->
+										<!--begin::Wrapper-->
+										
+										<div class="d-flex flex-stack flex-grow-1">
+											<!--begin::Content-->
+											<div class="fw-semibold">
+												<h4 class="text-gray-900 fw-bold">Thank you for your application, we'll update you via E-Mail.<br>Please make sure to check your E-Mail periodically.</h4>
+												
+											</div>
+											<!--end::Content-->
+										</div>
+										
+										<!--end::Wrapper-->
+									</div>
+									<?php } ?>
+									
+									<?=form_open_multipart('vacancy/applyp',['method'=>'post','class'=>'form-horizontal','id'=>'apply-form'])?>
+										<input type="hidden" value="<?=$vacancy->id?>" name="vacancyid">
+										<!--begin::Input group-->
+										<div class="row mb-5">
+											<!--begin::Col-->
+											<div class="col-md-6 fv-row">
+												<!--begin::Label-->
+												<label class="fs-5 fw-semibold mb-2">First Name</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<input type="text" class="form-control form-control-solid" placeholder="" name="firstname" />
+												<!--end::Input-->
+											</div>
+											<!--end::Col-->
+											<!--begin::Col-->
+											<div class="col-md-6 fv-row">
+												<!--end::Label-->
+												<label class="fs-5 fw-semibold mb-2">Last Name</label>
+												<!--end::Label-->
+												<!--end::Input-->
+												<input type="text" class="form-control form-control-solid" placeholder="" name="lastname" />
+												<!--end::Input-->
+											</div>
+											<!--end::Col-->
+										</div>
+										<div class="row mb-5">
+											<!--begin::Col-->
+											<div class="col-md-6 fv-row">
+												<!--begin::Label-->
+												<label class="fs-5 fw-semibold mb-2">Email</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<input type="text" class="form-control form-control-solid" placeholder="" name="email" />
+												<!--end::Input-->
+											</div>
+											<!--end::Col-->
+											<!--begin::Col-->
+											<div class="col-md-6 fv-row">
+												<!--end::Label-->
+												<label class="fs-5 fw-semibold mb-2">Phone (+62)</label>
+												<!--end::Label-->
+												<!--end::Input-->
+												<input type="text" class="form-control form-control-solid" placeholder="8..." name="phone" />
+												<!--end::Input-->
+											</div>
+											<!--end::Col-->
+										</div>
+										<!--end::Input group-->
+										<!--begin::Input group-->
+										<div class="row mb-5">
+											<!--begin::Col-->
+											<div class="col-md-12 fv-row">
+												<!--begin::Label-->
+												<label class="fs-5 fw-semibold mb-2">CV</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<input class="form-control form-control-solid" type="file" placeholder="Upload your CV" name="userfile" required />
+												<!--end::Input-->
+											</div>
+											<!--end::Col-->
+										</div>
+										<!--end::Input group-->
+										
+										<!--begin::Input group-->
+										<div class="d-flex flex-column mb-8">
+											<label class="fs-6 fw-semibold mb-2">Why we should hire you?</label>
+											<textarea class="form-control form-control-solid" rows="4" name="application" placeholder=""></textarea>
+										</div>
+										<!--end::Input group-->
+										<!--begin::Separator-->
+										<div class="separator mb-8"></div>
+										<!--end::Separator-->
+										<!--begin::Submit-->
+										<button type="submit" class="btn btn-primary" id="submit-btn">
+											Apply Now
+										</button>
+										<!--end::Submit-->
+									<?=form_close()?>
+								</div>
+							</div>
+							<!--begin::Separator-->
+							<div class="separator mt-8 mb-8"></div>
+							<!--end::Separator-->
+							
 							<!--begin::Description-->
 							<div class="m-0">
 								<!--begin::Title-->
@@ -216,121 +335,7 @@
 								<!--end::Separator-->
 							</div>
 							<!--end::Section-->
-							<!--end::Accordion-->
-							<div class="mt-10">
-								<!--begin::Title-->
-								<h4 class="fs-1 text-gray-800 w-bolder mb-6">Submit your Application</h4>
-								<!--end::Title-->
-								
-							</div>
 							
-							<div class="m-0">
-								<!--begin::Heading-->
-								<div class="align-items-center py-3 toggle mb-0">
-									<?php if(isset($status) && $status=='success'){?>
-									<div class="notice d-flex bg-light-success rounded border-success border border-dashed p-6">
-										<!--begin::Icon-->
-										<i class="ki-duotone ki-information fs-2tx text-success me-4">
-											<span class="path1"></span>
-											<span class="path2"></span>
-											<span class="path3"></span>
-										</i>
-										<!--end::Icon-->
-										<!--begin::Wrapper-->
-										
-										<div class="d-flex flex-stack flex-grow-1">
-											<!--begin::Content-->
-											<div class="fw-semibold">
-												<h4 class="text-gray-900 fw-bold">Thank you for your application, we'll update you via E-Mail.<br>Please make sure to check your E-Mail periodically.</h4>
-												
-											</div>
-											<!--end::Content-->
-										</div>
-										
-										<!--end::Wrapper-->
-									</div>
-									<?php } ?>
-									
-									<?=form_open_multipart('vacancy/applyp',['method'=>'post','class'=>'form-horizontal','id'=>'apply-form'])?>
-										<input type="hidden" value="<?=$vacancy->id?>" name="vacancyid">
-										<!--begin::Input group-->
-										<div class="row mb-5">
-											<!--begin::Col-->
-											<div class="col-md-6 fv-row">
-												<!--begin::Label-->
-												<label class="fs-5 fw-semibold mb-2">First Name</label>
-												<!--end::Label-->
-												<!--begin::Input-->
-												<input type="text" class="form-control form-control-solid" placeholder="" name="firstname" />
-												<!--end::Input-->
-											</div>
-											<!--end::Col-->
-											<!--begin::Col-->
-											<div class="col-md-6 fv-row">
-												<!--end::Label-->
-												<label class="fs-5 fw-semibold mb-2">Last Name</label>
-												<!--end::Label-->
-												<!--end::Input-->
-												<input type="text" class="form-control form-control-solid" placeholder="" name="lastname" />
-												<!--end::Input-->
-											</div>
-											<!--end::Col-->
-										</div>
-										<div class="row mb-5">
-											<!--begin::Col-->
-											<div class="col-md-6 fv-row">
-												<!--begin::Label-->
-												<label class="fs-5 fw-semibold mb-2">Email</label>
-												<!--end::Label-->
-												<!--begin::Input-->
-												<input type="text" class="form-control form-control-solid" placeholder="" name="email" />
-												<!--end::Input-->
-											</div>
-											<!--end::Col-->
-											<!--begin::Col-->
-											<div class="col-md-6 fv-row">
-												<!--end::Label-->
-												<label class="fs-5 fw-semibold mb-2">Phone (+62)</label>
-												<!--end::Label-->
-												<!--end::Input-->
-												<input type="text" class="form-control form-control-solid" placeholder="8..." name="phone" />
-												<!--end::Input-->
-											</div>
-											<!--end::Col-->
-										</div>
-										<!--end::Input group-->
-										<!--begin::Input group-->
-										<div class="row mb-5">
-											<!--begin::Col-->
-											<div class="col-md-12 fv-row">
-												<!--begin::Label-->
-												<label class="fs-5 fw-semibold mb-2">CV</label>
-												<!--end::Label-->
-												<!--begin::Input-->
-												<input class="form-control form-control-solid" type="file" placeholder="Upload your CV" name="userfile" required />
-												<!--end::Input-->
-											</div>
-											<!--end::Col-->
-										</div>
-										<!--end::Input group-->
-										
-										<!--begin::Input group-->
-										<div class="d-flex flex-column mb-8">
-											<label class="fs-6 fw-semibold mb-2">Why we should hire you?</label>
-											<textarea class="form-control form-control-solid" rows="4" name="application" placeholder=""></textarea>
-										</div>
-										<!--end::Input group-->
-										<!--begin::Separator-->
-										<div class="separator mb-8"></div>
-										<!--end::Separator-->
-										<!--begin::Submit-->
-										<button type="submit" class="btn btn-primary" id="submit-btn">
-											Apply Now
-										</button>
-										<!--end::Submit-->
-									<?=form_close()?>
-								</div>
-							</div>
 						</div>
 						<!--end::Job-->
 					</div>
