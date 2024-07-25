@@ -1,5 +1,6 @@
 .DS_Store
 
+application/config/advin-service-account.json
 application/config/database.php
 application/config/config.php
 
@@ -12,6 +13,9 @@ application/logs/*
 !application/logs/index.html
 
 !application/*/.htaccess
+
+assets/uploads/cvs/*
+assets/uploads/voices/*
 
 composer.lock
 tests/mocks/database/ci_test.sqlite
