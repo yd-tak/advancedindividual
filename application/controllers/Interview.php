@@ -27,6 +27,7 @@ class Interview extends MY_Controller {
         $view=$this->_defaultview;
         
         $vc=$this->vacancy_model->getvc($vcid);
+        // pre($vc->tests);
         $candidate=$this->candidate_model->get($vc->candidateid);
         // pre($vc);
         if($testid){

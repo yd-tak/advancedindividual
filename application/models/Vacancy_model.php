@@ -413,7 +413,7 @@ class Vacancy_model extends CI_Model {
         }
         $tests=$this->db->select('score,aisuspect')->where('vcid',$vcid)->where('finishdt is not null')->where('score is not null')->get('vc_tests')->result();
         foreach($tests as $row){
-            $totalscore+=calc_netscore($row->score,$row->aisuspect,$penalty);
+            $totalscore+=calc_netscore(intval($row->score),$row->aisuspect,$penalty);
             $countscore++;
         }
         $avgscore=$totalscore/$countscore;

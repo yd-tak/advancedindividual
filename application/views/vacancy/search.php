@@ -38,8 +38,8 @@
 										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/1')?>'"><?=number_format($row->vc_pending)?><br><small style="font-weight: normal;">Pending</small></li>
 										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/2')?>'"><?=number_format($row->vc_interviewing)?><br><small style="font-weight: normal;">Interviewing</small></li>
 										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/3')?>'"><?=number_format($row->vc_onprocess)?><br><small style="font-weight: normal;">On Progress</small></li>
-										<li class="list-group-item"><?=number_format($row->vc_hired)?><br><small style="font-weight: normal;">Hired</small></li>
-										<li class="list-group-item"><?=number_format($row->vc_rejected)?><br><small style="font-weight: normal;">Rejected</small></li>
+										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/8')?>'"><?=number_format($row->vc_hired)?><br><small style="font-weight: normal;">Hired</small></li>
+										<li class="list-group-item" onclick="location.href='<?=site_url('vacancy/viewstage/'.$row->id.'/9')?>'"><?=number_format($row->vc_rejected)?><br><small style="font-weight: normal;">Rejected</small></li>
 									</ul>
 								</td>
 				                <td>

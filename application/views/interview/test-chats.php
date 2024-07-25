@@ -2,7 +2,7 @@
 	<!--begin::Messages-->
 	<div class="scroll-y me-n5 pe-5 h-400px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="450px" data-kt-scroll-offset="5px" id="kt-<?=$htmlid?>-chat-content" style="height:400px;max-height: 400px;">
 		<?php 
-		if($test->thread!=null){?>
+		if($test->thread!=null && !empty($test->thread->chats)){?>
 			<?php foreach($test->thread->chats as $row){?>
 				<?php if($row->actor=='recruiter'){?>
 				<!--begin::Message(in)-->
@@ -72,7 +72,7 @@
 <!--end::Card body-->
 <!--begin::Card footer-->
 <div class="card-footer pt-4" id="kt-<?=$htmlid?>-form">
-	<?php if($test->thread!=null && $test->thread->finishdt==null){?>
+	<?php if($test->thread!=null && $test->thread->finishdt==null && !empty($test->thread->chats)){?>
 		<!--begin::Input-->
 		<textarea class="form-control form-control-flush mb-3" rows="3" data-kt-element="input" placeholder="Type a message" id="kt-<?=$htmlid?>-chat-input"></textarea>
 		<!--end::Input-->
