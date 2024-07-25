@@ -45,7 +45,7 @@ class Interview_model extends CI_Model {
         $this->credit_model->credit(getsetting('interview_credit'),'vc_stages',$vcid,'AI Interview: '.$vc->candidate.' for '.$vc->vacancy);
         return true;
     }
-    public function starttest($vcid,$testid){
+    public function createtester($vcid,$testid){
         $vct=$this->db->select("vct.*,concat(c.firstname,' ',c.lastname) candidate,v.title vacancy,t.name test")->from('vc_tests vct')->join('vc','vct.vcid=vc.id')->join('candidates c','vc.candidateid=c.id')->join('vacancies v','vc.vacancyid=v.id')->join('tests t','vct.testid=t.id')->where('vcid',$vcid)->where('testid',$testid)->get()->row();
         $test=$this->db->where('id',$testid)->get('tests')->row();
         // pre($test);
@@ -58,13 +58,20 @@ class Interview_model extends CI_Model {
             ]);
             $vct=$this->db->where('vcid',$vcid)->where('testid',$testid)->get('vc_tests')->row();
         }
-        // pre($vct);
-        if($vct->test_assistantid==null){
-            $this->_createaitester($vct->id);
-            $this->credit_model->credit($test->test_credit,'vc_tests',$vct->id,'AI '.$test->name.': '.$vct->candidate.' for '.$vct->vacancy);
+        if($vct==null || $vct->test_assistantid==null){
+            $this->_createaitester($vct->id);   
         }
         
-        $this->_createaitest($vct->id);
+    }
+    public function starttest($vcid,$testid){
+        $vct=$this->db->select("vct.*,concat(c.firstname,' ',c.lastname) candidate,v.title vacancy,t.name test")->from('vc_tests vct')->join('vc','vct.vcid=vc.id')->join('candidates c','vc.candidateid=c.id')->join('vacancies v','vc.vacancyid=v.id')->join('tests t','vct.testid=t.id')->where('vcid',$vcid)->where('testid',$testid)->get()->row();
+        $test=$this->db->where('id',$testid)->get('tests')->row();
+        // pre($test);
+        // pre($vct);
+        if($vct->test_threadid==null){
+            $this->credit_model->credit($test->test_credit,'vc_tests',$vct->id,'AI '.$test->name.': '.$vct->candidate.' for '.$vct->vacancy);
+            $this->_createaitest($vct->id);
+        }
         
         return true;
     }

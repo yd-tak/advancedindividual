@@ -29,6 +29,11 @@ class Interview extends MY_Controller {
         $vc=$this->vacancy_model->getvc($vcid);
         $candidate=$this->candidate_model->get($vc->candidateid);
         // pre($vc);
+        if($testid){
+            $this->db->trans_start();
+            $this->interview_model->createtester($vcid,$testid);
+            $this->db->trans_complete();
+        }
         $view['isuser']=$isuser;
         $view['vc']=$vc;
         // pre($vc->tests);

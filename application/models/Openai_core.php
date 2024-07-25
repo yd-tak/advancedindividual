@@ -127,7 +127,6 @@ class Openai_core extends CI_Model {
     }
     public function create_tester($testname,$testprompt,$interviewlang){
         $testprompt.="
-
             Conduct the test in ".$interviewlang." Language.
         ";
         $assistant = $this->client->assistants()->create([

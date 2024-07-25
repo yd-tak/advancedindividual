@@ -4,7 +4,9 @@
         "php-http/discovery": "^1.19",
         "openai-php/client": "^0.8.4",
         "smalot/pdfparser": "^2.10",
-        "dompdf/dompdf": "^3.0"
+        "dompdf/dompdf": "^3.0",
+        "google/cloud-speech": "^1.18",
+        "james-heinrich/getid3": "^1.9"
     },
     "config": {
         "allow-plugins": {

@@ -57,7 +57,7 @@
 		<!--begin::Layout-->
 		<div class="d-flex flex-column flex-lg-row">
 			<!--begin::Sidebar-->
-			<div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0">
+			<div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0" id="interview-menu">
 				<!--begin::Contacts-->
 				<div class="card card-flush">
 					<!--begin::Card header-->
@@ -72,7 +72,7 @@
 						<!--begin::List-->
 						<div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"  data-kt-scroll-offset="5px">
 							<div class="separator separator-dashed"></div>
-							<div class="d-flex flex-stack py-4">
+							<div class="d-flex flex-stack py-4" id="interview-menu-ai-interview">
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px symbol-circle">
 										<span class="symbol-label <?=(!$vc->aiinterviewstarted)?'bg-light-danger text-danger':'bg-light-success text-success'?> fs-6 fw-bolder">1</span>
@@ -89,7 +89,7 @@
 							
 							<?php $ctr=1;foreach($vc->tests as $i=>$row){?>
 							<div class="separator separator-dashed"></div>
-							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>">
+							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>" id="interview-menu-test-<?=$i?>">
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px symbol-circle">
 										<span class="symbol-label <?=($row->thread==null)?'bg-light-danger text-danger':'bg-light-success text-success'?>  fs-6 fw-bolder"><?=(1+$ctr++)?></span>
@@ -207,20 +207,21 @@
 		<!--end::Layout-->
 	</div>
 	<!--end::Post-->
+	<!-- Full Screen Warning Modal -->
+	<div class="modal" id="fullscreenModal" tabindex="-1" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="fullscreenModalLabel">Attention</h5>
+	            </div>
+	            <div class="modal-body">
+	                Please switch to full screen mode to continue the interview. <br>Click on CTRL+SHIFT+F on Windows or Command+Shift+F on Macbook.
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>
-<!-- Full Screen Warning Modal -->
- <div class="modal fade" id="fullscreenModal" tabindex="-1" role="dialog" aria-labelledby="fullscreenModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="fullscreenModalLabel">Attention</h5>
-            </div>
-            <div class="modal-body">
-                Please switch to full screen mode to continue the interview. <br>Click on CTRL+SHIFT+F on Windows or Command+Shift+F on Macbook.
-            </div>
-        </div>
-    </div>
-</div>
+
 <script>
 	function startinterview(vcid){
 		startloading("content-page-loader");
@@ -442,7 +443,7 @@
         // Track if user leaves the tab
         document.addEventListener('visibilitychange', function() {
             if (document.hidden) {
-                alert('You have exited out of the interview. This action is being recorded.');
+                // alert('You have exited out of the interview. This action is being recorded.');
             }
         });
 
@@ -458,4 +459,41 @@
         enforceFullScreen();
         // startTimer();
     });
+</script>
+<script id="tour-script">
+	// Initialize the tour
+    var tour = new Tour({
+        steps: [
+            {
+                element: "#tour-step1",
+                title: "Welcome",
+                content: "This is the first step, centered on the screen.",
+                placement: "top"
+            },
+            {
+                element: "#tour1",
+                title: "Step 2",
+                content: "Highlight this div.",
+                placement: "bottom"
+            },
+            {
+                element: "#tour2",
+                title: "Step 3",
+                content: "Highlight this div.",
+                placement: "bottom"
+            },
+            {
+                element: "#tour3",
+                title: "Step 4",
+                content: "Highlight this div.",
+                placement: "bottom"
+            }
+        ]
+    });
+
+    // Initialize the tour
+    tour.init();
+
+    // Start the tour
+    tour.start();
 </script>

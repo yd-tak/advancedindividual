@@ -1,6 +1,6 @@
 <div class="card-body" id="kt-<?=$htmlid?>-chat">
 	<!--begin::Messages-->
-	<div class="scroll-y me-n5 pe-5 h-400px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="400px" data-kt-scroll-offset="5px" id="kt-<?=$htmlid?>-chat-content" style="height:400px;max-height: 400px;">
+	<div class="scroll-y me-n5 pe-5 h-400px h-lg-auto" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="450px" data-kt-scroll-offset="5px" id="kt-<?=$htmlid?>-chat-content" style="height:400px;max-height: 400px;">
 		<?php 
 		if($test->thread!=null){?>
 			<?php foreach($test->thread->chats as $row){?>
