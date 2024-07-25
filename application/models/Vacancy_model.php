@@ -440,7 +440,8 @@ class Vacancy_model extends CI_Model {
             'status'=>'Available',
             'createdate'=>date("Y-m-d"),
             'useai'=>1,
-            'airesult'=>$airesult
+            'airesult'=>$airesult,
+            'cvfile'=>$post['cvfile']
         ]);
         $candidateid=$this->db->insert_id();
         $this->db->insert('vc',[
