@@ -605,7 +605,7 @@ class Vacancy_model extends CI_Model {
          Using your expertise in Recruitment, please add more qualifications and skills requirement other than the one i will mention so that i can get better candidates related to the job vacancy.
          Write me the job description in language: ".$get['interviewlang'].".";
         
-        $answer=$this->openai_core->do_chat($system,$request);
+        $answer=$this->openai_core->do_chat($system,$request,'gpt-3.5-turbo');
         return $answer;
          // echo json_encode(['request'=>$request,'jobdesc'=>$answer]);
         // pre($response);
@@ -638,7 +638,7 @@ class Vacancy_model extends CI_Model {
         ".$cvdata."
         ";
         
-        $answer=$this->openai_core->do_chatjson($system,$request);
+        $answer=$this->openai_core->do_chatjson($system,$request,'gpt-4-turbo');
         $json=json_decode($answer);
         $this->db->where('id',$vcid)->update('vc',[
             'cvscore'=>$json->cvscore,

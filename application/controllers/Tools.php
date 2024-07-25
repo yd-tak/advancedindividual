@@ -47,6 +47,7 @@ class Tools extends MY_Controller {
         $this->db->trans_complete();
         echo "DELETE $id SUCCESS";
     }
+    
     public function universalsearch(){
         $get=$this->input->get();
         $searchresults=$this->search_model->run($get['keyword']);

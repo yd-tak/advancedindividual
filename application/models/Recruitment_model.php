@@ -72,7 +72,7 @@ class Recruitment_model extends CI_Model {
 
         $request="Write me an offering letter template in ".$language." language. No need to translate the placeholders for me.";
         
-        $answer=$this->openai_core->do_chat($system,$request);
+        $answer=$this->openai_core->do_chat($system,$request,'gpt-3.5-turbo');
         return $answer;
     }
 }

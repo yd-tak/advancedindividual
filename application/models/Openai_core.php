@@ -138,7 +138,7 @@ class Openai_core extends CI_Model {
                     'type' => 'code_interpreter',
                 ],
             ],
-            'model' => 'gpt-4'
+            'model' => 'gpt-4-turbo'
         ]);
         $this->db->set([
             'id'=>$assistant->id,
@@ -235,7 +235,7 @@ class Openai_core extends CI_Model {
                     'type' => 'code_interpreter',
                 ],
             ],
-            'model' => 'gpt-4',
+            'model' => 'gpt-4-turbo',
         ]);
         $this->db->set([
             'id'=>$assistant->id,
@@ -267,9 +267,9 @@ class Openai_core extends CI_Model {
         //     'lastmessage'=>$lastmessage
         // ];
     }
-    public function do_chat($system,$request){
+    public function do_chat($system,$request,$model='gpt-4-turbo'){
         $response = $this->client->chat()->create([
-            'model' => 'gpt-4',
+            'model' => $model,
             'messages' => [
                 ['role'=>'system','content'=>$system],
                 ['role' => 'user', 'content' => $request],
@@ -282,9 +282,9 @@ class Openai_core extends CI_Model {
         $answer=str_replace("\n", "<br>", $answer);
         return $answer;
     }
-    public function do_chatjson($system,$request){
+    public function do_chatjson($system,$request,$model='gpt-4-turbo'){
         $response = $this->client->chat()->create([
-            'model' => 'gpt-4',
+            'model' => $model,
             'messages' => [
                 ['role'=>'system','content'=>$system],
                 ['role' => 'user', 'content' => $request],

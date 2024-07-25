@@ -128,7 +128,7 @@ class Interview_model extends CI_Model {
 
         Interview:
         ".$check->result;
-        $answer=$this->openai_core->do_chatjson($system,$request);
+        $answer=$this->openai_core->do_chatjson($system,$request,'gpt-4-turbo');
         //update candidates, candidate_workexps, candidate_educations, candidate_skills
         if($answer){
             $airesult=json_decode($answer);
