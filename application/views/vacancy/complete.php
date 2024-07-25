@@ -43,11 +43,11 @@
 							
 						</div>
 						
-						<?= form_open('vacancy/completep', ['method' => 'post', 'class' => 'form-horizontal']) ?>
+						<?= form_open('vacancy/completep', ['method' => 'post', 'class' => 'form-horizontal','id'=>'complete-form']) ?>
 							<input type="hidden" value="<?= $vcid ?>" name="vcid">
 
 							<!-- General Information -->
-							<div class="row mb-5">
+							<div class="row mb-5" id="basic-section">
 							    <div class="col-md-3 fv-row">
 							        <label class="fs-5 fw-semibold mb-2">First Name</label>
 							        <input type="text" class="form-control form-control-solid form-control-sm" name="firstname" value="<?= $candidate->firstname ?>" required/>
@@ -102,8 +102,8 @@
 							<!-- Work Experience -->
 							<h4 class="mb-3">Work Experience</h4>
 							<div id="workexp-section">
-							    <?php foreach ($candidate->workexps as $workexp) : ?>
-							    <div class="card mb-5 workexp-entry">
+							    <?php foreach ($candidate->workexps as $i=>$workexp) : ?>
+							    <div class="card mb-5 workexp-entry" <?php if($i==0){?>id="work-section"<?php } ?>>
 							        <div class="card-body">
 							            <div class="row">
 							                <div class="col-md-3 fv-row">
@@ -142,8 +142,8 @@
 							<!-- Education History -->
 							<h4 class="mb-3">Education History</h4>
 							<div id="education-section">
-							    <?php foreach ($candidate->educations as $education) : ?>
-							    <div class="card mb-5 education-entry">
+							    <?php foreach ($candidate->educations as $i=>$education) : ?>
+							    <div class="card mb-5 education-entry" <?php if($i==0){?>id="education-section"<?php } ?>>
 							        <div class="card-body">
 							            <div class="row">
 							                <div class="col-md-3 fv-row">
@@ -227,10 +227,8 @@
 							<div class="separator mb-8"></div>
 
 							<!-- Submit Button -->
-							<button type="submit" class="btn btn-primary" id="kt_careers_submit_button">
+							<button type="submit" class="btn btn-primary" id="submit-btn">
 							    <span class="indicator-label">Confirm your Application</span>
-							    <span class="indicator-progress">Please wait...
-							    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 							</button>
 
 						<?= form_close() ?>
@@ -244,6 +242,32 @@
 		<!--end::Careers - List-->
 	</div>
 	<!--end::Post-->
+</div>
+<!-- Modal -->
+<div class="modal fade" id="completeModal" tabindex="-1" role="dialog" aria-labelledby="completeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="completeModalLabel">Konfirmasi dan Lengkapi Informasi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Di halaman ini, Anda harus mengonfirmasi informasi Anda dan melengkapi informasi yang belum lengkap. Ikuti langkah-langkah berikut:</p>
+                <ul>
+                    <li>Masukkan informasi dasar Anda.</li>
+                    <li>Lengkapi riwayat pekerjaan Anda dan tambahkan pengalaman kerja baru jika diperlukan.</li>
+                    <li>Lengkapi riwayat pendidikan Anda dan tambahkan informasi pendidikan baru jika diperlukan.</li>
+                    <li>Masukkan keterampilan teknis Anda.</li>
+                    <li>Klik tombol kirim untuk menyelesaikan pengajuan.</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="startTour">Mengerti</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
 $(document).ready(function() {
@@ -352,6 +376,44 @@ $(document).ready(function() {
     $(document).on('click', '.remove-skill', function() {
         $(this).closest('tr').remove();
     });
+    $("#complete-form").submit(function(e){
+		$("#submit-btn").html("Loading... DO NOT CLOSE THIS WINDOW!");
+		$("#submit-btn").prop("disabled",true);
+	});
+	$('#completeModal').modal('show');
 
+    // Define the tour steps
+    var tourSteps = [
+        {
+            element: '#basic-section',
+            intro: 'Ini adalah bagian di mana Anda harus memasukkan informasi dasar Anda.'
+        },
+        {
+            element: '#work-section',
+            intro: 'Di sini Anda dapat melengkapi riwayat pekerjaan Anda dan menambahkan pengalaman kerja baru jika diperlukan.'
+        },
+        {
+            element: '#education-section',
+            intro: 'Lengkapi riwayat pendidikan Anda di bagian ini dan tambahkan informasi pendidikan baru jika diperlukan.'
+        },
+        {
+            element: '#skills-section',
+            intro: 'Masukkan keterampilan teknis Anda di sini.'
+        },
+        {
+            element: '#submit-btn',
+            intro: 'Klik tombol ini setelah semua informasi lengkap untuk menyelesaikan pengajuan Anda.'
+        }
+    ];
+
+    // Start the tour when the user clicks "Mengerti"
+    $('#startTour').on('click', function() {
+        $('#completeModal').modal('hide');
+        setTimeout(function() {
+            introJs().setOptions({
+                steps: tourSteps
+            }).start();
+        }, 500); // Delay to ensure the modal is fully hidden
+    });
 });
 </script>

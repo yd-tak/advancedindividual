@@ -19,7 +19,7 @@
 								
 							</div>
 							
-							<div class="m-0">
+							<div class="m-0" id="submission-form">
 								<!--begin::Heading-->
 								<div class="align-items-center py-3 toggle mb-0">
 									<?php if(isset($status) && $status=='success'){?>
@@ -97,7 +97,7 @@
 										<!--begin::Input group-->
 										<div class="row mb-5">
 											<!--begin::Col-->
-											<div class="col-md-12 fv-row">
+											<div class="col-md-12 fv-row" id="submission-cv">
 												<!--begin::Label-->
 												<label class="fs-5 fw-semibold mb-2">CV</label>
 												<!--end::Label-->
@@ -488,10 +488,62 @@
 		<!--end::Careers - List-->
 	</div>
 	<!--end::Post-->
+
+</div>
+<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="welcomeModalLabel">Selamat Datang</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Hai kandidat, di sini Anda harus mengunggah CV Anda. Setelah CV dikirimkan, harap tunggu hingga Anda diarahkan ke halaman konfirmasi.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="startTour">Mengerti</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
-	$("#apply-form").submit(function(e){
-		$("#submit-btn").html("Loading... DO NOT CLOSE THIS WINDOW!");
-		$("#submit-btn").prop("disabled",true);
+	$(document).ready(function(){
+		// Show the welcome modal
+		<?php if(!isset($status)){?>
+        $('#welcomeModal').modal('show');
+    	<?php } ?>
+
+        // Define the tour steps
+        var tourSteps = [
+            {
+                element: '#submission-form',
+                intro: 'Ini adalah formulir yang harus Anda isi.'
+            },
+            {
+                element: '#submission-cv',
+                intro: 'Di sini Anda harus mengunggah CV Anda.'
+            },
+            {
+                element: '#submit-btn',
+                intro: 'Klik tombol ini setelah semua informasi diisi dan CV diunggah. Harap tunggu hingga proses pengajuan selesai.'
+            }
+        ];
+
+        // Start the tour when the user clicks "Mengerti"
+        $('#startTour').on('click', function() {
+            $('#welcomeModal').modal('hide');
+            setTimeout(function() {
+                introJs().setOptions({
+                    steps: tourSteps
+                }).start();
+            }, 500); // Delay to ensure the modal is fully hidden
+        });
+        $("#apply-form").submit(function(e){
+			$("#submit-btn").html("Loading... DO NOT CLOSE THIS WINDOW!");
+			$("#submit-btn").prop("disabled",true);
+		});
 	});
+	
 </script>
