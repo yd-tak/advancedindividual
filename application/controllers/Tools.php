@@ -15,6 +15,38 @@ class Tools extends MY_Controller {
     public function apppath(){
         echo APPPATH;
     }
+    public function deletecandidate($id){
+        $this->db->trans_start();
+        $vcs=$this->db->where('candidateid',$id)->get('vc')->result();
+        $vcids=[];
+        foreach($vcs as $row){
+            $vcids[]=$row->id;
+        }
+        $this->db->where('id',$id)->delete('candidates');
+        $this->db->where('candidateid',$id)->delete('candidate_awards');
+        $this->db->where('candidateid',$id)->delete('candidate_certifications');
+        $this->db->where('candidateid',$id)->delete('candidate_educations');
+        $this->db->where('candidateid',$id)->delete('candidate_projects');
+        $this->db->where('candidateid',$id)->delete('candidate_refs');
+        $this->db->where('candidateid',$id)->delete('candidate_skills');
+        $this->db->where('candidateid',$id)->delete('candidate_socmeds');
+        $this->db->where('candidateid',$id)->delete('candidate_volunteerworks');
+        $this->db->where('candidateid',$id)->delete('candidate_workexps');
+        $this->db->where_in('id',$vcids)->delete('vc');
+        $this->db->where_in('vcid',$vcids)->delete('vc_interviews');
+        $this->db->where_in('vcid',$vcids)->delete('vc_interviews');
+        $this->db->where_in('vcid',$vcids)->delete('vc_stages');
+        $vctests=$this->db->where_in('vcid',$vcids)->get('vc_tests')->result();
+        $vctestids=[];
+        foreach($vctests as $row){
+            $vctestids[]=$row->id;
+        }
+        if(!empty($vctestids))
+            $this->db->where_in('vctestid',$vctestids)->delete('vc_test_details');
+        $this->db->where_in('vcid',$vcids)->delete('vc_tests');
+        $this->db->trans_complete();
+        echo "DELETE $id SUCCESS";
+    }
     public function universalsearch(){
         $get=$this->input->get();
         $searchresults=$this->search_model->run($get['keyword']);

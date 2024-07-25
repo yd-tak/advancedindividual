@@ -251,7 +251,7 @@
 									</div>
 									<?php } ?>
 									
-									<?=form_open_multipart('vacancy/applyp',['method'=>'post','class'=>'form-horizontal'])?>
+									<?=form_open_multipart('vacancy/applyp',['method'=>'post','class'=>'form-horizontal','id'=>'apply-form'])?>
 										<input type="hidden" value="<?=$vacancy->id?>" name="vacancyid">
 										<!--begin::Input group-->
 										<div class="row mb-5">
@@ -324,14 +324,8 @@
 										<div class="separator mb-8"></div>
 										<!--end::Separator-->
 										<!--begin::Submit-->
-										<button type="submit" class="btn btn-primary" id="kt_careers_submit_button">
-											<!--begin::Indicator label-->
-											<span class="indicator-label">Apply Now</span>
-											<!--end::Indicator label-->
-											<!--begin::Indicator progress-->
-											<span class="indicator-progress">Please wait...
-											<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-											<!--end::Indicator progress-->
+										<button type="submit" class="btn btn-primary" id="submit-btn">
+											Apply Now
 										</button>
 										<!--end::Submit-->
 									<?=form_close()?>
@@ -490,3 +484,9 @@
 	</div>
 	<!--end::Post-->
 </div>
+<script>
+	$("#apply-form").submit(function(e){
+		$("#submit-btn").html("Loading... DO NOT CLOSE THIS WINDOW!");
+		$("#submit-btn").prop("disabled",true);
+	});
+</script>
