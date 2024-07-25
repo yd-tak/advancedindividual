@@ -89,7 +89,7 @@
 							
 							<?php $ctr=1;foreach($vc->tests as $i=>$row){?>
 							<div class="separator separator-dashed"></div>
-							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>" id="interview-menu-test-<?=$i?>">
+							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>" id="interview-menu-test-<?=$ctr?>">
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px symbol-circle">
 										<span class="symbol-label <?=($row->thread==null)?'bg-light-danger text-danger':'bg-light-success text-success'?>  fs-6 fw-bolder"><?=(1+$ctr++)?></span>
