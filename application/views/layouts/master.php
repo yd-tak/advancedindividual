@@ -21,7 +21,10 @@
 		<link href="https://cdn.datatables.net/2.0.2/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 		<link href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
 		<!--begin:Bootstrap Tour-->
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.12.0/css/bootstrap-tour-standalone.min.css" rel="stylesheet">
+		<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.12.0/css/bootstrap-tour.min.css" rel="stylesheet"> -->
+	    <link href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/5.0.0/introjs.min.css" rel="stylesheet">
+
+
 		<!--end:Bootstrap Tour-->
 
 		<!--end::Vendor Stylesheets-->
@@ -122,8 +125,10 @@
 		<script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
 		<!--end::Vendors Javascript-->
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.12.0/js/bootstrap-tour-standalone.min.js"></script>
-		
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> -->
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tour/0.12.0/js/bootstrap-tour.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/5.0.0/intro.min.js"></script>
+
 		<script src="<?=base_url('assets/plugins/custom/datatables/datatables.bundle.js')?>"></script>
 		<!--begin::Custom Javascript(used for this page only)-->
 		<script src="<?=base_url('assets/js/widgets.bundle.js')?>"></script>

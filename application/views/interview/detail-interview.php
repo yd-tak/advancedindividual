@@ -57,7 +57,7 @@
 		<!--begin::Layout-->
 		<div class="d-flex flex-column flex-lg-row">
 			<!--begin::Sidebar-->
-			<div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0" id="interview-menu">
+			<div class="flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0" id="interview-menu"  data-intro="Ini adalah menu untuk wawancara dan tes. Anda bisa mengakses wawancara atau tes tertentu dengan mengklik salah satu menu." data-step="1">
 				<!--begin::Contacts-->
 				<div class="card card-flush">
 					<!--begin::Card header-->
@@ -72,7 +72,7 @@
 						<!--begin::List-->
 						<div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"  data-kt-scroll-offset="5px">
 							<div class="separator separator-dashed"></div>
-							<div class="d-flex flex-stack py-4" id="interview-menu-ai-interview">
+							<div class="d-flex flex-stack py-4" id="interview-menu-ai-interview" data-intro="Klik di sini untuk memulai wawancara AI." data-step="2">
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px symbol-circle">
 										<span class="symbol-label <?=(!$vc->aiinterviewstarted)?'bg-light-danger text-danger':'bg-light-success text-success'?> fs-6 fw-bolder">1</span>
@@ -89,7 +89,7 @@
 							
 							<?php $ctr=1;foreach($vc->tests as $i=>$row){?>
 							<div class="separator separator-dashed"></div>
-							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>" id="interview-menu-test-<?=$ctr?>">
+							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>" id="interview-menu-test-<?=$ctr?>" <?php if($ctr==1){?> data-intro="Klik di sini untuk memulai test 1. Anda harus menyelesaikan semua tes. Anda hanya bisa mengakses tes setelah wawancara AI selesai." data-step="3"<?php }?>>
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px symbol-circle">
 										<span class="symbol-label <?=($row->thread==null)?'bg-light-danger text-danger':'bg-light-success text-success'?>  fs-6 fw-bolder"><?=(1+$ctr++)?></span>
@@ -125,7 +125,7 @@
 			<!--begin::Content-->
 			<div class="flex-lg-row-fluid ms-lg-7 ms-xl-10 <?=($istest)?'d-none':''?>" id="interview-content">
 				<!--begin::Messenger-->
-				<div class="card" id="kt_chat_messenger">
+				<div class="card" id="kt_chat_messenger" data-intro="Di sini wawancara dan dialog tes akan terjadi. Untuk memulai wawancara atau tes, klik tombol 'Mulai'. Untuk setiap pertanyaan yang diajukan pewawancara, Anda harus menjawab dalam satu balasan. Setelah Anda menjawab, pewawancara akan melanjutkan ke pertanyaan berikutnya." data-step="4" >
 					<!--begin::Card header-->
 					<div class="card-header" id="kt_chat_messenger_header">
 						<!--begin::Title-->
@@ -216,6 +216,28 @@
 	            </div>
 	            <div class="modal-body">
 	                Please switch to full screen mode to continue the interview. <br>Click on CTRL+SHIFT+F on Windows or Command+Shift+F on Macbook.
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<!-- Modal -->
+	<div class="modal" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="welcomeModalLabel" aria-hidden="true">
+	    <div class="modal-dialog modal-dialog-centered" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="welcomeModalLabel">Selamat Datang</h5>
+	            </div>
+	            <div class="modal-body">
+	                <p>Hai kandidat, berikut adalah aturan umum wawancara:</p>
+	                <ul>
+	                    <li>Kandidat harus mengakses URL ini dari laptop atau PC.</li>
+	                    <li>Kandidat harus menggunakan mode layar penuh pada browser dengan menekan CTRL + SHIFT + F atau Command + SHIFT + F.</li>
+	                    <li>Kandidat tidak boleh berpindah dari tab wawancara selama wawancara berlangsung atau bisa didiskualifikasi.</li>
+	                    <li>Kandidat tidak boleh menggunakan fungsi salin tempel (copy paste).</li>
+	                </ul>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-primary" id="startTour">Mengerti</button>
 	            </div>
 	        </div>
 	    </div>
@@ -458,42 +480,26 @@
         // Initial check
         enforceFullScreen();
         // startTimer();
+        // introJs().start();
+
     });
 </script>
-<script id="tour-script">
-	// Initialize the tour
-    var tour = new Tour({
-        steps: [
-            {
-                element: "#tour-step1",
-                title: "Welcome",
-                content: "This is the first step, centered on the screen.",
-                placement: "top"
-            },
-            {
-                element: "#tour1",
-                title: "Step 2",
-                content: "Highlight this div.",
-                placement: "bottom"
-            },
-            {
-                element: "#tour2",
-                title: "Step 3",
-                content: "Highlight this div.",
-                placement: "bottom"
-            },
-            {
-                element: "#tour3",
-                title: "Step 4",
-                content: "Highlight this div.",
-                placement: "bottom"
-            }
-        ]
+<script id="intro-script">
+	$(document).ready(function() {
+		// Show the welcome modal
+        $('#welcomeModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#welcomeModal').modal('show');
+
+        // Start the tour when the user clicks "Mengerti"
+        $('#startTour').on('click', function() {
+            $('#welcomeModal').modal('hide');
+            setTimeout(function() {
+                introJs().start();
+            }, 500); // Delay to ensure the modal is fully hidden
+        });
     });
 
-    // Initialize the tour
-    tour.init();
-
-    // Start the tour
-    tour.start();
 </script>
