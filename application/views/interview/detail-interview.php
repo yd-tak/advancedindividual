@@ -487,19 +487,21 @@
 <script id="intro-script">
 	$(document).ready(function() {
 		// Show the welcome modal
-        $('#welcomeModal').modal({
-            backdrop: 'static',
-            keyboard: false
-        });
-        $('#welcomeModal').modal('show');
+		<?php if(!$isuser){?>
+	        $('#welcomeModal').modal({
+	            backdrop: 'static',
+	            keyboard: false
+	        });
+	        $('#welcomeModal').modal('show');
 
-        // Start the tour when the user clicks "Mengerti"
-        $('#startTour').on('click', function() {
-            $('#welcomeModal').modal('hide');
-            setTimeout(function() {
-                introJs().start();
-            }, 500); // Delay to ensure the modal is fully hidden
-        });
+	        // Start the tour when the user clicks "Mengerti"
+	        $('#startTour').on('click', function() {
+	            $('#welcomeModal').modal('hide');
+	            setTimeout(function() {
+	                introJs().start();
+	            }, 500); // Delay to ensure the modal is fully hidden
+	        });
+	    <?php } ?>
     });
 
 </script>
