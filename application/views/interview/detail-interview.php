@@ -92,7 +92,7 @@
 							<div class="d-flex flex-stack py-4 <?=($row->thread==null)?'':''?>" id="interview-menu-test-<?=$ctr?>" <?php if($ctr==1){?> data-intro="Klik di sini untuk memulai test 1. Anda harus menyelesaikan semua tes. Anda hanya bisa mengakses tes setelah wawancara AI selesai." data-step="3"<?php }?>>
 								<div class="d-flex align-items-center">
 									<div class="symbol symbol-45px symbol-circle">
-										<span class="symbol-label <?=($row->thread==null)?'bg-light-danger text-danger':'bg-light-success text-success'?>  fs-6 fw-bolder"><?=(1+$ctr++)?></span>
+										<span class="symbol-label <?=($row->thread==null || $row->thread->result==null)?'bg-light-danger text-danger':'bg-light-success text-success'?>  fs-6 fw-bolder"><?=(1+$ctr++)?></span>
 									</div>
 									<div class="ms-5">
 										<a href="javascript:viewtest('<?=$row->testid?>')" class="fs-5 fw-bold text-gray-900 text-hover-primary mb-2"><?=$row->test?></a>
@@ -100,7 +100,7 @@
 									</div>
 								</div>
 								<div class="d-flex flex-column align-items-end ms-2">
-									<?=($row->thread!=null)?ymd($row->thread->createdt):''?>
+									<?=($row->thread!=null && $row->thread->result!=null)?ymd($row->thread->createdt):''?>
 								</div>
 							</div>
 							<div class="separator separator-dashed d-none"></div>

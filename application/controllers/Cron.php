@@ -12,6 +12,36 @@ class Cron extends CI_Controller {
         $this->load->model('candidate_model');
         
     }
+    public function startInterview(){
+        $vcs=$this->db->select('vc.*')->from("vc")->join('vacancies v','vc.vacancyid=v.id')->join('vc_stages vcs','vc.lastvcstageid=vcs.id')->join("candidates c","vc.candidateid=c.id")->where('vcs.stageid',2)->where('vc.aiinterviewstarted',0)->limit(5)->get()->result();
+
+        $vacancyids=[];
+        foreach($vcs as $row){
+            if(!in_array($row->vacancyid, $vacancyids))
+                $vacancyids[]=$row->vacancyid;
+        }
+        $vacancytests=$this->db->where_in('vacancyid',$vacancyids)->get('vacancy_tests')->result();
+        $vacancytestmap=[];
+        foreach($vacancytests as $row){
+            if(!isset($vacancytestmap[$row->vacancyid])){
+                $vacancytestmap[$row->vacancyid]=[];
+            }
+            $vacancytestmap[$row->vacancyid][]=$row->testid;
+        }
+        foreach($vcs as $row){
+            $vcid=$row->id;
+            $this->db->trans_start();
+            $this->interview_model->start($vcid);
+            if(isset($vacancytestmap[$row->vacancyid])){
+                foreach($vacancytestmap[$row->vacancyid] as $testid){
+                    $this->interview_model->createtester($vcid,$testid);
+                    $this->interview_model->starttest($vcid,$testid);
+                }
+            }
+            $this->db->trans_complete();    
+        }
+        
+    }
     public function sendInterviewEmail(){
         $candidates=$this->db->select("v.title,vc.id,c.email,concat(c.firstname,' ',c.lastname) name,vc.interviewurisent")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('vc_stages vcs','vc.lastvcstageid=vcs.id')->join("candidates c","vc.candidateid=c.id")->where("vc.interviewurisent",0)->where('vcs.stageid',2)->limit(5)->get()->result();
         // pre($candidates);
