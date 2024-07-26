@@ -718,6 +718,7 @@
 		$("#reject-candidate-modal").modal("hide");
 		startloading("content-page-loader");
 		console.log($("#reject-vcs-ids").val());
+		// return;
 		$.ajax({
 			url:"<?=site_url('vacancy/reject_vcs')?>",
 			type:"POST",

@@ -335,6 +335,10 @@ class Vacancy_model extends CI_Model {
     public function acceptvcs($post){
         $today=date("Y-m-d");
         $now=date("Y-m-d H:i:s");
+        if(!is_array($post['vcsids'])){
+            $post['vcsids']=explode(",",$post['vcsids']);
+        }
+        
         $vcss=$this->db->where_in('id',$post['vcsids'])->get('vc_stages')->result();
         // pre($vcss);
         $ub_vcs=[];
@@ -366,6 +370,10 @@ class Vacancy_model extends CI_Model {
     public function rejectvcs($post){
         $today=date("Y-m-d");
         $now=date("Y-m-d H:i:s");
+        // pre($post);
+        if(!is_array($post['vcsids'])){
+            $post['vcsids']=explode(",",$post['vcsids']);
+        }
         $stage=$this->db->where('isfinish',2)->get('stages')->row();
         $vcss=$this->db->where_in('id',$post['vcsids'])->get('vc_stages')->result();
         $ub_vcs=[];
