@@ -487,7 +487,7 @@
 <script id="intro-script">
 	$(document).ready(function() {
 		// Show the welcome modal
-		<?php if(!$isuser){?>
+		<?php if($isuser){?>
 	        $('#welcomeModal').modal({
 	            backdrop: 'static',
 	            keyboard: false
