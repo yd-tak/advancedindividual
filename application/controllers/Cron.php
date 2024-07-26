@@ -43,6 +43,7 @@ class Cron extends CI_Controller {
         }
         
     }
+
     public function sendInterviewEmail(){
         $candidates=$this->db->select("v.title,vc.id,c.email,concat(c.firstname,' ',c.lastname) name,vc.interviewurisent")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('vc_stages vcs','vc.lastvcstageid=vcs.id')->join("candidates c","vc.candidateid=c.id")->where("vc.interviewurisent",0)->where('vcs.stageid',2)->limit(5)->get()->result();
         // pre($candidates);
@@ -72,9 +73,13 @@ class Cron extends CI_Controller {
             
             <p>We look forward to your participation and wish you the best of luck.</p>
             
+            <p>If you experience difficulties in the process, do not hesitate to contact our official WhatsApp (:</p>
+
             <p>Best regards,</p>
             <p>
-                HR<br>
+                Krisma Bela<br>
+                Talent Acquisition Supervisor<br>
+                +62 889-0234-7290<br>
                 ".getCompany('name')."
             </p>";
             // echo $subject."<br>".$message;exit;

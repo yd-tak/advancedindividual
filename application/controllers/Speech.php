@@ -21,4 +21,7 @@ class Speech extends CI_Controller {
         $result = $this->Speech_model->recognize_audio();
         echo json_encode($result);
     }
+    public function test(){
+        $result=$this->Speech_model->test_audio();
+    }
 }

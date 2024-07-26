@@ -3,7 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 use Google\Cloud\Speech\V1\SpeechClient;
 use Google\Cloud\Speech\V1\RecognitionConfig;
+use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
 use Google\Cloud\Speech\V1\RecognitionAudio;
+use Google\Cloud\Speech\V1\StreamingRecognitionConfig;
 use Google\ApiCore\ApiException;
 use Google\ApiCore\ValidationException;
 // use getID3;
@@ -37,7 +39,28 @@ class Speech_model extends CI_Model {
             show_error('Error initializing Google Cloud SpeechClient. Exception: ' . $e->getMessage());
         }
     }
+    public function test_audio(){
 
+        $jsonPath = APPPATH . 'config/advin-service-account.json';
+        $speechClient=new SpeechClient([
+            'keyFilePath' => $jsonPath
+        ]);
+        $recognitionConfig = new RecognitionConfig();
+        $recognitionConfig->setEncoding(AudioEncoding::LINEAR16);
+        $recognitionConfig->setSampleRateHertz(44100);
+        $recognitionConfig->setLanguageCode('id-ID');
+        $config = new StreamingRecognitionConfig();
+        $config->setConfig($recognitionConfig);
+
+        $audioResource = fopen(FCPATH . 'assets/uploads/voices/audio4.wav', 'r');
+
+        $responses = $speechClient->recognizeAudioStream($config, $audioResource);
+
+        foreach ($responses as $element) {
+            // doSomethingWith($element);
+            pre($element);
+        }
+    }
     public function recognize_audio()
     {
         
@@ -74,12 +97,13 @@ class Speech_model extends CI_Model {
         // ]);
         // set config
         $config = (new RecognitionConfig())
-            ->setEncoding(RecognitionConfig\AudioEncoding::LINEAR16)
+            ->setEncoding(AudioEncoding::LINEAR16)
             ->setSampleRateHertz($sampleRate)
             ->setLanguageCode('id-ID');
         $transcript='';
         try {
             $response = $this->client->recognize($config, $audio);
+            // pre($response);
             foreach ($response->getResults() as $result) {
                 $alternatives = $result->getAlternatives();
                 $mostLikely = $alternatives[0];
@@ -114,6 +138,6 @@ class Speech_model extends CI_Model {
 
         log_message('info', 'Transcript: ' . $transcript);
 
-        return ['transcript' => $transcript];
+        return ['transcript' => $transcript,'sampleRate'=>$sampleRate];
     }
 }
