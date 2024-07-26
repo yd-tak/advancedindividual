@@ -5,7 +5,7 @@ class MY_Controller extends CI_Controller
 {
     public function __construct(){
         parent::__construct();
-        if($this->uri->segment(1)!=="auth" && !($this->uri->segment(1)=="vacancy" && in_array($this->uri->segment(2),['apply','applyp','complete','completep'])) && !($this->uri->segment(1)=="interview" && in_array($this->uri->segment(2),['view','run']))){
+        if($this->uri->segment(1)!=="auth" && !($this->uri->segment(1)=="vacancy" && in_array($this->uri->segment(2),['apply','applyp','complete','completep'])) && !$this->uri->segment(1)=="interview"){
             if(!$this->session->has_userdata('login')){
                 redirect("auth/signin");
             }
