@@ -14,7 +14,8 @@ class Cron extends CI_Controller {
     }
     public function startInterview(){
         $vcs=$this->db->select('vc.*')->from("vc")->join('vacancies v','vc.vacancyid=v.id')->join('vc_stages vcs','vc.lastvcstageid=vcs.id')->join("candidates c","vc.candidateid=c.id")->where('vcs.stageid',2)->where('vc.aiinterviewstarted',0)->limit(5)->get()->result();
-
+        if(empty($vcs))
+            return;
         $vacancyids=[];
         foreach($vcs as $row){
             if(!in_array($row->vacancyid, $vacancyids))
