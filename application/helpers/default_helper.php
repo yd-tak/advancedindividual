@@ -189,3 +189,11 @@ function sendHelperEmail($recipient,$subject,$message){
 
     return $ci->email->send();
 }
+function filter_string($data){
+    if(is_string($data)){
+        return $data;
+    }
+    else{
+        return '';
+    }
+}

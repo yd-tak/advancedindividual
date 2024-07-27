@@ -86,7 +86,14 @@
 				<div class="col-lg-8">
 					<span class="fw-bold fs-6 text-gray-800">
 						<?php foreach($row->json->evaluation as $traits=>$eval){
-							echo "<b>".ucwords(str_replace("_", " ", $traits))."</b><span class='text-muted'>: ".$eval."</span><br>";
+							if(is_string($eval)){
+								echo "<b>".ucwords(str_replace("_", " ", $traits))."</b><span class='text-muted'>: ".$eval."</span><br>";
+							}
+							else{
+								foreach(get_object_vars($eval) as $traits2=>$eval2){
+									echo "<b>".ucwords(str_replace("_", " ", $traits2))."</b><span class='text-muted'>: ".$eval2."</span><br>";
+								}
+							}
 						}?>
 					</span>
 				</div>

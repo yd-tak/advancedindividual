@@ -121,18 +121,18 @@ class Candidate_model extends CI_Model {
                 }
                 if(isset($row->field_of_study) && !empty($row->field_of_study)){
                     $ib_fields[]=[
-                        'name'=>$row->field_of_study
+                        'name'=>filter_string($row->field_of_study)
                     ];
                 }
                 $ib_ces[]=[
                     'candidateid'=>$id,
-                    'degree'=>$row->degree,
-                    'institution'=>$row->institution_name,
-                    'fieldparse'=>$row->field_of_study,
+                    'degree'=>filter_string($row->degree),
+                    'institution'=>filter_string($row->institution_name),
+                    'fieldparse'=>filter_string($row->field_of_study),
                     'startyear'=>$startyear,
                     'endyear'=>$toyear,
                     'gpa'=>$row->gpa,
-                    'notes'=>$row->achievements
+                    'notes'=>filter_string($row->achievements)
                 ];
             }
             foreach($airesult->work_history as $row){
@@ -170,13 +170,13 @@ class Candidate_model extends CI_Model {
                 }
                 $ib_cws[]=[
                     'candidateid'=>$id,
-                    'company'=>$row->company_name,
-                    'position'=>$row->job_position,
+                    'company'=>filter_string($row->company_name),
+                    'position'=>filter_string($row->job_position),
                     'salary'=>$row->salary,
                     'startyear'=>$startyear,
                     'endyear'=>$toyear,
-                    'responsibilities'=>$row->responsibilities,
-                    'achievements'=>$row->achievements,
+                    'responsibilities'=>filter_string($row->responsibilities),
+                    'achievements'=>filter_string($row->achievements),
                 ];
             }
             
@@ -189,7 +189,7 @@ class Candidate_model extends CI_Model {
                 
                 $ib_ccs[]=[
                     'candidateid'=>$id,
-                    'certification'=>$row->certification,
+                    'certification'=>filter_string($row->certification),
                     'certifiedyear'=>intval($row->certified_year),
                     'certificatenum'=>$row->certification_number,
                     'createdt'=>$now
@@ -197,12 +197,12 @@ class Candidate_model extends CI_Model {
             }
             foreach($airesult->technical_skills as $skill){
                 $ib_skills[]=[
-                    'name'=>$skill,
+                    'name'=>filter_string($skill),
                     'type'=>'Technical'
                 ];
                 $ib_css[]=[
                     'candidateid'=>$id,
-                    'skillparse'=>$skill
+                    'skillparse'=>filter_string($skill)
                 ]; 
             }
             $this->db->where('id',$id)->update('candidates',$u_candidate);

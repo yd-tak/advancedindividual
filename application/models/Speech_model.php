@@ -41,25 +41,50 @@ class Speech_model extends CI_Model {
     }
     public function test_audio(){
 
-        $jsonPath = APPPATH . 'config/advin-service-account.json';
-        $speechClient=new SpeechClient([
-            'keyFilePath' => $jsonPath
+        $speechClient=new SpeechClient();
+        
+        #local
+        $audioFilePath=FCPATH . 'assets/uploads/voices/test4.wav';
+        // $audioFilePath=base_url('assets/uploads/voices/audio.mp3');
+        $audioContent = file_get_contents($audioFilePath);
+
+        $getID3 = new getID3();
+        $fileInfo = $getID3->analyze($audioFilePath);
+        pre($fileInfo);
+        // $uri=base_url('assets/uploads/voices/audio6.wav');
+        // echo $uri;
+        
+        #google storage
+        // $gcsURI = 'gs://cloud-samples-data/speech/brooklyn_bridge.raw';
+
+        $audio = (new RecognitionAudio())
+            // ->setUri($uri);
+        ->setContent($audioContent);
+
+        # The audio file's encoding, sample rate and language
+        $config = new RecognitionConfig([
+            'encoding' => AudioEncoding::LINEAR16,
+            // 'sample_rate_hertz' => 16000,
+            'language_code' => 'id-ID',
+            'audio_channel_count'=>$fileInfo['audio']['channels']??1
         ]);
-        $recognitionConfig = new RecognitionConfig();
-        $recognitionConfig->setEncoding(AudioEncoding::LINEAR16);
-        $recognitionConfig->setSampleRateHertz(44100);
-        $recognitionConfig->setLanguageCode('id-ID');
-        $config = new StreamingRecognitionConfig();
-        $config->setConfig($recognitionConfig);
 
-        $audioResource = fopen(FCPATH . 'assets/uploads/voices/audio4.wav', 'r');
+        # Instantiates a client
+        $client = new SpeechClient();
 
-        $responses = $speechClient->recognizeAudioStream($config, $audioResource);
+        # Detects speech in the audio file
+        $response = $client->recognize($config, $audio);
 
-        foreach ($responses as $element) {
-            // doSomethingWith($element);
-            pre($element);
+        # Print most likely transcription
+        foreach ($response->getResults() as $result) {
+            $alternatives = $result->getAlternatives();
+            // pre($alternatives,1);
+            $mostLikely = $alternatives[0];
+            $transcript = $mostLikely->getTranscript();
+            printf('Transcript: %s' . PHP_EOL, $transcript);
         }
+
+        $client->close();
     }
     public function recognize_audio()
     {
@@ -73,12 +98,15 @@ class Speech_model extends CI_Model {
         }
         $audioFileName=$this->upload->data('file_name');
         
-        $audioFilePath=FCPATH . 'assets/uploads/voices/'.$audioFileName;
+        // $audioFilePath=FCPATH . 'assets/uploads/voices/'.$audioFileName;
+        $audioFilePath=base_url('assets/uploads/voices/'.$audioFileName);
+        // echo $audioFilePath;
         // Use getID3 to get the sample rate of the audio file
         // require_once(APPPATH . 'third_party/getid3/getid3.php'); // Ensure you have getid3 in third_party directory
         $getID3 = new getID3();
         $fileInfo = $getID3->analyze($audioFilePath);
-        $sampleRate = $fileInfo['audio']['sample_rate'] ?? 16000; // Default to 16000 if not found
+        $sampleRate = $fileInfo['audio']['sample_rate'] ?? 44100; // Default to 16000 if not found
+        $sampleRate=44100;
 
         log_message('info', 'Sample rate: ' . $sampleRate);
 
@@ -98,7 +126,7 @@ class Speech_model extends CI_Model {
         // set config
         $config = (new RecognitionConfig())
             ->setEncoding(AudioEncoding::LINEAR16)
-            ->setSampleRateHertz($sampleRate)
+            // ->setSampleRateHertz($sampleRate)
             ->setLanguageCode('id-ID');
         $transcript='';
         try {
