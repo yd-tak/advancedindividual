@@ -1,0 +1,8 @@
+RewriteEngine on
+RewriteCond $1 !^(index\.php|resources|robots\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+#RewriteRule ^(.*)$ index.php?/$1 [L,QSA] 
+#php_value max_input_vars 14000
+php_value date.timezone "Asia/Jakarta"
