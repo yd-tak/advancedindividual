@@ -12,6 +12,15 @@ class Tools extends MY_Controller {
         $this->load->model('candidate_model');
         
     }
+    public function test_gmeet(){
+        $this->load->model('gcp_model');
+        $summary = 'Interview Invitation 31 Jul 2024 | Flutter Developer | PT PASSION ABADI KORPORA';
+        $description = 'Hi Yudhistira, you are invited for user interview for Flutter Developer position at 31 Jul 2024';
+
+        $event = $this->gcp_model->create_space_sample();
+
+        pre($event);
+    }
     public function apppath(){
         echo APPPATH;
     }

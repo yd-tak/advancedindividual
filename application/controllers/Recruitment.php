@@ -44,10 +44,26 @@ class Recruitment extends MY_Controller {
         $view['content']=$this->load->view('recruitment/setting',$view,true);
         $this->load->view('layouts/master', ['view'=>$view]);
     }
-    public function offering_template($language='english'){
+    public function recruitment_template($templatecode,$language='english'){
         $view=$this->_defaultview;
-        $view['breadcrumbs'][]='Offering Letter Template';
-        $view['pagename']='Offering Letter Template Setting';
+        // $templatecode='';
+        switch($templatecode){
+            case 'offering_template':
+                $pagename='Offering Letter Template';
+                break;
+            case 'rejected_template':
+                $pagename='Rejection Letter Template';
+                break;
+            case 'accepted_template':
+                $pagename='Acceptance Letter Template';
+                break;
+            case 'interview_template':
+                $pagename='Interview Letter Template';
+                break;
+
+        }
+        $view['breadcrumbs'][]=$pagename;
+        $view['pagename']=$pagename;
         $view['language']=$language;
         if($language=='english'){
             $language2='indonesia';
@@ -56,17 +72,31 @@ class Recruitment extends MY_Controller {
             $language2='english';
         }
         $view['language2']=$language2;
-        $view['template']=getsetting('offering_template_'.$language);
-        $view['content']=$this->load->view('recruitment/offering_template',$view,true);
+        $view['templatecode']=$templatecode;
+        $view['template']=getsetting($templatecode.'_'.$language);
+        $view['content']=$this->load->view('recruitment/recruitment_template',$view,true);
         $this->load->view('layouts/master', ['view'=>$view]);
     }
-    public function offering_templatep(){
+    public function recruitment_templatep(){
         $input=$this->input->post();
-        $this->db->where('param','offering_template_'.$input['language'])->update('setting',['val'=>$input['val']]);
+        $this->db->where('param',$input['templatecode'].'_'.$input['language'])->update('setting',['val'=>$input['val']]);
         redirect($this->input->server("HTTP_REFERER"));
     }
-    public function generate_offering_template($language){
-        $template=$this->recruitment_model->generate_offering_template($language);
+    public function generate_recruitment_template($templatecode,$language){
+        switch($templatecode){
+            case 'offering_template':
+                $template=$this->recruitment_model->generate_offering_template($language);
+                break;
+            case 'accepted_template':
+                $template=$this->recruitment_model->generate_accepted_template($language);
+                break;
+            case 'rejected_template':
+                $template=$this->recruitment_model->generate_rejected_template($language);
+                break;
+            case 'interview_template':
+                $template=$this->recruitment_model->generate_interview_template($language);
+                break;
+        }
         echo json_encode(['template'=>$template]);
     }
 }

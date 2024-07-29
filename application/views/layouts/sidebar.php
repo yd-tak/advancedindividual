@@ -151,11 +151,41 @@
 						<!--begin:Menu item-->
 						<div class="menu-item">
 							<!--begin:Menu link-->
-							<a class="menu-link " href="<?=site_url('recruitment/offering_template')?>"  title="Offering Letter Template" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+							<a class="menu-link " href="<?=site_url('recruitment/recruitment_template/offering_template')?>"  title="Offering Letter Template" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
 								<span class="menu-bullet">
 									<span class="bullet bullet-dot"></span>
 								</span>
 								<span class="menu-title">Offering Template</span>
+							</a>
+							<!--end:Menu link-->
+						</div>
+						<div class="menu-item">
+							<!--begin:Menu link-->
+							<a class="menu-link " href="<?=site_url('recruitment/recruitment_template/interview_template')?>"  title="Interview Invitation Template" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+								<span class="menu-title">Interview Template</span>
+							</a>
+							<!--end:Menu link-->
+						</div>
+						<div class="menu-item">
+							<!--begin:Menu link-->
+							<a class="menu-link " href="<?=site_url('recruitment/recruitment_template/accepted_template')?>"  title="Acceptance Letter Template" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+								<span class="menu-title">Acceptance Template</span>
+							</a>
+							<!--end:Menu link-->
+						</div>
+						<div class="menu-item">
+							<!--begin:Menu link-->
+							<a class="menu-link " href="<?=site_url('recruitment/recruitment_template/rejected_template')?>"  title="Rejection Letter Template" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
+								<span class="menu-bullet">
+									<span class="bullet bullet-dot"></span>
+								</span>
+								<span class="menu-title">Rejection Template</span>
 							</a>
 							<!--end:Menu link-->
 						</div>

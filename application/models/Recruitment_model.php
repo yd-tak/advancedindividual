@@ -68,9 +68,74 @@ class Recruitment_model extends CI_Model {
             [DEADLINE]: Deadline of Confirmation
             [ARRANGEMENT]: Working Arrangement (e.g., remote, hybrid, in-office)
             [COMMITMENT]: Job Commitment (e.g., full-time, part-time)
+            [CONFIRMATION_URL]: Offering Confirmation URL (Accept or Reject Offering)
             [YOUR_NAME]: Signee from your company";
 
         $request="Write me an offering letter template in ".$language." language. No need to translate the placeholders for me.";
+        
+        $answer=$this->openai_core->do_chat($system,$request,'gpt-3.5-turbo');
+        return $answer;
+    }
+    public function generate_interview_template($language){
+        $this->load->model("openai_core");
+        $system="You are a professional assistant tasked with creating an recruitment interview invitation letter template for a company. The letter should be formal and include all the necessary details for a job offer. The letter should not exceed one page on a letter page size. Do not put in benefits other than salary on the letter. Please include ALL and ONLY the following placeholders:
+
+            [DATE]: Date of Offering
+            [COM]: Your Company Name
+            [COM_ADDRESS]: Your Company Address
+            [JOB_TITLE]: Job Title for the Vacancy
+            [CAN_NAME]: Candidate Name
+            [CAN_ADDRESS]: Candidate Address
+            [ARRANGEMENT]: Working Arrangement (e.g., remote, hybrid, in-office)
+            [COMMITMENT]: Job Commitment (e.g., full-time, part-time)
+            [YOUR_NAME]: Signee from your company
+            [GMEET_URL]: Google Meet Interview URL
+            [GMEER_DATE]: Google Meet Interview Date & Time
+            ";
+
+        $request="Write me an interview invitation letter template in ".$language." language. No need to translate the placeholders for me.";
+        
+        $answer=$this->openai_core->do_chat($system,$request,'gpt-3.5-turbo');
+        return $answer;
+    }
+    public function generate_accepted_template($language){
+        $this->load->model("openai_core");
+        $system="You are a professional assistant tasked with creating an recruitment acceptance letter template for a company. The letter should be formal and include all the necessary details for a job offer. The letter should not exceed one page on a letter page size. Do not put in benefits other than salary on the letter. Please include ALL and ONLY the following placeholders:
+
+            [DATE]: Date of Offering
+            [COM]: Your Company Name
+            [COM_ADDRESS]: Your Company Address
+            [JOB_TITLE]: Job Title for the Vacancy
+            [CAN_NAME]: Candidate Name
+            [CAN_ADDRESS]: Candidate Address
+            [ARRANGEMENT]: Working Arrangement (e.g., remote, hybrid, in-office)
+            [COMMITMENT]: Job Commitment (e.g., full-time, part-time)
+            [YOUR_NAME]: Signee from your company
+            [OFF_SALARY]: Offered Salary
+            [START_DATE]: Starting Work Date
+            ";
+
+        $request="Write me an recruitment acceptance letter template in ".$language." language. No need to translate the placeholders for me.";
+        
+        $answer=$this->openai_core->do_chat($system,$request,'gpt-3.5-turbo');
+        return $answer;
+    }
+    public function generate_rejected_template($language){
+        $this->load->model("openai_core");
+        $system="You are a professional assistant tasked with creating an recruitment rejection letter template for a company. The letter should be formal and include all the necessary details for a job offer. The letter should not exceed one page on a letter page size. Do not put in benefits other than salary on the letter. Please include ALL and ONLY the following placeholders:
+
+            [DATE]: Date of Offering
+            [COM]: Your Company Name
+            [COM_ADDRESS]: Your Company Address
+            [JOB_TITLE]: Job Title for the Vacancy
+            [CAN_NAME]: Candidate Name
+            [CAN_ADDRESS]: Candidate Address
+            [ARRANGEMENT]: Working Arrangement (e.g., remote, hybrid, in-office)
+            [COMMITMENT]: Job Commitment (e.g., full-time, part-time)
+            [YOUR_NAME]: Signee from your company
+            ";
+
+        $request="Write me an recruitment rejection letter template in ".$language." language. No need to translate the placeholders for me.";
         
         $answer=$this->openai_core->do_chat($system,$request,'gpt-3.5-turbo');
         return $answer;

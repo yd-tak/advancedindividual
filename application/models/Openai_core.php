@@ -194,13 +194,6 @@ class Openai_core extends CI_Model {
                 Once you have summarized, output me the JSON response only, follow this JSON format and do not append or prepend any text outside of the JSON response:
 
                 {
-                    "work_evaluation":[
-                        {
-                            "workexps_id":"",
-                            "evaulation":"",
-                            "score":""
-                        }
-                    ],
                     "expected_salary":"",
                     "strong_qualities":[
                         ""
@@ -209,6 +202,13 @@ class Openai_core extends CI_Model {
                         ""
                     ],
                     "reason_to_hire":"",
+                    "work_evaluation":[
+                        {
+                            "workexps_id":"",
+                            "evaulation":"",
+                            "score":""
+                        }
+                    ],
                     "technical_question":[
                         {
                             "question":"",

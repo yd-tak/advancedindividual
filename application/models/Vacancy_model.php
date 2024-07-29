@@ -220,6 +220,7 @@ class Vacancy_model extends CI_Model {
             $row->candidates=[];
             $stagemap[$row->id]=$row;
         }
+        // pre($stagemap)
         foreach($candidates as $row){
             $stagemap[$row->stageid]->candidates[]=$row;
         }
@@ -339,10 +340,11 @@ class Vacancy_model extends CI_Model {
             $post['vcsids']=explode(",",$post['vcsids']);
         }
         
-        $vcss=$this->db->where_in('id',$post['vcsids'])->get('vc_stages')->result();
+        $vcss=$this->db->where_in('id',$post['vcsids'])->where('stageid!=',8)->get('vc_stages')->result();
         // pre($vcss);
         $ub_vcs=[];
         $ib_vcs=[];
+        $ub_vc=[];
 
         foreach($vcss as $row){
             $ub_vcs[]=[
@@ -357,6 +359,23 @@ class Vacancy_model extends CI_Model {
                 'score'=>$row->score,
                 'createdt'=>$now
             ];
+            if($post['acceptedby']=='candidate'){
+                $ub_vc[]=[
+                    'id'=>$row->vcid,
+                    'acceptedby'=>$post['acceptedby'],
+                    'isofferaccepted'=>1,
+                    'offeracceptdate'=>date("Y-m-d"),
+                ];
+            }
+            else{
+                $ub_vc[]=[
+                    'id'=>$row->vcid,
+                    'acceptedby'=>$post['acceptedby']
+                ];
+            }
+        }
+        if(!empty($ub_vc)){
+            $this->db->update_batch('vc',$ub_vc,'id');
         }
         if(!empty($ub_vcs)){
             $this->db->update_batch('vc_stages',$ub_vcs,'id');
@@ -375,15 +394,16 @@ class Vacancy_model extends CI_Model {
             $post['vcsids']=explode(",",$post['vcsids']);
         }
         $stage=$this->db->where('isfinish',2)->get('stages')->row();
-        $vcss=$this->db->where_in('id',$post['vcsids'])->get('vc_stages')->result();
+        $vcss=$this->db->where_in('id',$post['vcsids'])->where('stageid!=',9)->get('vc_stages')->result();
         $ub_vcs=[];
         $ib_vcs=[];
+        $ub_vc=[];
 
         foreach($vcss as $row){
             $ub_vcs[]=[
                 'id'=>$row->id,
                 'datecompleted'=>$today,
-                'updatedt'=>$now
+                'updatedt'=>$now,
             ];
             $ib_vcs[]=[
                 'vcid'=>$row->vcid,
@@ -395,6 +415,25 @@ class Vacancy_model extends CI_Model {
                 'createdt'=>$now,
                 'updatedt'=>$now
             ];
+            if($post['rejectedby']=='candidate'){
+                $ub_vc[]=[
+                    'id'=>$row->vcid,
+                    'rejectreason'=>$post['rejectreason'],
+                    'rejectedby'=>$post['rejectedby'],
+                    'isofferaccepted'=>0,
+                    'offerrejectdate'=>date("Y-m-d")
+                ];
+            }
+            else{
+                $ub_vc[]=[
+                    'id'=>$row->vcid,
+                    'rejectreason'=>$post['rejectreason'],
+                    'rejectedby'=>$post['rejectedby']
+                ];
+            }
+        }
+        if(!empty($ub_vc)){
+            $this->db->update_batch('vc',$ub_vc,'id');
         }
         if(!empty($ub_vcs)){
             $this->db->update_batch('vc_stages',$ub_vcs,'id');
@@ -681,6 +720,7 @@ class Vacancy_model extends CI_Model {
         $vacancy=$this->get($vc->vacancyid);
         $company=getcompany();
         $template=getsetting('offering_template_'.strtolower($vacancy->interviewlang));
+        $confirmation_url=site_url('vacancy/confirm_offering/'.$vcid);
         $template=str_replace_multiple($template,[
             '[DATE]'=>$vc->offerdate,
             '[COM]'=>$company->name,
@@ -693,7 +733,8 @@ class Vacancy_model extends CI_Model {
             '[DEADLINE]'=>$vc->offerdeadline,
             '[ARRANGEMENT]'=>$vacancy->arrangement,
             '[COMMITMENT]'=>$vacancy->jobcommitment,
-            '[YOUR_NAME]'=>$this->session->login->name
+            '[YOUR_NAME]'=>$this->session->login->name,
+            '[CONFIRMATION_URL]'=>$confirmation_url
         ]);
         $this->db->where('id',$vcid)->update('vc',[
             'offerletter'=>$template
@@ -710,6 +751,64 @@ class Vacancy_model extends CI_Model {
     public function create_offering_pdf($vcid){
         $vc=$this->db->where('id',$vcid)->get('vc')->row();
         $this->utilities->savetopdf($vc->offerletter,'vc-'.$vc->id);
+    }
+
+    public function userinterview_vc($post){
+
+        $vcid=$post['id'];
+        $meet_datetime=$post['meet_datetime'];
+        $meet_uri=$post['meet_uri'];
+        $meet_durationmin=$post['meet_durationmin'];
+        
+        $vc=$this->db->select("v.title,concat(c.firstname,' ',c.lastname) name")->from('vacancies v')->join('vc','vc.vacancyid=vc.id')->join('candidates c','vc.candidateid=c.id')->where('vc.id',$vcid)->get()->row();
+        $company=getcompany();
+
+        $userinterviewsent_date=date("Y-m-d");
+
+        $this->db->where('id',$vcid)->update('vc',[
+            'meet_datetime'=>$meet_datetime,
+            'meet_uri'=>$meet_uri,
+            'meet_durationmin'=>$meet_durationmin,
+            'userinterviewinvitedate'=>date("Y-m-d"),
+        ]);
+        $this->create_interview_letter($vcid);
+        $this->send_interview_letter($vcid);
+    }
+    public function create_interview_letter($vcid){
+        $vc=$this->getvc($vcid);
+        $vacancy=$this->get($vc->vacancyid);
+        $company=getcompany();
+        $template=getsetting('interview_template_'.strtolower($vacancy->interviewlang));
+        $dt=new DateTime($vc->meet_datetime);
+        $dt->modify("+".$vc->meet_durationmin."minutes");
+        $totime=$dt->format("H:i:s");
+        // pre($template);
+        $params=[
+            '[DATE]'=>date("Y-m-d"),
+            '[COM]'=>$company->name,
+            '[COM_ADDRESS]'=>$company->city.', '.$company->province.', '.$company->country,
+            '[JOB_TITLE]'=>$vacancy->title,
+            '[CAN_NAME]'=>$vc->name,
+            '[CAN_ADDRESS]'=>$vc->address,
+            '[ARRANGEMENT]'=>$vacancy->arrangement,
+            '[COMMITMENT]'=>$vacancy->jobcommitment,
+            '[YOUR_NAME]'=>$this->session->login->name,
+            '[GMEET_URL]'=>$vc->meet_uri,
+            '[GMEET_DATE]'=>($vc->meet_datetime.' - '.$totime)
+        ];
+        // pre($params);
+        $template=str_replace_multiple($template,$params);
+        $this->db->where('id',$vcid)->update('vc',[
+            'userinterviewinviteletter'=>$template
+        ]);
+        return true;
+    }
+    public function send_interview_letter($vcid){
+        $vc=$this->db->select("v.title,vc.id,c.email,concat(c.firstname,' ',c.lastname) name,vc.userinterviewinviteletter")->from('vc')->join('vacancies v','vc.vacancyid=v.id')->join('vc_stages vcs','vc.lastvcstageid=vcs.id')->join("candidates c","vc.candidateid=c.id")->where('vc.id',$vcid)->get()->row();
+        if($vc->userinterviewinviteletter!=null){
+            $subject=getCompany('name').' - Interview Invitation for '.$vc->title.' Job Position';
+            sendHelperEmail($vc->email,$subject,$vc->userinterviewinviteletter);
+        }
     }
     
 }

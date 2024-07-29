@@ -101,6 +101,28 @@
 				<div class="separator separator-dashed"></div>
 			</div>
 			<?php } ?>
+			<?php if($row->json!=null && isset($row->json->score)){?>
+			<div class="col-lg-6 row">
+				<!--begin::Label-->
+				<label class="col-lg-4 fw-semibold text-title">Score</label>
+				<div class="col-lg-8">
+					<span class="fw-bold fs-6 text-gray-800">
+						<?=$row->json->score?>
+					</span>
+				</div>
+			</div>
+			<div class="col-lg-6 row">
+				<!--end::Label-->
+				<!--begin::Col-->
+				<div class="col-lg-8">
+					<span class="fw-bold fs-6 text-gray-800">
+						<?=$row->json->analysis?>
+					</span>
+				</div>
+				<!--end::Col-->
+				<div class="separator separator-dashed"></div>
+			</div>
+			<?php } ?>
 			<?php if($row->json!=null && isset($row->json->reasoning)){?>
 			<div class="col-lg-6 row">
 				<!--begin::Label-->

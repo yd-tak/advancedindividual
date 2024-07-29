@@ -370,18 +370,6 @@
 						<!--begin::Actions-->
 						<div class="mb-0">
 							<!--begin::Row-->
-							<div class="row mb-5">
-								<!--begin::Col-->
-								<div class="col">
-									<a href="#" class="btn btn-warning w-100">Preview</a>
-								</div>
-								<!--end::Col-->
-								<!--begin::Col-->
-								<div class="col">
-									<a href="#" class="btn btn-success w-100">Save</a>
-								</div>
-								<!--end::Col-->
-							</div>
 							<!--end::Row-->
 							<button type="submit" class="btn btn-primary w-100" id="submit-btn" onsubmit="startloading('content-page-loader')">
 							<i class="ki-duotone ki-triangle fs-3">

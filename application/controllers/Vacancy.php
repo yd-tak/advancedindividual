@@ -108,6 +108,17 @@ class Vacancy extends MY_Controller {
         $html=$this->load->view('vacancy/vc-modal',['vc'=>$vc,'candidate'=>$candidate,'stages'=>$stages,'stage'=>$stage],true);
         echo json_encode(['html'=>$html]);
     }
+    public function confirm_offering($vcid){
+        $view=$this->_defaultview;
+        $vc=$this->vacancy_model->getvc($vcid);
+        $vacancy=$this->vacancy_model->get($vc->vacancyid);
+
+        $view['vacancy']=$vacancy;
+        $view['vc']=$vc;
+        $view['pagename']=$view['breadcrumbs'][]='Confirm Your Offering - '.$vacancy->title;
+        $view['content']=$this->load->view('vacancy/confirm-offering', $view,true);
+        $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true,'hidesidebar'=>true]);
+    }
     public function apply($id,$status=false){
         $view=$this->_defaultview;
 
@@ -183,6 +194,7 @@ class Vacancy extends MY_Controller {
     public function accept_vcs(){
         $input=$this->input->post();
         $this->db->trans_start();
+        $input['acceptedby']='recruiter';
         $result=$this->vacancy_model->acceptvcs($input);
         $this->db->trans_complete();
         echo json_encode($input);
@@ -190,9 +202,32 @@ class Vacancy extends MY_Controller {
     public function reject_vcs(){
         $input=$this->input->post();
         $this->db->trans_start();
+        $input['rejectedby']='recruiter';
         $result=$this->vacancy_model->rejectvcs($input);
         $this->db->trans_complete();
         echo json_encode($input);
+    }
+    public function reject_offering(){
+        $input=$this->input->post();
+        // pre($input);
+        $input['vcsids']=[$input['vcsid']];
+        $this->db->trans_start();
+        $input['rejectedby']='candidate';
+        $result=$this->vacancy_model->rejectvcs($input);
+        $this->db->trans_complete();
+        redirect($this->input->server("HTTP_REFERER"));
+    }
+    public function accept_offering(){
+        $input=$this->input->post();
+        // pre($input);
+        $input['stageid']=8;
+        $input['vcsids']=[$input['vcsid']];
+        $this->db->trans_start();
+        $input['acceptedby']='candidate';
+        // pre($input);
+        $result=$this->vacancy_model->acceptvcs($input);
+        $this->db->trans_complete();
+        redirect($this->input->server("HTTP_REFERER"));
     }
     public function generate_jobdesc(){
         $input=$this->input->get();
@@ -206,7 +241,6 @@ class Vacancy extends MY_Controller {
         $this->db->trans_complete();
         echo json_encode(['message'=>'offered']);
     }
-    
     public function view_offered($vcid){
         // $view=$this->_defaultview;
         // $view['pagename']=$view['breadcrumbs'][]='View Offering Letter';
@@ -214,6 +248,17 @@ class Vacancy extends MY_Controller {
         // $view['content']=$this->load->view('vacancy/view-offered', $view,true);
         // $this->load->view('layouts/master',['view'=>$view,'hideheader'=>true]);
         $this->vacancy_model->create_offering_pdf($vcid);
+    }
+    public function userinterview_vc(){
+        $input=$this->input->post();
+        $this->db->trans_start();
+        $this->vacancy_model->userinterview_vc($input);
+        $this->db->trans_complete();
+        echo json_encode(['message'=>'sent']);
+    }
+    public function view_userinterview($vcid){
+        $vc=$this->db->where('id',$vcid)->get('vc')->row();
+        redirect($vc->meet_uri);
     }
 }
 ?>

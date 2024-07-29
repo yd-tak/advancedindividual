@@ -487,6 +487,75 @@
 							</div>
 							<!--end::Modal dialog-->
 						</div>
+						<div class="modal fade" id="userinterview-candidate-modal" tabindex="-1" aria-hidden="true">
+							<!--begin::Modal dialog-->
+							<div class="modal-dialog modal-dialog-centered mw-650px">
+								<!--begin::Modal content-->
+								<div class="modal-content">
+									<!--begin::Modal header-->
+									<div class="modal-header">
+										<!--begin::Modal title-->
+										<h2 class="fw-bold">Invite User Interview</h2>
+										<!--end::Modal title-->
+										<!--begin::Close-->
+										<div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+											<i class="ki-duotone ki-cross fs-1">
+												<span class="path1"></span>
+												<span class="path2"></span>
+											</i>
+										</div>
+										<!--end::Close-->
+									</div>
+									<!--end::Modal header-->
+									<!--begin::Modal body-->
+									<div class="modal-body px-5 my-7">
+										<!--begin::Form-->
+										<?=form_open('#',['id'=>'userinterview-vc-form'])?>
+											<input type="hidden" name="id" id="userinterview-vc-id" value="">
+											<!--begin::Scroll-->
+											<div class="d-flex flex-column scroll-y px-5 px-lg-10">
+												<div class="row mb-7">
+													<div class="col-md-6">
+														<label class="fw-semibold fs-6 mb-2">Interview Start Date & Time</label>
+														<div class="input-group" id="kt_td_picker_localization" data-td-target-input="nearest" data-td-target-toggle="nearest">
+														    <input type="text" class="form-control" data-td-target="#kt_td_picker_localization" name="meet_datetime"/>
+														    <span class="input-group-text" data-td-target="#kt_td_picker_localization" data-td-toggle="datetimepicker">
+														        <i class="ki-duotone ki-calendar fs-2"><span class="path1"></span><span class="path2"></span></i>
+														    </span>
+														</div>
+
+													</div>
+													<div class="col-md-6">
+														<label class="fw-semibold fs-6 mb-2">Interview Duration (Minutes)</label>
+														<input class="form-control" name="meet_durationmin" type="number" value="60" required>
+													</div>
+													<div class="col-md-12">
+														<label class="fw-semibold fs-6 mb-2">Interview URL</label>
+														<input class="form-control" name="meet_uri" type="text" required>
+													</div>
+												</div>
+												
+											</div>
+											<div class="text-center pt-10" id="userinterview-candidate-modal-action">
+												<button type="reset" class="btn btn-light me-3" data-bs-dismiss="modal">Cancel</button>
+												<button type="button" class="btn btn-primary" onclick="userinterviewvc()">
+													<span class="indicator-label">Submit</span>
+													<span class="indicator-progress">Please wait...
+													<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+												</button>
+											</div>
+											<div class="text-center pt-10 d-none" id="userinterview-candidate-modal-loading">
+												<button type="button" class="btn btn-secondary me-3" >Loading...</button>
+											</div>
+										<?=form_close()?>
+										<!--end::Form-->
+									</div>
+									<!--end::Modal body-->
+								</div>
+								<!--end::Modal content-->
+							</div>
+							<!--end::Modal dialog-->
+						</div>
 					</div>
 					<!--end::Card toolbar-->
 				</div>
@@ -532,12 +601,21 @@
 								<td onclick="viewvc(<?=$row->id?>)"><?=($stage->id==1)?$row->cvscore:$row->avgscore?></td>
 								<td class="text-end d-flex">
 									<?php if(!$vacancy->stages[$stage->id]->isfinish){?>
-										<?php if($stage->id==7){?>
-											<?php if(!$row->isoffered){?>
+										<?php if($stage->id==7){
+											if(!$row->isoffered){?>
 												<button onclick="offersingle(<?=$row->id?>,<?=($row->asksalary==null?0:$row->asksalary)?>,this)" class="btn btn-primary btn-center btn-sm">
 												<i class="fa fa-envelope"></i></button>
 											<?php }else{ ?>
 												<a href="<?=site_url('vacancy/view_offered/'.$row->id)?>" target="_blank" class="btn btn-primary btn-center btn-sm">
+												<i class="fa fa-external-link"></i></a>
+										<?php }
+										}
+										elseif($stage->id==4){ 
+											if(!$row->userinterviewinvitedate){?>
+												<button onclick="userinterviewsingle(<?=$row->id?>,this)" class="btn btn-primary btn-center btn-sm">
+												<i class="fa fa-envelope"></i></button>
+											<?php }else{ ?>
+												<a href="<?=site_url('vacancy/view_userinterview/'.$row->id)?>" target="_blank" class="btn btn-primary btn-center btn-sm">
 												<i class="fa fa-external-link"></i></a>
 										<?php }
 										} ?>
@@ -663,8 +741,7 @@
 	function offersingle(vcid,asksalary){
 		$("#offer-vc-id").val(vcid);
 		$("#offer-vc-salary").val(asksalary);
-		$("#offer-candidate-modal").modal("show");
-		
+		$("#offer-candidate-modal").modal("show");	
 	}
 	function offervc(){
 		
@@ -689,6 +766,36 @@
 				stoploading("content-page-loader");
 				$("#offer-candidate-modal-action").removeClass("d-none");
 				$("#offer-candidate-modal-loading").addClass("d-none");
+			}
+		});
+	}
+	function userinterviewsingle(vcid,asksalary){
+		$("#userinterview-vc-id").val(vcid);
+		$("#userinterview-candidate-modal").modal("show");	
+	}
+	function userinterviewvc(){
+		
+		startloading("content-page-loader");
+		
+		$.ajax({
+			url:"<?=site_url('vacancy/userinterview_vc')?>",
+			type:"POST",
+			dataType:"json",
+			data:$("#userinterview-vc-form").serialize(),
+			beforeSend:function(){
+				$("#userinterview-candidate-modal-action").addClass("d-none");
+				$("#userinterview-candidate-modal-loading").removeClass("d-none");
+			},
+			success:function(response){
+				alert("User Interview Invitation Letter Sent to the candidate email");
+				stoploading("content-page-loader");
+					
+			},
+			error:function(err){
+				alert(err);
+				stoploading("content-page-loader");
+				$("#userinterview-candidate-modal-action").removeClass("d-none");
+				$("#userinterview-candidate-modal-loading").addClass("d-none");
 			}
 		});
 	}
@@ -737,4 +844,13 @@
 		});
 
 	}
+
+	new tempusDominus.TempusDominus(document.getElementById("kt_td_picker_localization"), {
+	    localization: {
+	        locale: "id",
+	        startOfTheWeek: 1,
+	        format: "yyyy-MM-dd hh:mm"
+	    }
+	});
+
 </script>
