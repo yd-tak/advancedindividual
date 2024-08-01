@@ -21,7 +21,8 @@ class Cron extends CI_Controller {
             if(!in_array($row->vacancyid, $vacancyids))
                 $vacancyids[]=$row->vacancyid;
         }
-        $vacancytests=$this->db->where_in('vacancyid',$vacancyids)->get('vacancy_tests')->result();
+        $vacancytests=$this->db->where_in('vacancyid',$vacancyids)->where('isactive',1)->get('vacancy_tests')->result();
+        // pre($vacancytests);
         $vacancytestmap=[];
         foreach($vacancytests as $row){
             if(!isset($vacancytestmap[$row->vacancyid])){

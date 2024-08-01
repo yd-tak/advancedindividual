@@ -134,8 +134,20 @@ class Vacancy_model extends CI_Model {
     public function get($id,$get=[]){
         $vacancy=$this->gettbl()->where('v.id',$id)->get()->row();
         $vacancy->skills=$this->gettblskill()->where("vs.vacancyid",$id)->get()->result();
+
+        $vacancy->skillids=[];
+        foreach($vacancy->skills as $row){
+            $vacancy->skillids[]=$row->skillid;
+        }
+        
         // pre($vacancy->skills);
         $vacancy->tests=$this->gettbltest()->where("vt.vacancyid",$id)->get()->result();
+
+        $vacancy->testids=[];
+        foreach($vacancy->tests as $row){
+            if($row->isactive)
+                $vacancy->testids[]=$row->testid;
+        }
 
         if($vacancy->minage==null && $vacancy->maxage==null){
             $vacancy->age='No Age Restriction';
@@ -328,6 +340,91 @@ class Vacancy_model extends CI_Model {
             $this->db->insert_batch('vacancy_tests',$ib_vt);
         }
         if(!empty($ib_vs)){
+            $this->db->insert_batch('vacancy_skills',$ib_vs);
+        }
+        // pre($data);
+        return $vacancyid;
+    }
+    public function edit($data){
+        $vacancyid=$data['id'];
+        $data['jobdesc']=trim($data['jobdesc']);
+        $tests=$data['tests'];
+        unset($data['tests']);
+        if($data['workexperience']){
+            $workexp=explode("-",$data['workexperience']);    
+            // pre($workexp);
+            $data['minworkexp']=$workexp[0];
+            $data['maxworkexp']=$workexp[1];
+        }
+        else{
+            $data['minworkexp']=0;
+            $data['maxworkexp']=100;
+        }
+
+        $techskillids=autocreate_select_options($data['techskills'],'skills','name',['type'=>'Technical']);
+        $softskillids=autocreate_select_options($data['softskills'],'skills','name',['type'=>'Soft']);
+        $langskillids=autocreate_select_options($data['langskills'],'skills','name',['type'=>'Language']);
+        $certskillids=autocreate_select_options($data['certskills'],'skills','name',['type'=>'Certification']);
+
+        unset($data['minworkexp']);
+        unset($data['techskills']);
+        unset($data['softskills']);
+        unset($data['langskills']);
+        unset($data['certskills']);
+        unset($data['workexperience']);
+        // pre($data);
+        $this->db->where('id',$vacancyid)->update('vacancies',$data);
+        $ib_vt=[];
+        foreach($tests as $testid){
+            $ib_vt[]=[
+                'vacancyid'=>$vacancyid,
+                'testid'=>$testid
+            ];
+        }
+        // pre($ib_vt);
+        $ib_vs=[];
+        foreach($techskillids as $skillid){
+            $ib_vs[]=[
+                'vacancyid'=>$vacancyid,
+                'skillid'=>$skillid,
+                'proficiency'=>0
+            ];
+        }
+        foreach($softskillids as $skillid){
+            $ib_vs[]=[
+                'vacancyid'=>$vacancyid,
+                'skillid'=>$skillid,
+                'proficiency'=>0
+            ];
+        }
+        foreach($langskillids as $skillid){
+            $ib_vs[]=[
+                'vacancyid'=>$vacancyid,
+                'skillid'=>$skillid,
+                'proficiency'=>0
+            ];
+        }
+        foreach($certskillids as $skillid){
+            $ib_vs[]=[
+                'vacancyid'=>$vacancyid,
+                'skillid'=>$skillid,
+                'proficiency'=>0
+            ];
+        }
+        // pre($ib_vs);
+        if(!empty($ib_vt)){
+
+            $testids=[];
+            foreach($ib_vt as $row){
+                $testids[]=$row['testid'];
+            }
+            // pre($ib_vt,1);
+            // pre($testids);
+            $this->db->insert_ignore_batch('vacancy_tests',$ib_vt);
+            $this->db->where_not_in('testid',$testids)->where('vacancyid',$vacancyid)->update('vacancy_tests',['isactive'=>0]);
+        }
+        if(!empty($ib_vs)){
+            $this->db->where('vacancyid',$vacancyid)->delete('vacancy_skills');
             $this->db->insert_batch('vacancy_skills',$ib_vs);
         }
         // pre($data);

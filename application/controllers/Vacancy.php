@@ -76,10 +76,23 @@ class Vacancy extends MY_Controller {
         $this->db->where('id',$id)->update('vacancies',['interview_assistantid'=>$assistant_id]);
     }
     
-
-    public function edit($id) {
+    public function update($id){
+        $view=$this->_defaultview;
+        $prep=$this->vacancy_model->prep_new();
+        $view+=$prep;
+        $vacancy=$this->vacancy_model->get($id);
+        $tests=$this->db->get('tests')->result();
+        $view['tests']=$tests;
+        $view['vacancy']=$vacancy;
+        $view['creditbalance']=$this->credit_model->getbalance();
+        $view['pagename']=$view['breadcrumbs'][]='Edit Vacancy';
+        $view['content']=$this->load->view('vacancy/update', $view,true);
+        $this->load->view('layouts/master', ['view'=>$view]);
+    }
+    public function edit() {
         $input = $this->input->post();
-        $this->vacancy_model->edit($id, $input);
+        $this->vacancy_model->edit($input);
+        $this->session->set_flashdata('success', "Edit Vacancy Success");
         redirect('vacancy/search');
     }
 

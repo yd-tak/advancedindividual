@@ -142,7 +142,7 @@
 				</div>
 				<!--end::Card title-->
 				<!--begin::Action-->
-				<a href="../../demo2/dist/account/settings.html" class="btn btn-sm btn-primary align-self-center">Edit Vacancies</a>
+				<a href="<?=site_url('vacancy/update/'.$vacancy->id)?>" class="btn btn-sm btn-primary align-self-center">Edit Vacancies</a>
 				<!--end::Action-->
 			</div>
 			<!--begin::Card header-->
