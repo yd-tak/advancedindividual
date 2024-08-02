@@ -44,17 +44,22 @@
 <div class="card-footer pt-4" id="kt-interview-form">
 	<?php if($vc->aiinterviewstarted && !$vc->aiinterviewdone){?>
 		<!--begin::Input-->
-		<textarea class="form-control form-control-flush mb-3" rows="3" data-kt-element="input" placeholder="Type a message" id="kt-interview-chat-input"></textarea>
+		<textarea class="form-control form-control-flush mb-3" rows="3" data-kt-element="input" placeholder="Type a message" id="transcript"
+		 data-intro="Di sini adalah tempat anda menjawab pertanyaan, pastikan anda menjawab seluruh pertanyaan dalam satu jawaban." data-step="5" ></textarea>
 		<!--end::Input-->
 		<!--begin:Toolbar-->
 		<div class="d-flex flex-stack">
 			<!--begin::Actions-->
 			<div class="d-flex align-items-center me-2">
+				<!-- <input type="hidden" id="post-url" value="<?= site_url('speech/recognize') ?>">
+				<button class="btn btn-warning" type="button" id="record-button"
+			 	data-intro="Klik tombol ini untuk menjawab dengan suara, jawaban anda akan direkam dan dikirim. PASTIKAN ANDA DALAM SUASANA HENING." data-step="7" ><i class="fa fa-microphone"></i> Record</button> -->
 				
 			</div>
 			<!--end::Actions-->
 			<!--begin::Send-->
-			<button class="btn btn-primary" type="button" onclick="sendinterviewchat('kt-interview-chat',this)">Send</button>
+			<button class="btn btn-primary" type="button" onclick="sendinterviewchat('transcript',this)"
+			 data-intro="Klik send jika anda sudah selesai menjawab pertanyaan untuk mengirim jawaban anda, lalu tunggu balasan selanjutnya." data-step="6" >Send</button>
 			<!--end::Send-->
 		</div>
 		<!--end::Toolbar-->
@@ -71,3 +76,4 @@
 		</div>
 	<?php } ?>
 </div>
+<script type="module" src="<?=base_url('assets/js/custom/audiorecord/record.js')?>"></script>

@@ -6,6 +6,8 @@ use Google\Cloud\Speech\V1\RecognitionConfig;
 use Google\Cloud\Speech\V1\RecognitionConfig\AudioEncoding;
 use Google\Cloud\Speech\V1\RecognitionAudio;
 use Google\Cloud\Speech\V1\StreamingRecognitionConfig;
+use Google\Cloud\Speech\V1\StreamingRecognizeRequest;
+
 use Google\ApiCore\ApiException;
 use Google\ApiCore\ValidationException;
 // use getID3;
@@ -98,11 +100,9 @@ class Speech_model extends CI_Model {
         }
         $audioFileName=$this->upload->data('file_name');
         
-        // $audioFilePath=FCPATH . 'assets/uploads/voices/'.$audioFileName;
-        $audioFilePath=base_url('assets/uploads/voices/'.$audioFileName);
-        // echo $audioFilePath;
-        // Use getID3 to get the sample rate of the audio file
-        // require_once(APPPATH . 'third_party/getid3/getid3.php'); // Ensure you have getid3 in third_party directory
+        // $audioFilePath=base_url('assets/uploads/voices/'.$audioFileName);
+        $audioFilePath=base_url('assets/uploads/voices/recording6.wav');
+        
         $getID3 = new getID3();
         $fileInfo = $getID3->analyze($audioFilePath);
         $sampleRate = $fileInfo['audio']['sample_rate'] ?? 44100; // Default to 16000 if not found
@@ -117,29 +117,63 @@ class Speech_model extends CI_Model {
         $audio = (new RecognitionAudio())
             ->setContent($audioContent);
 
-        // Set the configuration for the request
-        // $config = new RecognitionConfig([
-        //     'encoding' => RecognitionConfig\AudioEncoding::LINEAR16,
-        //     'sample_rate_hertz' => $sampleRate,
-        //     'language_code' => 'id-ID'
-        // ]);
         // set config
         $config = (new RecognitionConfig())
             ->setEncoding(AudioEncoding::LINEAR16)
             // ->setSampleRateHertz($sampleRate)
             ->setLanguageCode('id-ID');
+        
+        $strmConfig = new StreamingRecognitionConfig();
+        $strmConfig->setConfig($config);
+
+        $strmReq = new StreamingRecognizeRequest();
+        $strmReq->setStreamingConfig($strmConfig);
+
+        $strm = $this->client->streamingRecognize();
+        $strm->write($strmReq);
+
+        $strmReq = new StreamingRecognizeRequest();
+        $strmReq->setAudioContent($audioContent);
+        $strm->write($strmReq);
+
         $transcript='';
         try {
-            $response = $this->client->recognize($config, $audio);
-            // pre($response);
-            foreach ($response->getResults() as $result) {
-                $alternatives = $result->getAlternatives();
-                $mostLikely = $alternatives[0];
-                // $transcript = $mostLikely->getTranscript();
-                $confidence = $mostLikely->getConfidence();
-                $transcript .= $mostLikely->getTranscript() . "\n";
-                // printf('Transcript: %s' . PHP_EOL, $transcript);
-                // printf('Confidence: %s' . PHP_EOL, $confidence);
+            #normal
+            // $response = $this->client->recognize($config, $audio);
+            // foreach ($response->getResults() as $result) {
+            //     $alternatives = $result->getAlternatives();
+            //     $mostLikely = $alternatives[0];
+            //     $confidence = $mostLikely->getConfidence();
+            //     $transcript .= $mostLikely->getTranscript() . "\n";
+            // }
+
+            //#long running
+            // $operation = $this->client->longRunningRecognize($config, $audio);
+            // $operation->pollUntilComplete();
+
+            // if ($operation->operationSucceeded()) {
+            //     $response = $operation->getResult();
+
+            //     // each result is for a consecutive portion of the audio. iterate
+            //     // through them to get the transcripts for the entire audio file.
+            //     foreach ($response->getResults() as $result) {
+            //         $alternatives = $result->getAlternatives();
+            //         $mostLikely = $alternatives[0];
+            //         // $transcript = $mostLikely->getTranscript();
+            //         $confidence = $mostLikely->getConfidence();
+            //         // printf('Transcript: %s' . PHP_EOL, $transcript);
+            //         // printf('Confidence: %s' . PHP_EOL, $confidence);
+            //         $transcript .= $mostLikely->getTranscript() . "\n";
+            //     }
+            // } else {
+            //     print_r($operation->getError());
+            // }
+            foreach ($strm->closeWriteAndReadAll() as $response) {
+                foreach ($response->getResults() as $result) {
+                    foreach ($result->getAlternatives() as $alt) {
+                        printf("Transcription: %s\n", $alt->getTranscript());
+                    }
+                }
             }
         } catch (ApiException $e) {
             log_message('error', 'ApiException: ' . $e->getMessage());

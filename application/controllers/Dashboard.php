@@ -10,9 +10,11 @@ class Dashboard extends MY_Controller {
         		'Dashboard'
         	]
         ];
+
     }
 	public function index()
 	{
+		
 		$this->load->model('candidate_model');
 		$this->load->model('credit_model');
 		$this->load->model('interview_model');

@@ -12,6 +12,19 @@ class Tools extends MY_Controller {
         $this->load->model('candidate_model');
         
     }
+    public function reset_interview($vcid){
+        $vc=$this->db->where('id',$vcid)->get('vc')->row();
+        $this->db->where('id',$vcid)->update('vc',[
+            'aiinterviewstarted'=>0,
+            'aiinterviewdone'=>0,
+            'interviewurisent'=>0,
+            'interview_threadid'=>null,
+            'avgscore'=>$vc->cvscore
+        ]);
+        $this->db->where('vcid',$vcid)->delete('vc_interviews');
+        $this->db->where('vcid',$vcid)->where('stageid',2)->delete('vc_stages');
+        $this->interview_model->start($vcid);
+    }
     public function test_gmeet(){
         $this->load->model('gcp_model');
         $summary = 'Interview Invitation 31 Jul 2024 | Flutter Developer | PT PASSION ABADI KORPORA';
@@ -107,7 +120,7 @@ class Tools extends MY_Controller {
     public function create_interview($vcid){
         $vc=$this->vacancy_model->gettblvc()->select("v.interview_assistantid,concat(c.firstname,' ',c.lastname) fullname")->where('vc.id',$vcid)->get()->row();
         $this->openai_core->set_assistant($vc->interview_assistantid);
-        $run=$this->openai_core->create_interview($vc->fullname);
+        $run=$this->openai_core->create_interview($vc->fullname,$vc->cvresult);
         pre($run);
     }
     public function get_interview_messages($vcid){

@@ -125,7 +125,7 @@
 			<!--begin::Content-->
 			<div class="flex-lg-row-fluid ms-lg-7 ms-xl-10 <?=($istest)?'d-none':''?>" id="interview-content">
 				<!--begin::Messenger-->
-				<div class="card" id="kt_chat_messenger" data-intro="Di sini wawancara dan dialog tes akan terjadi. Untuk memulai wawancara atau tes, klik tombol 'Mulai'. Untuk setiap pertanyaan yang diajukan pewawancara, Anda harus menjawab dalam satu balasan. Setelah Anda menjawab, pewawancara akan melanjutkan ke pertanyaan berikutnya." data-step="4" >
+				<div class="card" id="kt_chat_messenger" data-intro="Di sini wawancara dan dialog tes akan terjadi. Untuk setiap pertanyaan yang diajukan pewawancara, Anda harus menjawab dalam satu balasan. Setelah Anda menjawab, pewawancara akan melanjutkan ke pertanyaan berikutnya." data-step="4" >
 					<!--begin::Card header-->
 					<div class="card-header" id="kt_chat_messenger_header">
 						<!--begin::Title-->

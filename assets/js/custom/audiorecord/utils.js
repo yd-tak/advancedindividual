@@ -1,6 +1,6 @@
 export async function convertAudioBufferToWavBlob(audioBuffer) {
   return new Promise(function (resolve) {
-    var worker = new Worker('./assets/js/custom/audiorecord/wave-worker.js');
+    var worker = new Worker('../../assets/js/custom/audiorecord/wave-worker.js');
 
     worker.onmessage = function (e) {
       var blob = new Blob([e.data.buffer], { type: 'audio/wav' });
@@ -40,7 +40,7 @@ export function downloadBlob(blob, name) {
 
 export function initButtonListener(mediaRecorder) {
   const recordButton = document.getElementById('record-button');
-  recordButton.innerHTML = 'Record';
+  recordButton.innerHTML = "<i class='fa fa-microphone'></i> Record";
 
   recordButton.addEventListener('click', () => {
     if (mediaRecorder.state === 'inactive') {
@@ -48,7 +48,8 @@ export function initButtonListener(mediaRecorder) {
       recordButton.innerHTML = 'Recording ...';
     } else {
       mediaRecorder.stop();
-      recordButton.innerHTML = 'Record';
+      document.getElementById('transcript').innerText = "Waiting for Transcription...";
+      recordButton.innerHTML = "<i class='fa fa-microphone'></i> Record";
     }
   });
 }
