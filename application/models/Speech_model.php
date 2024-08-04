@@ -100,8 +100,8 @@ class Speech_model extends CI_Model {
         }
         $audioFileName=$this->upload->data('file_name');
         
-        // $audioFilePath=base_url('assets/uploads/voices/'.$audioFileName);
-        $audioFilePath=base_url('assets/uploads/voices/recording6.wav');
+        $audioFilePath=base_url('assets/uploads/voices/'.$audioFileName);
+        // $audioFilePath=base_url('assets/uploads/voices/recording6.wav');
         
         $getID3 = new getID3();
         $fileInfo = $getID3->analyze($audioFilePath);
@@ -120,7 +120,7 @@ class Speech_model extends CI_Model {
         // set config
         $config = (new RecognitionConfig())
             ->setEncoding(AudioEncoding::LINEAR16)
-            // ->setSampleRateHertz($sampleRate)
+            ->setSampleRateHertz($sampleRate)
             ->setLanguageCode('id-ID');
         
         $strmConfig = new StreamingRecognitionConfig();
@@ -171,7 +171,8 @@ class Speech_model extends CI_Model {
             foreach ($strm->closeWriteAndReadAll() as $response) {
                 foreach ($response->getResults() as $result) {
                     foreach ($result->getAlternatives() as $alt) {
-                        printf("Transcription: %s\n", $alt->getTranscript());
+                        // printf("Transcription: %s\n", $alt->getTranscript());
+                        $transcript.=$alt->getTranscript();
                     }
                 }
             }
