@@ -48,7 +48,7 @@ export function initButtonListener(mediaRecorder) {
       recordButton.innerHTML = 'Recording ...';
     } else {
       mediaRecorder.stop();
-      document.getElementById('transcript').innerText = "Waiting for Transcription...";
+      // document.getElementById('transcript').innerText = "Waiting for Transcription...";
       recordButton.innerHTML = "<i class='fa fa-microphone'></i> Record";
     }
   });

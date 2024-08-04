@@ -35,6 +35,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     });
 
     const result = await response.json();
-    document.getElementById('transcript').innerText = result.transcript;
+    // document.getElementById('transcript').innerText += result.transcript;
+    document.getElementById('transcript').value += result.transcript;
   });
 });
