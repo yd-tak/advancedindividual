@@ -337,10 +337,10 @@ class Vacancy_model extends CI_Model {
         }
         // pre($ib_vs);
         if(!empty($ib_vt)){
-            $this->db->insert_batch('vacancy_tests',$ib_vt);
+            $this->db->insert_ignore_batch('vacancy_tests',$ib_vt);
         }
         if(!empty($ib_vs)){
-            $this->db->insert_batch('vacancy_skills',$ib_vs);
+            $this->db->insert_ignore_batch('vacancy_skills',$ib_vs);
         }
         // pre($data);
         return $vacancyid;
