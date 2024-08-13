@@ -51,9 +51,9 @@
 		<div class="d-flex flex-stack">
 			<!--begin::Actions-->
 			<div class="d-flex align-items-center me-2">
-				<input type="hidden" id="post-url" value="<?= site_url('speech/recognize') ?>">
+				<!-- <input type="hidden" id="post-url" value="<?= site_url('speech/recognize') ?>">
 				<button class="btn btn-warning" type="button" id="record-button"
-			 	data-intro="Klik tombol ini untuk menjawab dengan suara, jawaban anda akan direkam dan dikirim. PASTIKAN ANDA DALAM SUASANA HENING." data-step="7" ><i class="fa fa-microphone"></i> Record</button>
+			 	data-intro="Klik tombol ini untuk menjawab dengan suara, jawaban anda akan direkam dan dikirim. PASTIKAN ANDA DALAM SUASANA HENING." data-step="7" ><i class="fa fa-microphone"></i> Record</button> -->
 				
 			</div>
 			<!--end::Actions-->

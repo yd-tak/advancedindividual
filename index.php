@@ -54,6 +54,8 @@
  * NOTE: If you change these, also change the error_reporting() code below
  */
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+ini_set('session.cookie_samesite', 'None');
+session_set_cookie_params(['samesite' => 'None']);
 
 /*
  *---------------------------------------------------------------
