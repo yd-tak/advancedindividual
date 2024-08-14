@@ -44,7 +44,7 @@
 <div class="card-footer pt-4" id="kt-interview-form">
 	<?php if($vc->aiinterviewstarted && !$vc->aiinterviewdone){?>
 		<!--begin::Input-->
-		<textarea class="form-control form-control-flush mb-3" rows="3" data-kt-element="input" placeholder="Type a message" id="kt-interview-chat"
+		<textarea class="form-control form-control-flush mb-3" rows="3" data-kt-element="input" placeholder="Type a message" id="kt-interview-chat-input"
 		 data-intro="Di sini adalah tempat anda menjawab pertanyaan, pastikan anda menjawab seluruh pertanyaan dalam satu jawaban." data-step="5" ></textarea>
 		<!--end::Input-->
 		<!--begin:Toolbar-->
