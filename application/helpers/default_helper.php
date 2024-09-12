@@ -53,7 +53,7 @@ function insert_select_options($tblname,$datas,$colname='name',$defaultrow=[]){
             $ib_newdata[]=$newdata;
         }
         // pre($ib_newdata);
-        $ci->db->insert_batch($tblname,$ib_newdata);
+        $ci->db->insert_ignore_batch($tblname,$ib_newdata);
         $inserted=$ci->db->where_in($colname,$datas)->get($tblname)->result();
         // pre($inserted);
         $newids=[];
@@ -132,6 +132,9 @@ function array_set(&$arr,$key,$val){
         $arr[$key]=$val;
     }
 }
+function jsonkey($str){
+    return ucwords(str_replace("_", " ", $str));
+}
 function associatedwith($str){
     return ucwords(str_replace("_", " ", $str));
 }
@@ -196,4 +199,9 @@ function filter_string($data){
     else{
         return '';
     }
+}
+function get_notifs(){
+    $ci=&get_instance();
+    $notifs=$ci->db->order_by('notifdt desc')->limit(20)->get('notifs')->result();
+    return $notifs;
 }

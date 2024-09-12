@@ -176,7 +176,7 @@ class Openai_core extends CI_Model {
                     - Why '.getCompany('name').' should hire them
                     - Expected salary
 
-                C. Third you need to ask 3 technical questions relating to a '.$jobtitle.' position in a '.$company->industry.' company and score their answer.
+                C. Third you need to ask 3 technical questions relating to a '.$jobtitle.' position in a '.$company->industry.' company and score their answer, adjust the test difficulty depending on the job posisition level (Manager position requires more difficult question than staff position).
 
                 D. Finally you need to ask 3 question to evaluate and score their personality.
 

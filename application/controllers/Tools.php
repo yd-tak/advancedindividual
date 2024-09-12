@@ -213,5 +213,91 @@ class Tools extends MY_Controller {
     public function create_offering_letter($vcid){
         $this->vacancy_model->create_offering_pdf($vcid);
     }
+    public function score_0cv(){
+        $cvs=$this->db->select('c.id candidateid,vc.id vcid')->from('vc')->join('candidates c','vc.candidateid=c.id')->where('vc.isconfirmed',0)->where('vc.avgscore',0)->get()->result();
+        foreach($cvs as $row){
+            $cvdata=$this->candidate_model->getjson($row->candidateid);
+            $answer=$this->vacancy_model->scorecv($row->vcid,$cvdata);
+            // pre($answer);
+            // break;
+        }
+
+    }
+    public function batch_notifs(){
+        $newcvs=$this->db->select("date(vc.createdt) notifdate,v.id vacancyid,v.title,count(vc.id) newcv,group_concat(vc.id) vcids")->from("vc")->join("vacancies v","vc.vacancyid=v.id")->group_by("1,2")->get()->result();
+        $interviewsdone=$this->db->select("date(vcs.datecompleted) notifdate,v.id vacancyid,v.title,count(vcs.id) interviewdone,group_concat(vcs.vcid) vcids")->from("vc_stages vcs")->join("vc","vcs.vcid=vc.id")->join("vacancies v","vc.vacancyid=v.id")->where("vcs.stageid",2)->where("vcs.datecompleted is not null")->group_by("1,2")->get()->result();
+        $testsdone=$this->db->select("date(vct.finishdt) notifdate,v.id vacancyid,v.title,count(distinct vct.vcid) testdone,group_concat(distinct vct.vcid) vcids")->from("vc_tests vct")->join("vc","vct.vcid=vc.id")->join("vacancies v","vc.vacancyid=v.id")->where("vct.finishdt is not null")->group_by("1,2")->get()->result();
+        $offersaccepted=$this->db->select("date(vc.offeracceptdate) notifdate,v.id vacancyid,v.title,count(vc.id) offeraccepted,group_concat(vc.id) vcids")->from("vc")->join("vacancies v","vc.vacancyid=v.id")->where("vc.offeracceptdate is not null")->group_by("1,2")->get()->result();
+        $offersrejected=$this->db->select("date(vc.offerrejectdate) notifdate,v.id vacancyid,v.title,count(vc.id) offerrejected,group_concat(vc.id) vcids")->from("vc")->join("vacancies v","vc.vacancyid=v.id")->where("vc.offerrejectdate is not null")->group_by("1,2")->get()->result();
+        $ib_notifs=[];
+        foreach($newcvs as $row){
+            $notifdt=$row->notifdate.' 23:00:00';
+            $ib_notifs[]=[
+                'notifdt'=>$notifdt,
+                'lastdt'=>$notifdt,
+                'closedt'=>$notifdt,
+                'tipe'=>'newcv',
+                'vacancyid'=>$row->vacancyid,
+                'datacount'=>$row->newcv,
+                'description'=>'You have '.$row->newcv.' new applicants for '.$row->title,
+                'vcids'=>json_encode(explode(",",$row->vcids))
+            ];
+        }
+        foreach($interviewsdone as $row){
+            $notifdt=$row->notifdate.' 23:00:00';
+            $ib_notifs[]=[
+                'notifdt'=>$notifdt,
+                'lastdt'=>$notifdt,
+                'closedt'=>$notifdt,
+                'tipe'=>'interviewdone',
+                'vacancyid'=>$row->vacancyid,
+                'datacount'=>$row->interviewdone,
+                'description'=>$row->interviewdone.' candidates have completed interview for '.$row->title,
+                'vcids'=>json_encode(explode(",",$row->vcids))
+            ];
+        }
+        foreach($testsdone as $row){
+            $notifdt=$row->notifdate.' 23:00:00';
+            $ib_notifs[]=[
+                'notifdt'=>$notifdt,
+                'lastdt'=>$notifdt,
+                'closedt'=>$notifdt,
+                'tipe'=>'testdone',
+                'vacancyid'=>$row->vacancyid,
+                'datacount'=>$row->testdone,
+                'description'=>$row->testdone.' candidates have completed test for '.$row->title,
+                'vcids'=>json_encode(explode(",",$row->vcids))
+            ];
+        }
+        foreach($offersaccepted as $row){
+            $notifdt=$row->notifdate.' 23:00:00';
+            $ib_notifs[]=[
+                'notifdt'=>$notifdt,
+                'lastdt'=>$notifdt,
+                'closedt'=>$notifdt,
+                'tipe'=>'offeraccepted',
+                'vacancyid'=>$row->vacancyid,
+                'datacount'=>$row->offeraccepted,
+                'description'=>$row->offeraccepted.' candidates have accepted offering for '.$row->title,
+                'vcids'=>json_encode(explode(",",$row->vcids))
+            ];
+        }
+        foreach($offersrejected as $row){
+            $notifdt=$row->notifdate.' 23:00:00';
+            $ib_notifs[]=[
+                'notifdt'=>$notifdt,
+                'lastdt'=>$notifdt,
+                'closedt'=>$notifdt,
+                'tipe'=>'offerrejected',
+                'vacancyid'=>$row->vacancyid,
+                'datacount'=>$row->offerrejected,
+                'description'=>$row->offerrejected.' candidates have rejected offering interview for '.$row->title,
+                'vcids'=>json_encode(explode(",",$row->vcids))
+            ];
+        }
+        $this->db->truncate('notifs');
+        $this->db->insert_batch('notifs',$ib_notifs);
+        
+    }
 }
 ?>

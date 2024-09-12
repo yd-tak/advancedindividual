@@ -590,7 +590,14 @@
 									<div class="d-flex flex-column">
 										<a href="#" class="text-gray-800 text-hover-primary mb-1"><?=$row->name?></a>
 										<span><?=$row->address?></span>
+
 									</div>
+									<?php if($stage->id>1){?>
+										<span class="badge badge-<?=($row->aiinterviewdone)?'success':'warning'?>">interview</span>
+										<?php foreach($vacancy->tests as $test){?>
+											<span class="badge badge-<?=(in_array($test->testid, $row->testiddone))?'success':'warning'?>"><?=$test->testid?></span>
+										<?php }?>
+									<?php } ?>
 								</td>
 								<td onclick="viewvc(<?=$row->id?>)"><?=ucwords(sanitize($row->gender))."<br>".$row->age." y.o."?></td>
 								<td onclick="viewvc(<?=$row->id?>)">

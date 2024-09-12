@@ -328,12 +328,33 @@
 									<div class="mb-5">
 										<?php foreach($tests as $row){?>
 										<div class="form-check form-check-solid mb-5">
-										    <input class="form-check-input" type="checkbox" value="<?=$row->id?>" name="tests[]" onchange="modifycredit(<?=$row->test_credit?>,this)" <?=(in_array($row->id,$vacancy->testids))?'checked':''?>/>
+										    <input class="form-check-input" type="checkbox" value="<?=$row->id?>" name="tests[]" onchange="selecttest('<?=$row->id?>',<?=$row->test_credit?>,this)" <?=(in_array($row->id,$vacancy->testids))?'checked':''?>/>
 										    <label class="form-check-label">
 										        <?=$row->name." (".$row->test_credit." Credit)"?>
 										    </label>
 										</div>
-										<?php } ?>
+										<?php if($row->evaluation!=null){ ?>
+										<div class="row <?=(in_array($row->id,$vacancy->testids))?'':'d-none'?>" id="test-target-<?=$row->id?>">
+											<?php 
+											$targets=json_decode($row->evaluation);
+											foreach($targets as $key=>$optstr){
+												$opts=explode("/", $optstr);
+												?>
+												<label class="form-label form-label col-lg-4 offset-lg-1"><?=jsonkey($key)?></label>
+												<div class="col-lg-6 form-check-inline">
+													
+													<?php $i=0;foreach($opts as $opt){?>
+														<input class="form-check-input d-inline" type="radio" value="<?=$opt?>" name="testtargets[<?=$row->id?>][<?=$key?>]" <?php if( ($i===0 && !in_array($row->id,$vacancy->testids)) || (isset($vacancy->testidmap[$row->id]) && $opt==$vacancy->testidmap[$row->id]->target[$key]))echo "checked"?>/>
+													    <label class="form-check-label d-inline">
+													        <?=$opt?>
+													    </label>
+														
+													<?php $i++;} ?>
+												</div>
+											<?php }?>
+										</div>
+										<?php }
+										} ?>
 									</div>
 								</div>
 							</div>
@@ -438,6 +459,17 @@
 				stoploading("content-page-loader");
 			}
 		});
+	}
+	function selecttest(testid,credit,elm){
+		console.log($(elm).is(":checked"));
+		if($(elm).is(":checked")){
+			$("#test-target-"+testid).removeClass("d-none");	
+		}
+		else{
+			$("#test-target-"+testid).addClass("d-none");
+		}
+		
+		modifycredit(credit,elm);
 	}
 	function modifycredit(credit,elm){
 		if($(elm).is(":checked")){

@@ -142,6 +142,14 @@ class Vacancy_model extends CI_Model {
         
         // pre($vacancy->skills);
         $vacancy->tests=$this->gettbltest()->where("vt.vacancyid",$id)->get()->result();
+        $vacancy->testmap=[];
+        foreach($vacancy->tests as $row){
+            if($row->target!=null){
+                $row->target=json_decode($row->target,true);
+            }
+
+            $vacancy->testidmap[$row->testid]=$row;
+        }
 
         $vacancy->testids=[];
         foreach($vacancy->tests as $row){
@@ -203,6 +211,22 @@ class Vacancy_model extends CI_Model {
         $vacancy->certification_str=implode(", ", $vacancy->certifications);
         $vacancy->test_str=implode(", ", $tests);
         $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->get()->result();
+        $vcids=[];
+        foreach($candidates as $row){
+            $row->testiddone=[];
+            $vcids[]=$row->id;
+        }
+        $vctestdone=$this->db->select('vcid,testid,finishdt')->where_in('vcid',$vcids)->where('finishdt is not null')->get('vc_tests')->result();
+
+        foreach($vctestdone as $row){
+            foreach($candidates as $rowc){
+                if($row->vcid==$rowc->id){
+                    $rowc->testiddone[]=$row->testid;
+                    break;
+                }
+            }
+        }
+
         if(isset($get['aidescription']) && !empty(trim($get['aidescription']))){
             $airesult=$this->search_model->runai($candidates,$get['aidescription']);
             // pre($airesult->result);
@@ -216,9 +240,7 @@ class Vacancy_model extends CI_Model {
             }
             else{
                 $candidates=$this->gettblvc()->where("vc.vacancyid",$id)->where_in("vc.id",array_keys($airesultmap))->get()->result();
-                foreach($candidates as $row){
-                    $row->reason=$airesultmap[$row->id];
-                }
+                
             }
 
         }
@@ -251,7 +273,7 @@ class Vacancy_model extends CI_Model {
         $jobroles=$this->db->get('job_roles')->result();
         $degrees=$this->db->get('degrees')->result();
         $departments=$this->db->get('departments')->result();
-        $techskills=$this->db->where('type','Technical')->limit(100)->get('skills')->result();
+        $techskills=$this->db->where('type','Technical')->get('skills')->result();
         // $techskills=[];
         $softskills=$this->db->where('type','Soft')->get('skills')->result();
         $langskills=$this->db->where('type','Language')->get('skills')->result();
@@ -271,7 +293,9 @@ class Vacancy_model extends CI_Model {
     public function add($data){
         $data['jobdesc']=trim($data['jobdesc']);
         $tests=$data['tests'];
+        $testtargets=$data['testtargets'];
         unset($data['tests']);
+        unset($data['testtargets']);
         if($data['workexperience']){
             list($data['minworkexp'],$data['maxworkexp'])=explode("-",$data['workexperience']);    
         }
@@ -301,9 +325,11 @@ class Vacancy_model extends CI_Model {
         $vacancyid=$this->db->insert_id();
         $ib_vt=[];
         foreach($tests as $testid){
+            $testtarget=$testtargets[$testid];
             $ib_vt[]=[
                 'vacancyid'=>$vacancyid,
-                'testid'=>$testid
+                'testid'=>$testid,
+                'target'=>json_encode($testtarget)
             ];
         }
         $ib_vs=[];
@@ -349,7 +375,9 @@ class Vacancy_model extends CI_Model {
         $vacancyid=$data['id'];
         $data['jobdesc']=trim($data['jobdesc']);
         $tests=$data['tests'];
+        $testtargets=$data['testtargets'];
         unset($data['tests']);
+        unset($data['testtargets']);
         if($data['workexperience']){
             $workexp=explode("-",$data['workexperience']);    
             // pre($workexp);
@@ -362,6 +390,7 @@ class Vacancy_model extends CI_Model {
         }
 
         $techskillids=autocreate_select_options($data['techskills'],'skills','name',['type'=>'Technical']);
+        // pre($techskillids);
         $softskillids=autocreate_select_options($data['softskills'],'skills','name',['type'=>'Soft']);
         $langskillids=autocreate_select_options($data['langskills'],'skills','name',['type'=>'Language']);
         $certskillids=autocreate_select_options($data['certskills'],'skills','name',['type'=>'Certification']);
@@ -374,12 +403,26 @@ class Vacancy_model extends CI_Model {
         unset($data['workexperience']);
         // pre($data);
         $this->db->where('id',$vacancyid)->update('vacancies',$data);
+        $vts=$this->db->where('vacancyid',$vacancyid)->get('vacancy_tests')->result();
+        $vtids=[];
+        foreach($vts as $row){
+            $vtids[$row->testid]=$row->id;
+        }
         $ib_vt=[];
+        $ub_vt=[];
         foreach($tests as $testid){
+            $testtarget=$testtargets[$testid];
             $ib_vt[]=[
                 'vacancyid'=>$vacancyid,
-                'testid'=>$testid
+                'testid'=>$testid,
+                'target'=>json_encode($testtarget)
             ];
+            if(isset($vtids[$testid])){
+                $ub_vt[]=[
+                    'id'=>$vtids[$testid],
+                    'target'=>json_encode($testtarget)
+                ];
+            }
         }
         // pre($ib_vt);
         $ib_vs=[];
@@ -421,9 +464,14 @@ class Vacancy_model extends CI_Model {
             // pre($ib_vt,1);
             // pre($testids);
             $this->db->insert_ignore_batch('vacancy_tests',$ib_vt);
+            if(!empty($ub_vt)){
+                $this->db->update_batch('vacancy_tests',$ub_vt,'id');
+            }
             $this->db->where_not_in('testid',$testids)->where('vacancyid',$vacancyid)->update('vacancy_tests',['isactive'=>0]);
         }
+        // pre($ib_vs);
         if(!empty($ib_vs)){
+
             $this->db->where('vacancyid',$vacancyid)->delete('vacancy_skills');
             $this->db->insert_batch('vacancy_skills',$ib_vs);
         }

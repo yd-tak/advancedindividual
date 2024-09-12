@@ -48,7 +48,7 @@ class Vacancy extends MY_Controller {
         $view=$this->_defaultview;
         $input=$this->input->get();
         $vacancy=$this->vacancy_model->get($id,$input);
-
+        // pre($vacancy);
         $stage=$this->db->where('id',$stageid)->get('stages')->row(0);
         $stages=$this->db->order_by('no')->get('stages')->result();
         $this->search_model->logView(getLoginSession('id'),'Vacancy',$vacancy->id,$vacancy->title.' - '.$stage->name,'vacancy/viewstage/'.$id.'/'.$stageid);
@@ -64,11 +64,12 @@ class Vacancy extends MY_Controller {
     }
     public function add() {
         $input = $this->input->post();
+        // pre($input);
         $this->db->trans_start();
         $id=$this->vacancy_model->add($input);
         $this->set_ai_interviewer($id);
         $this->db->trans_complete();
-        redirect('vacancy/view/'.$id);
+        // redirect('vacancy/view/'.$id);
     }
     public function set_ai_interviewer($id){
         $vacancy=$this->vacancy_model->gettbl()->where('v.id',$id)->get()->row();
@@ -81,6 +82,7 @@ class Vacancy extends MY_Controller {
         $prep=$this->vacancy_model->prep_new();
         $view+=$prep;
         $vacancy=$this->vacancy_model->get($id);
+        // pre($vacancy);
         $tests=$this->db->get('tests')->result();
         $view['tests']=$tests;
         $view['vacancy']=$vacancy;
