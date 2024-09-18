@@ -216,7 +216,12 @@ class Vacancy_model extends CI_Model {
             $row->testiddone=[];
             $vcids[]=$row->id;
         }
-        $vctestdone=$this->db->select('vcid,testid,finishdt')->where_in('vcid',$vcids)->where('finishdt is not null')->get('vc_tests')->result();
+        if(!empty($vcids)){
+            $vctestdone=$this->db->select('vcid,testid,finishdt')->where_in('vcid',$vcids)->where('finishdt is not null')->get('vc_tests')->result();
+        }
+        else{
+            $vctestdone=[];
+        }
 
         foreach($vctestdone as $row){
             foreach($candidates as $rowc){
@@ -292,6 +297,15 @@ class Vacancy_model extends CI_Model {
     }
     public function add($data){
         $data['jobdesc']=trim($data['jobdesc']);
+        if(!isset($data['tests'])){
+            $data['tests']=[];
+            $data['testtargets']=[];
+        }
+        if(!isset($data['certskills'])){
+            $data['certskills']=[];
+        }
+
+
         $tests=$data['tests'];
         $testtargets=$data['testtargets'];
         unset($data['tests']);
@@ -312,7 +326,10 @@ class Vacancy_model extends CI_Model {
         $techskillids=autocreate_select_options($data['techskills'],'skills','name',['type'=>'Technical']);
         $softskillids=autocreate_select_options($data['softskills'],'skills','name',['type'=>'Soft']);
         $langskillids=autocreate_select_options($data['langskills'],'skills','name',['type'=>'Language']);
-        $certskillids=autocreate_select_options($data['certskills'],'skills','name',['type'=>'Certification']);
+        if(!empty($data['certskills']))
+            $certskillids=autocreate_select_options($data['certskills'],'skills','name',['type'=>'Certification']);
+        else
+            $certskillids=[];
 
         unset($data['minworkexp']);
         unset($data['techskills']);
